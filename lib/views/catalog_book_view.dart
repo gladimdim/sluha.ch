@@ -28,6 +28,23 @@ class _CatalogBookViewState extends State<CatalogBookView> {
           Column(
             children: [
               Text("Playlist"),
+              ...widget.book.files.map((file) {
+                return Container(
+                  decoration: BoxDecoration(
+                    border: Border(
+                      bottom: BorderSide(width: 1, color: Colors.pink),
+                    )
+                  ),
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          file.title,
+                        ),
+                        IconButton(icon: Icon(Icons.play_arrow), onPressed: null)
+                      ]),
+                );
+              }).toList()
             ],
           )
         ],

@@ -66,7 +66,30 @@ List<Book> generateBooks() {
         files: [
           BookFile(title: "Передмова", url: "/minecraft/deep_dive/pre.mp3"),
           BookFile(title: "Розділ 1", url: "/minecraft/deep_dive/01.mp3"),
-        ])
+        ]),
+    Book(
+      id: 3,
+      title: "Minecraft. Цифрова загроза",
+      author: "Нік Еліопулос",
+      year: 2020,
+      imageUrl: "assets/minecraft/cifrova_zagroza/cover.png",
+      duration: Duration(minutes: 53),
+      description:
+          """Четверта книга неймовірних пригод в офіційній серії «Майнкрафт. Хроніки Вудсворду»! У попередній книзі історія об
+      ривається на найцікавішому місці... Що робитимуть друзі, о
+      пинившись у небезпечній ситуації? Хто ж усе-таки розставляє усі ці пастки та називає себе Королем кликунів? Тим часом
+      на Вудсворд насувається цифрова загроза...""",
+      ageRating: 7,
+      languages: [
+        LANGUAGES.UKR,
+      ],
+      files: [
+        BookFile(title: "Передмова", url: "/minecraft/cifrova_zagroza/pre.mp3"),
+        BookFile(title: "Розділ 1", url: "/minecraft/cifrova_zagroza/01.mp3"),
+        BookFile(title: "Розділ 2", url: "/minecraft/cifrova_zagroza/02.mp3"),
+        BookFile(title: "Розділ 3", url: "/minecraft/cifrova_zagroza/03.mp3"),
+      ],
+    ),
   ];
 }
 

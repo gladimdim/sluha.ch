@@ -22,7 +22,13 @@ class CatalogCardBookView extends StatelessWidget {
           Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(book.title),
+              Text(
+                book.title,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 24,
+                ),
+              ),
               BookMetaFieldView("Автор", book.author),
               BookMetaFieldView("Рік", book.year.toString()),
               BookMetaFieldView(
