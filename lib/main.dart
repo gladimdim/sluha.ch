@@ -22,11 +22,12 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         // brightness: Brightness.dark,
         // primarySwatch: Colors.deepPurple,
-        primaryColor: BG_COLOR,
-        accentColor: LIGHT_COLOR,
+        primaryColor: LIGHT_COLOR,
+        accentColor: DEEP_COLOR,
         backgroundColor: LIGHT_COLOR,
         // cardTheme: CardTheme(color: MEDIUM_COLOR),
         scaffoldBackgroundColor: Colors.white,
+        // splashColor: DEEP_COLOR,
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ButtonStyle(
             textStyle: MaterialStateProperty.resolveWith((states) {
@@ -38,18 +39,20 @@ class MyApp extends StatelessWidget {
               );
             }),
             backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                  (Set<MaterialState> states) {
-                if (states.contains(MaterialState.hovered)) return DEEP_COLOR;
-                if (states.contains(MaterialState.focused) ||
-                    states.contains(MaterialState.pressed)) return LIGHT_COLOR;
+              (Set<MaterialState> states) {
+                if (states.contains(MaterialState.hovered) ||
+                    states.contains(MaterialState.focused) ||
+                    states.contains(MaterialState.pressed)) {
+                  return DEEP_COLOR;
+                }
                 return LIGHT_COLOR; // Defer to the widget's default.
               },
             ),
             foregroundColor: MaterialStateProperty.resolveWith((states) {
               if (states.contains(MaterialState.hovered)) {
-                return Colors.green[300];
+                return Colors.white;
               } else if (states.contains(MaterialState.pressed)) {
-                return Colors.blue[500];
+                return Colors.white;
               }
               return Colors.black;
             }),
@@ -60,4 +63,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-

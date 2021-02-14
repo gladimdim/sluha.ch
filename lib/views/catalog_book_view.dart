@@ -1,3 +1,4 @@
+import 'package:audiobooks_app/main.dart';
 import 'package:audiobooks_app/models/book.dart';
 import 'package:audiobooks_app/views/catalog_card_book_view.dart';
 import 'package:flutter/material.dart';
@@ -32,7 +33,7 @@ class _CatalogBookViewState extends State<CatalogBookView> {
                 return Container(
                   decoration: BoxDecoration(
                     border: Border(
-                      bottom: BorderSide(width: 1, color: Colors.pink),
+                      bottom: BorderSide(width: 1, color: DEEP_COLOR),
                     )
                   ),
                   child: Row(

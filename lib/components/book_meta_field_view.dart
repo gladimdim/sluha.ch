@@ -13,7 +13,7 @@ class BookMetaFieldView extends StatelessWidget {
         border: Border(
           bottom: BorderSide(
             width: 3,
-            color: Theme.of(context).primaryColor,
+            color: Theme.of(context).accentColor,
           )
         )
       ),
