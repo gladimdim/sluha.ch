@@ -9,35 +9,38 @@ class CatalogCardBookView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Image.asset(
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Hero(
+          tag: book.id,
+          child: Image.asset(
             book.imageUrl,
             width: 256,
             fit: BoxFit.fitWidth,
           ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                book.title,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 24,
-                ),
+          // child: CatalogCardBookView(
+          //   book: widget.book,
+          // ),
+        ),
+        Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              book.title,
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 24,
               ),
-              BookMetaFieldView("Автор", book.author),
-              BookMetaFieldView("Рік", book.year.toString()),
-              BookMetaFieldView(
-                  "Тривалість", book.duration.inMinutes.toString()),
-              BookMetaFieldView("Вік", "${book.ageRating}+"),
-            ],
-          ),
-        ],
-      ),
+            ),
+            BookMetaFieldView("Автор", book.author),
+            BookMetaFieldView("Рік", book.year.toString()),
+            BookMetaFieldView(
+                "Тривалість", book.duration.inMinutes.toString()),
+            BookMetaFieldView("Вік", "${book.ageRating}+"),
+          ],
+        ),
+      ],
     );
   }
 }

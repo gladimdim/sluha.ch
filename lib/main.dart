@@ -6,10 +6,10 @@ void main() {
   runApp(MyApp());
 }
 
-var DEEP_COLOR = Colors.deepPurple[500];
+var DEEP_COLOR = Colors.deepPurple;
 
-var MEDIUM_COLOR = Colors.deepPurple[400];
-var LIGHT_COLOR = Colors.deepPurple[300];
+var MEDIUM_COLOR = Colors.deepPurple[200];
+var LIGHT_COLOR = Colors.deepPurple[100];
 var BG_COLOR = DEEP_COLOR;
 
 class MyApp extends StatelessWidget {
@@ -23,11 +23,15 @@ class MyApp extends StatelessWidget {
         // brightness: Brightness.dark,
         // primarySwatch: Colors.deepPurple,
         primaryColor: LIGHT_COLOR,
-        accentColor: DEEP_COLOR,
+        accentColor: MEDIUM_COLOR,
         backgroundColor: LIGHT_COLOR,
         // cardTheme: CardTheme(color: MEDIUM_COLOR),
         scaffoldBackgroundColor: Colors.white,
-        // splashColor: DEEP_COLOR,
+        // splashColor: MEDIUM_COLOR,
+        iconTheme: IconThemeData(
+          color: DEEP_COLOR,
+          size: 40,
+        ),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ButtonStyle(
             textStyle: MaterialStateProperty.resolveWith((states) {
@@ -43,7 +47,7 @@ class MyApp extends StatelessWidget {
                 if (states.contains(MaterialState.hovered) ||
                     states.contains(MaterialState.focused) ||
                     states.contains(MaterialState.pressed)) {
-                  return DEEP_COLOR;
+                  return MEDIUM_COLOR;
                 }
                 return LIGHT_COLOR; // Defer to the widget's default.
               },

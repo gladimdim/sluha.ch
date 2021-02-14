@@ -25,11 +25,8 @@ class CatalogView extends StatelessWidget {
                     // color: Theme.of(context).backgroundColor,
                   ),
                   child: ElevatedButton(
-                    child: Hero(
-                      tag: book.id,
-                      child: CatalogCardBookView(
-                        book: book,
-                      ),
+                    child: CatalogCardBookView(
+                      book: book,
                     ),
                     onPressed: () {
                       Navigator.push(context,
