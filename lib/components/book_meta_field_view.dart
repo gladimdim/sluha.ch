@@ -8,12 +8,22 @@ class BookMetaFieldView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(name),
-        Text(value),
-      ],
+    return  Container(
+      decoration: BoxDecoration(
+        border: Border(
+          bottom: BorderSide(
+            width: 3,
+            color: Theme.of(context).primaryColor,
+          )
+        )
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(name, style: Theme.of(context).textTheme.headline6,),
+          Text(value, style: Theme.of(context).textTheme.headline6,),
+        ],
+      ),
     );
   }
 }

@@ -10,24 +10,39 @@ class CatalogView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      children: books.map(
-            (book) =>
-            InkWell(
-              child: Hero(
-                tag: book.id,
-                child: CatalogCardBookView(
-                  book: book,
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: ListView(
+        children: books
+            .map(
+              (book) => Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  // padding: const EdgeInsets.all(8.0),
+                  decoration: BoxDecoration(
+                    border: Border.all(width: 1),
+                    borderRadius: BorderRadius.circular(6.0),
+                    // color: Theme.of(context).backgroundColor,
+                  ),
+                  child: ElevatedButton(
+                    child: Hero(
+                      tag: book.id,
+                      child: CatalogCardBookView(
+                        book: book,
+                      ),
+                    ),
+                    onPressed: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                        return CatalogBookView(book: book);
+                      }));
+                    },
+                  ),
                 ),
               ),
-              onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context)
-                {
-                  return CatalogBookView(book: book);
-                }));
-              },
-            ),
-      ).toList(),
+            )
+            .toList(),
+      ),
     );
   }
 }
