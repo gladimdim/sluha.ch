@@ -25,12 +25,10 @@ class MyApp extends StatelessWidget {
         primaryColor: LIGHT_COLOR,
         accentColor: MEDIUM_COLOR,
         backgroundColor: LIGHT_COLOR,
-        // cardTheme: CardTheme(color: MEDIUM_COLOR),
-        scaffoldBackgroundColor: Colors.white,
-        // splashColor: MEDIUM_COLOR,
+        buttonColor: DEEP_COLOR,
         iconTheme: IconThemeData(
           color: DEEP_COLOR,
-          size: 40,
+          size: 44,
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ButtonStyle(
