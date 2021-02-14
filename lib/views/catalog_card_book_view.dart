@@ -1,4 +1,5 @@
 import 'package:audiobooks_app/components/book_meta_field_view.dart';
+import 'package:audiobooks_app/components/title_text.dart';
 import 'package:audiobooks_app/models/book.dart';
 import 'package:flutter/material.dart';
 
@@ -26,17 +27,13 @@ class CatalogCardBookView extends StatelessWidget {
         Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              book.title,
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 24,
-              ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TitleText(book.title),
             ),
             BookMetaFieldView("Автор", book.author),
             BookMetaFieldView("Рік", book.year.toString()),
-            BookMetaFieldView(
-                "Тривалість", book.duration.inMinutes.toString()),
+            BookMetaFieldView("Тривалість", book.duration.inMinutes.toString()),
             BookMetaFieldView("Вік", "${book.ageRating}+"),
           ],
         ),

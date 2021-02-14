@@ -10,8 +10,10 @@ class Book {
   final List<LANGUAGES> languages;
   final String author;
   final int year;
+  final String filePath;
+  final int amountOfParts;
 
-  final List<BookFile> files;
+  List<BookFile> files;
 
   Book({
     this.id,
@@ -21,10 +23,22 @@ class Book {
     this.description,
     this.ageRating,
     this.languages,
-    this.files,
     this.author,
     this.year,
-  });
+    this.filePath,
+    this.amountOfParts
+  }) {
+    files = Iterable<int>.generate(amountOfParts).map((index) {
+      if (index == 0) {
+        return BookFile(
+            title: "Передмова", url: "$filePath/pre.mp3");
+      } else {
+        return BookFile(
+            title: "Розділ $index",
+            url: "$filePath}/$index.mp3");
+      }
+    }).toList();
+  }
 }
 
 List<Book> generateBooks() {
@@ -40,18 +54,9 @@ List<Book> generateBooks() {
         languages: [LANGUAGES.UKR],
         author: "Нік Еліопулос",
         year: 2020,
-        files: [
-          BookFile(
-              title: "Передмова", url: "/minecraft/night_of_the_bats/pre.mp3"),
-          BookFile(
-              title: "Розділ 1", url: "/minecraft/night_of_the_bats/1.mp3"),
-          BookFile(
-              title: "Розділ 2", url: "/minecraft/night_of_the_bats/2.mp3"),
-          BookFile(
-              title: "Розділ 3", url: "/minecraft/night_of_the_bats/3.mp3"),
-          BookFile(
-              title: "Розділ 4", url: "/minecraft/night_of_the_bats/4.mp3"),
-        ]),
+        filePath: "/minecraft/night_of_the_bats",
+        amountOfParts: 15,
+       ),
     Book(
         id: 2,
         title: "Minecraft. Глибоке занурення",
@@ -63,10 +68,9 @@ List<Book> generateBooks() {
         languages: [LANGUAGES.UKR],
         author: "Нік Еліопулос",
         year: 2020,
-        files: [
-          BookFile(title: "Передмова", url: "/minecraft/deep_dive/pre.mp3"),
-          BookFile(title: "Розділ 1", url: "/minecraft/deep_dive/01.mp3"),
-        ]),
+        filePath: "/minecraft/deep_dive",
+        amountOfParts: 16,
+    ),
     Book(
       id: 3,
       title: "Minecraft. Цифрова загроза",
@@ -83,12 +87,8 @@ List<Book> generateBooks() {
       languages: [
         LANGUAGES.UKR,
       ],
-      files: [
-        BookFile(title: "Передмова", url: "/minecraft/cifrova_zagroza/pre.mp3"),
-        BookFile(title: "Розділ 1", url: "/minecraft/cifrova_zagroza/01.mp3"),
-        BookFile(title: "Розділ 2", url: "/minecraft/cifrova_zagroza/02.mp3"),
-        BookFile(title: "Розділ 3", url: "/minecraft/cifrova_zagroza/03.mp3"),
-      ],
+      filePath: "/minecraft/cifrova_zagroza",
+      amountOfParts: 15,
     ),
   ];
 }

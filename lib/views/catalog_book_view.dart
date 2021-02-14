@@ -1,5 +1,7 @@
 import 'dart:math';
 
+import 'package:audiobooks_app/components/headline_text.dart';
+import 'package:audiobooks_app/components/icon_button_styled.dart';
 import 'package:audiobooks_app/models/book.dart';
 import 'package:flutter/material.dart';
 
@@ -19,15 +21,15 @@ class _CatalogBookViewState extends State<CatalogBookView> {
       appBar: AppBar(
         title: Text(widget.book.title),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: [
-            Expanded(
-              flex: 10,
-              child: Wrap(
-                children: [
-                  Center(
+      body: Column(
+        children: [
+          Expanded(
+            flex: 10,
+            child: Column(
+              children: [
+                Expanded(
+                  flex: 1,
+                  child: Center(
                     child: Hero(
                       tag: widget.book.id,
                       child: Image.asset(
@@ -40,84 +42,80 @@ class _CatalogBookViewState extends State<CatalogBookView> {
                       // ),
                     ),
                   ),
-                  SingleChildScrollView(
+                ),
+                Expanded(
+                  flex: 1,
+                  child: SingleChildScrollView(
                     child: Column(
                         children: widget.book.files.map((file) {
-                          return Padding(
-                            padding: const EdgeInsets.all(2.0),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                border: Border.all(width: 4, color: Theme
-                                    .of(context)
-                                    .buttonColor),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(4.0),
-                                child: Row(
-                                    mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        file.title,
-                                      ),
-                                      IconButton(
-                                          icon: Icon(Icons.play_arrow),
-                                          onPressed: null)
-                                    ]),
-                              ),
+                      return Padding(
+                        padding: const EdgeInsets.all(2.0),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                                width: 4, color: Theme.of(context).buttonColor),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(4.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                HeadlineText(
+                                  file.title,
+                                ),
+                                IconButtonStyled(
+                                  iconData: Icons.play_arrow_outlined,
+                                  onPressed: null,
+                                ),
+                              ],
                             ),
-                          );
-                        }).toList()),
+                          ),
+                        ),
+                      );
+                    }).toList()),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            flex: 2,
+            child: Container(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  HeadlineText("Зараз грає"),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 18.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        IconButtonStyled(
+                            iconData: Icons.skip_previous_outlined,
+                            onPressed: () {}),
+                        IconButtonStyled(
+                            iconData: Icons.settings_backup_restore,
+                            onPressed: () {}),
+                        IconButtonStyled(
+                            iconData: Icons.play_circle_filled_outlined,
+                            onPressed: () {}),
+                        Transform(
+                            alignment: Alignment.center,
+                            transform: Matrix4.rotationY(pi),
+                            child: IconButtonStyled(
+                                iconData: Icons.settings_backup_restore,
+                                onPressed: () {})),
+                        IconButtonStyled(
+                            iconData: Icons.skip_next_outlined,
+                            onPressed: () {}),
+                      ],
+                    ),
                   ),
                 ],
               ),
             ),
-            Expanded(
-              flex: 1,
-              child: SizedBox(
-                width: MediaQuery
-                    .of(context)
-                    .size
-                    .width,
-                height: 44,
-                child: Container(
-                  color: Theme
-                      .of(context)
-                      .backgroundColor,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      IconButton(
-
-                          icon: Icon(Icons.skip_previous_outlined),
-                          iconSize: 32,
-                          onPressed: () {}),
-                      IconButton(
-                          icon: Icon(Icons.settings_backup_restore),
-                          iconSize: 32,
-                          onPressed: () {}),
-                      IconButton(
-                          icon: Icon(Icons.play_circle_filled_outlined),
-                          iconSize: 32,
-                          onPressed: () {}),
-                      Transform(
-                          alignment: Alignment.center,
-                          transform: Matrix4.rotationY(pi),
-                          child: IconButton(
-                              icon: Icon(Icons.settings_backup_restore),
-                              iconSize: 32,
-                              onPressed: () {})),
-                      IconButton(
-                          icon: Icon(Icons.skip_next_outlined),
-                          iconSize: 32,
-                          onPressed: () {}),
-                    ],
-                  ),
-                ),
-              ),
-            )
-          ],
-        ),
+          )
+        ],
       ),
     );
   }

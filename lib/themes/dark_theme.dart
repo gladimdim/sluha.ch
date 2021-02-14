@@ -1,26 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-var DEEP_COLOR = Colors.red[900];
+var deepColor = Colors.deepPurple[900];
 
-var MEDIUM_COLOR = Colors.deepPurple[600];
-var LIGHT_COLOR = Colors.deepPurple[400];
-var BG_COLOR = DEEP_COLOR;
+var mediumColor = Colors.deepPurple[600];
+var lightColor = Colors.deepPurple[400];
+var bgColor = deepColor;
 
 ThemeData getDarkTheme() {
   return ThemeData(
-    primaryColor: LIGHT_COLOR,
-    accentColor: MEDIUM_COLOR,
-    backgroundColor: LIGHT_COLOR,
-    buttonColor: DEEP_COLOR,
+    primaryColor: lightColor,
+    accentColor: mediumColor,
+    backgroundColor: deepColor,
+    buttonColor: lightColor,
     scaffoldBackgroundColor: Colors.black,
     textTheme: TextTheme(
       bodyText1: TextStyle(color: Colors.white),
       bodyText2: TextStyle(color: Colors.white),
-      headline6: TextStyle(color: Colors.white),
+      headline6: GoogleFonts.roboto(color: Colors.white),
+      headline4: GoogleFonts.tenorSans(
+        color: Colors.white,
+        fontWeight: FontWeight.bold,
+        fontSize: 22,
+      ),
     ),
     iconTheme: IconThemeData(
-      color: DEEP_COLOR,
+      color: deepColor,
       size: 44,
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
@@ -38,9 +43,9 @@ ThemeData getDarkTheme() {
             if (states.contains(MaterialState.hovered) ||
                 states.contains(MaterialState.focused) ||
                 states.contains(MaterialState.pressed)) {
-              return MEDIUM_COLOR;
+              return mediumColor;
             }
-            return LIGHT_COLOR; // Defer to the widget's default.
+            return lightColor; // Defer to the widget's default.
           },
         ),
         foregroundColor: MaterialStateProperty.resolveWith((states) {

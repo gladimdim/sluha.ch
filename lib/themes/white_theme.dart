@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-var DEEP_COLOR = Colors.deepPurple;
+var deepColor = Colors.deepPurple;
 
-var MEDIUM_COLOR = Colors.deepPurple[200];
-var LIGHT_COLOR = Colors.deepPurple[100];
-var BG_COLOR = DEEP_COLOR;
+var mediumColor = Colors.deepPurple[200];
+var lightColor = Colors.deepPurple[100];
+var bgColor = deepColor;
 
 ThemeData getWhiteTheme() {
   return ThemeData(
-    primaryColor: LIGHT_COLOR,
-    accentColor: MEDIUM_COLOR,
-    backgroundColor: LIGHT_COLOR,
-    buttonColor: DEEP_COLOR,
+    primaryColor: lightColor,
+    accentColor: mediumColor,
+    backgroundColor: lightColor,
+    buttonColor: deepColor,
     iconTheme: IconThemeData(
-      color: DEEP_COLOR,
+      color: deepColor,
       size: 44,
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
@@ -32,9 +32,9 @@ ThemeData getWhiteTheme() {
             if (states.contains(MaterialState.hovered) ||
                 states.contains(MaterialState.focused) ||
                 states.contains(MaterialState.pressed)) {
-              return MEDIUM_COLOR;
+              return mediumColor;
             }
-            return LIGHT_COLOR; // Defer to the widget's default.
+            return lightColor; // Defer to the widget's default.
           },
         ),
         foregroundColor: MaterialStateProperty.resolveWith((states) {
