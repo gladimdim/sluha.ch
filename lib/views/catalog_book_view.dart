@@ -75,8 +75,12 @@ class _CatalogBookViewState extends State<CatalogBookView> {
                                   HeadlineText(
                                     file.title,
                                   ),
-                                  Icon(
-                                      isCurrentlyPlayingThisFile(file) ? Icons.pause_circle_filled_outlined :Icons.play_arrow_outlined
+                                  StreamBuilder(
+                                    stream: _player.onPlayerStateChanged,
+                                    builder: (context, data) => Icon(
+                                        isCurrentlyPlayingThisFile(file)
+                                            ? Icons.pause_circle_filled_outlined
+                                            : Icons.play_arrow_outlined),
                                   ),
                                 ],
                               ),
@@ -128,6 +132,9 @@ class _CatalogBookViewState extends State<CatalogBookView> {
                                           Icons.play_circle_filled_outlined,
                                       onPressed: resume);
                                 }
+                                return IconButtonStyled(
+                                  iconData: Icons.play_circle_filled_outlined,
+                                );
                               } else {
                                 return IconButtonStyled(
                                   iconData: Icons.play_circle_filled_outlined,
@@ -164,6 +171,7 @@ class _CatalogBookViewState extends State<CatalogBookView> {
       pause();
       return;
     }
+    await _player.stop();
     await _player.play("https://sluha.ch/${file.url}");
     setState(() {
       _currentFile = file;

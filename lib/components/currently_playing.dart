@@ -13,6 +13,5 @@ class CurrentlyPlaying extends StatelessWidget {
     } else {
       return HeadlineText(file.title);
     }
-
   }
 }
