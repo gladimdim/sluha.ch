@@ -1,10 +1,11 @@
 import 'dart:math';
 
 import 'package:audiobooks_app/components/currently_playing.dart';
+import 'package:audiobooks_app/components/file_progress_view.dart';
 import 'package:audiobooks_app/components/headline_text.dart';
 import 'package:audiobooks_app/components/icon_button_styled.dart';
 import 'package:audiobooks_app/models/book.dart';
-import 'package:audiobooks_app/models/book_file.dart';
+import 'package:audiobooks_app/models/player.dart';
 import 'package:audioplayer/audioplayer.dart';
 import 'package:flutter/material.dart';
 
@@ -18,11 +19,9 @@ class CatalogBookView extends StatefulWidget {
 }
 
 class _CatalogBookViewState extends State<CatalogBookView> {
-  final AudioPlayer _player = AudioPlayer();
-  BookFile _currentFile;
-
   @override
   Widget build(BuildContext context) {
+    var player = Player.instance;
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.book.title),
@@ -52,46 +51,46 @@ class _CatalogBookViewState extends State<CatalogBookView> {
                 Expanded(
                   flex: 1,
                   child: SingleChildScrollView(
-                    child: Column(
-                        children: widget.book.files.map((file) {
-                      return Padding(
-                        padding: const EdgeInsets.all(2.0),
-                        child: InkWell(
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: _currentFile == file
-                                  ? Theme.of(context).accentColor
-                                  : null,
-                              border: Border.all(
-                                  width: 4,
-                                  color: Theme.of(context).buttonColor),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(4.0),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  HeadlineText(
-                                    file.title,
-                                  ),
-                                  StreamBuilder(
-                                    stream: _player.onPlayerStateChanged,
-                                    builder: (context, data) => Icon(
-                                        isCurrentlyPlayingThisFile(file)
-                                            ? Icons.pause_circle_filled_outlined
-                                            : Icons.play_arrow_outlined),
-                                  ),
-                                ],
+                    child: StreamBuilder(
+                      stream: player.playbackChanges,
+                      builder: (context, data) => Column(
+                          children: widget.book.files.map((file) {
+                        return Padding(
+                          padding: const EdgeInsets.all(2.0),
+                          child: InkWell(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: player.currentFile == file
+                                    ? Theme.of(context).accentColor
+                                    : null,
+                                border: Border.all(
+                                    width: 4,
+                                    color: Theme.of(context).buttonColor),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(4.0),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    HeadlineText(
+                                      file.title,
+                                    ),
+                                    Icon(Player.instance
+                                            .isCurrentlyPlayingThisFile(file)
+                                        ? Icons.pause_circle_filled_outlined
+                                        : Icons.play_arrow_outlined),
+                                  ],
+                                ),
                               ),
                             ),
+                            onTap: () {
+                              player.play(widget.book, file);
+                            },
                           ),
-                          onTap: () {
-                            play(file);
-                          },
-                        ),
-                      );
-                    }).toList()),
+                        );
+                      }).toList()),
+                    ),
                   ),
                 ),
               ],
@@ -103,7 +102,13 @@ class _CatalogBookViewState extends State<CatalogBookView> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  CurrentlyPlaying(_currentFile),
+                  StreamBuilder(
+                    stream: player.playbackChanges,
+                    builder: (context, data) => CurrentlyPlaying(
+                      Player.instance.currentFile,
+                    ),
+                  ),
+                  FileProgressView(),
                   Padding(
                     padding: const EdgeInsets.only(bottom: 18.0),
                     child: Row(
@@ -111,12 +116,12 @@ class _CatalogBookViewState extends State<CatalogBookView> {
                       children: [
                         IconButtonStyled(
                             iconData: Icons.skip_previous_outlined,
-                            onPressed: () {}),
+                            onPressed: player.playPrevious),
                         IconButtonStyled(
                             iconData: Icons.settings_backup_restore,
                             onPressed: () {}),
                         StreamBuilder(
-                            stream: _player.onPlayerStateChanged,
+                            stream: player.playbackChanges,
                             builder: (context, data) {
                               if (data.hasData) {
                                 AudioPlayerState state = data.data;
@@ -124,13 +129,13 @@ class _CatalogBookViewState extends State<CatalogBookView> {
                                   return IconButtonStyled(
                                       iconData:
                                           Icons.pause_circle_filled_outlined,
-                                      onPressed: pause);
+                                      onPressed: player.pause);
                                 }
                                 if (state == AudioPlayerState.PAUSED) {
                                   return IconButtonStyled(
                                       iconData:
                                           Icons.play_circle_filled_outlined,
-                                      onPressed: resume);
+                                      onPressed: player.resume);
                                 }
                                 return IconButtonStyled(
                                   iconData: Icons.play_circle_filled_outlined,
@@ -149,7 +154,7 @@ class _CatalogBookViewState extends State<CatalogBookView> {
                                 onPressed: () {})),
                         IconButtonStyled(
                             iconData: Icons.skip_next_outlined,
-                            onPressed: () {}),
+                            onPressed: player.playNext),
                       ],
                     ),
                   ),
@@ -160,39 +165,5 @@ class _CatalogBookViewState extends State<CatalogBookView> {
         ],
       ),
     );
-  }
-
-  bool isCurrentlyPlayingThisFile(BookFile file) {
-    return file == _currentFile && _player.state == AudioPlayerState.PLAYING;
-  }
-
-  void play(BookFile file) async {
-    if (file == _currentFile && _player.state == AudioPlayerState.PLAYING) {
-      pause();
-      return;
-    }
-    await _player.stop();
-    await _player.play("https://sluha.ch/${file.url}");
-    setState(() {
-      _currentFile = file;
-    });
-  }
-
-  void pause() async {
-    if (_currentFile != null) {
-      await _player.pause();
-    }
-  }
-
-  void stop() async {
-    if (_currentFile != null) {
-      await _player.stop();
-    }
-  }
-
-  void resume() async {
-    if (_currentFile != null) {
-      await _player.play("https://sluha.ch/${_currentFile.url}");
-    }
   }
 }
