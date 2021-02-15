@@ -35,7 +35,7 @@ class Book {
       } else {
         return BookFile(
             title: "Розділ $index",
-            url: "$filePath}/$index.mp3");
+            url: "$filePath/$index.mp3");
       }
     }).toList();
   }
@@ -54,7 +54,7 @@ List<Book> generateBooks() {
         languages: [LANGUAGES.UKR],
         author: "Нік Еліопулос",
         year: 2020,
-        filePath: "/minecraft/night_of_the_bats",
+        filePath: "minecraft/night_of_the_bats",
         amountOfParts: 15,
        ),
     Book(
@@ -68,7 +68,7 @@ List<Book> generateBooks() {
         languages: [LANGUAGES.UKR],
         author: "Нік Еліопулос",
         year: 2020,
-        filePath: "/minecraft/deep_dive",
+        filePath: "minecraft/deep_dive",
         amountOfParts: 16,
     ),
     Book(
@@ -87,8 +87,8 @@ List<Book> generateBooks() {
       languages: [
         LANGUAGES.UKR,
       ],
-      filePath: "/minecraft/cifrova_zagroza",
-      amountOfParts: 15,
+      filePath: "minecraft/cifrova_zagroza",
+      amountOfParts: 16,
     ),
   ];
 }
