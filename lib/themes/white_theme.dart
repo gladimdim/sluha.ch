@@ -13,6 +13,16 @@ ThemeData getWhiteTheme() {
     accentColor: mediumColor,
     backgroundColor: lightColor,
     buttonColor: deepColor,
+    textTheme: TextTheme(
+      bodyText1: TextStyle(color: Colors.black),
+      bodyText2: TextStyle(color: Colors.black),
+      headline6: GoogleFonts.roboto(color: Colors.black),
+      headline4: GoogleFonts.tenorSans(
+        color: Colors.black,
+        fontWeight: FontWeight.bold,
+        fontSize: 22,
+      ),
+    ),
     iconTheme: IconThemeData(
       color: deepColor,
       size: 44,

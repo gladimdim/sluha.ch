@@ -29,6 +29,14 @@ class Player {
 
   static final Player instance = Player._internal();
 
+  String get getBookTitle {
+    if (book != null) {
+      return book.title;
+    } else {
+      return "";
+    }
+  }
+
   BookFile get currentFile {
     if (book == null) {
       return null;
