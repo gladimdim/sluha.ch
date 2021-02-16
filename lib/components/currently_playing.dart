@@ -13,13 +13,7 @@ class CurrentlyPlaying extends StatelessWidget {
     if (file == null) {
       return HeadlineText("Трек не вибрано");
     } else {
-      return Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          HeadlineText(bookTitle),
-          HeadlineText(file.title),
-        ],
-      );
+      return HeadlineText("$bookTitle: ${file.title}");
     }
   }
 }
