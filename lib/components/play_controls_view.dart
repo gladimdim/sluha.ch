@@ -43,16 +43,22 @@ class PlayControlsView extends StatelessWidget {
           StreamBuilder(
             stream: player.progressChanges,
             builder: (context, snapshot) {
-              Duration value = snapshot.hasData ? snapshot.data : Duration(seconds: 0);
-              var max = Player.instance.audioPlayer.duration.inSeconds.toDouble();
-              var inDouble = value.inSeconds.toDouble();
-              return Slider(
-                min: 0,
-                max: Player.instance.audioPlayer.duration.inSeconds.toDouble(),
-                value: inDouble,
-                label: "Dima",
-                onChanged: (value) {},
-              );
+              if (snapshot.hasData) {
+                Duration value = snapshot.data;
+                var max = Player.instance.audioPlayer.duration.inSeconds
+                    .toDouble();
+                var inDouble = value.inSeconds.toDouble();
+                return Slider(
+                  min: 0,
+                  max: Player.instance.audioPlayer.duration.inSeconds
+                      .toDouble(),
+                  value: inDouble,
+                  label: "Dima",
+                  onChanged: (value) {},
+                );
+              } else {
+                return Container();
+              }
             }
           ),
           Padding(
