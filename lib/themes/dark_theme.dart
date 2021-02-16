@@ -12,8 +12,19 @@ ThemeData getDarkTheme() {
     primaryColor: lightColor,
     accentColor: mediumColor,
     backgroundColor: deepColor,
-    buttonColor: lightColor,
+    buttonColor: deepColor,
     scaffoldBackgroundColor: Colors.black,
+    sliderTheme: SliderThemeData(
+      valueIndicatorColor: Colors.white,
+      // progress line to the right
+      inactiveTrackColor: Colors.red,
+      // progress line to the left
+      activeTrackColor: deepColor,
+      // wave color when dragging
+      overlayColor: deepColor,
+      // button
+      thumbColor: mediumColor,
+    ),
     textTheme: TextTheme(
       bodyText1: TextStyle(color: Colors.white),
       bodyText2: TextStyle(color: Colors.white),

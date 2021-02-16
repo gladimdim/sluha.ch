@@ -13,6 +13,17 @@ ThemeData getWhiteTheme() {
     accentColor: mediumColor,
     backgroundColor: lightColor,
     buttonColor: deepColor,
+    sliderTheme: SliderThemeData(
+      valueIndicatorColor: Colors.white,
+      // progress line to the right
+      inactiveTrackColor: deepColor,
+      // progress line to the left
+      activeTrackColor: Colors.red,
+      // wave color when dragging
+      overlayColor: deepColor,
+      // button
+      thumbColor: mediumColor,
+    ),
     textTheme: TextTheme(
       bodyText1: TextStyle(color: Colors.black),
       bodyText2: TextStyle(color: Colors.black),

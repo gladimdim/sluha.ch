@@ -75,7 +75,7 @@ class PlayControlsView extends StatelessWidget {
                     iconData: Icons.skip_previous_outlined,
                     onPressed: player.playPrevious),
                 IconButtonStyled(
-                    iconData: Icons.settings_backup_restore, onPressed: () {}),
+                    iconData: Icons.settings_backup_restore, onPressed: player.rewind30),
                 StreamBuilder(
                     stream: player.playbackChanges,
                     builder: (context, data) {
@@ -105,7 +105,7 @@ class PlayControlsView extends StatelessWidget {
                     transform: Matrix4.rotationY(pi),
                     child: IconButtonStyled(
                         iconData: Icons.settings_backup_restore,
-                        onPressed: () {})),
+                        onPressed: player.skip30)),
                 IconButtonStyled(
                     iconData: Icons.skip_next_outlined,
                     onPressed: player.playNext),

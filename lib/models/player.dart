@@ -17,11 +17,14 @@ class Player {
     playbackChanges = _playbackChanges.stream;
     audioPlayer.onPlayerStateChanged.listen(_playbackChanges.add);
     audioPlayer.onAudioPositionChanged.listen(_progressChanges.add);
-    audioPlayer.onAudioPositionChanged.listen((event) {
-      print(event);
-    });
     audioPlayer.onPlayerStateChanged.listen((event) {
-      print(event);
+      switch (event) {
+        case AudioPlayerState.COMPLETED:
+          playNext();
+          break;
+        default:
+          break;
+      }
     });
 
     progressChanges = _progressChanges.stream;
@@ -73,15 +76,29 @@ class Player {
     }
   }
 
+  void skip30() {
+    jumpToOffset(Duration(seconds: 30));
+  }
+
+  void rewind30() {
+    jumpToOffset(Duration(seconds: -30));
+  }
+
+  void jumpToOffset(Duration offset) async {
+    Duration current = await _progressChanges.first;
+    var newPosition = current + offset;
+    audioPlayer.seek(newPosition.inSeconds.toDouble());
+  }
+
   void playPrevious() {
-    jumpToOffset(-1);
+    jumpToTrack(-1);
   }
 
   void playNext() {
-    jumpToOffset(1);
+    jumpToTrack(1);
   }
 
-  void jumpToOffset(int offset) async {
+  void jumpToTrack(int offset) async {
     if (book != null) {
       var next = book.files[currentFileIndex + offset];
       if (next != null) {
