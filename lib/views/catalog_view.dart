@@ -11,49 +11,46 @@ class CatalogView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Column(
-        children: [
-          Expanded(
-            flex: 10,
-            child: SingleChildScrollView(
-              child: Column(
-                children: books
-                    .map(
-                      (book) => Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Container(
-                          // padding: const EdgeInsets.all(8.0),
-                          decoration: BoxDecoration(
-                            border: Border.all(width: 1),
-                            borderRadius: BorderRadius.circular(6.0),
-                            // color: Theme.of(context).backgroundColor,
+    return Column(
+      children: [
+        Expanded(
+          flex: 10,
+          child: SingleChildScrollView(
+            child: Column(
+              children: books
+                  .map(
+                    (book) => Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        // padding: const EdgeInsets.all(8.0),
+                        decoration: BoxDecoration(
+                          border: Border.all(width: 1),
+                          borderRadius: BorderRadius.circular(6.0),
+                          // color: Theme.of(context).backgroundColor,
+                        ),
+                        child: ElevatedButton(
+                          child: CatalogCardBookView(
+                            book: book,
                           ),
-                          child: ElevatedButton(
-                            child: CatalogCardBookView(
-                              book: book,
-                            ),
-                            onPressed: () {
-                              Navigator.push(context,
-                                  MaterialPageRoute(builder: (context) {
-                                return CatalogBookView(book: book);
-                              }));
-                            },
-                          ),
+                          onPressed: () {
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (context) {
+                              return CatalogBookView(book: book);
+                            }));
+                          },
                         ),
                       ),
-                    )
-                    .toList(),
-              ),
+                    ),
+                  )
+                  .toList(),
             ),
           ),
-          Expanded(
-            flex: 2,
-            child: PlayControlsView(),
-          ),
-        ],
-      ),
+        ),
+        Expanded(
+          flex: 2,
+          child: PlayControlsView(),
+        ),
+      ],
     );
   }
 }
