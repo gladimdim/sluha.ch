@@ -14,7 +14,7 @@ class CatalogView extends StatelessWidget {
     return Column(
       children: [
         Expanded(
-          flex: 10,
+          flex: 8,
           child: SingleChildScrollView(
             child: Column(
               children: books
@@ -48,7 +48,7 @@ class CatalogView extends StatelessWidget {
         ),
         Expanded(
           flex: 2,
-          child: PlayControlsView(),
+          child: Hero(tag: "PlayControls", child: PlayControlsView()),
         ),
       ],
     );

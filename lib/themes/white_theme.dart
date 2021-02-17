@@ -18,7 +18,7 @@ ThemeData getWhiteTheme() {
       // progress line to the right
       inactiveTrackColor: deepColor,
       // progress line to the left
-      activeTrackColor: Colors.red,
+      activeTrackColor: mediumColor,
       // wave color when dragging
       overlayColor: deepColor,
       // button

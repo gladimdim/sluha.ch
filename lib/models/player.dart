@@ -109,5 +109,6 @@ class Player {
 
   void dispose() {
     _playbackChanges.close();
+    _progressChanges.close();
   }
 }

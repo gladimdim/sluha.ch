@@ -24,7 +24,7 @@ class _CatalogBookViewState extends State<CatalogBookView> {
       body: Column(
         children: [
           Expanded(
-            flex: 10,
+            flex: 8,
             child: Column(
               children: [
                 Expanded(
@@ -93,7 +93,7 @@ class _CatalogBookViewState extends State<CatalogBookView> {
           ),
           Expanded(
             flex: 2,
-            child: PlayControlsView(),
+            child: Hero(tag: "PlayControls", child: PlayControlsView()),
           )
         ],
       ),
