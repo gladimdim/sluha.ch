@@ -91,6 +91,23 @@ List<Book> generateBooks() {
       filePath: "minecraft/cifrova_zagroza",
       amountOfParts: 16,
     ),
+    Book(
+      id: 4,
+      seriesTitle: "Minecraft",
+      title: "Таємниця підземелля",
+      author: "Нік Еліопулос",
+      year: 2020,
+      imageUrl: "assets/minecraft/dungeon_secrets/cover.png",
+      duration: Duration(minutes: 42),
+      description:
+          """П'ята книжка з серії «Майнкрафт. Хроніки Вудсворду». Що яскравішим буде світло прожекторів... То глибшим стане підземелля! Доки усі метушаться, готуючись до шкільної п’єси, у По та його друзів є серйозніші проблеми. Їм треба знайти джерело сили Короля кликунів, сховане у страшному підземеллі… Але що глибше друзі копають, то все більше їм здається, що хтось скеровує кожен їхній крок.""",
+      ageRating: 7,
+      languages: [
+        LANGUAGES.UKR,
+      ],
+      filePath: "minecraft/dungeon_secrets",
+      amountOfParts: 13,
+    ),
   ];
 }
 

@@ -13,7 +13,7 @@ class IconButtonStyled extends StatelessWidget {
           iconData,
           color: Theme.of(context).buttonColor,
         ),
-        iconSize: 44,
+        iconSize: 60,
         onPressed: onPressed);
   }
 }
