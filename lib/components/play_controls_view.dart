@@ -4,7 +4,6 @@ import 'package:audiobooks_app/components/currently_playing.dart';
 import 'package:audiobooks_app/components/file_progress_view.dart';
 import 'package:audiobooks_app/components/icon_button_styled.dart';
 import 'package:audiobooks_app/models/player.dart';
-import 'package:audioplayer/audioplayer.dart';
 import 'package:flutter/material.dart';
 
 class PlayControlsView extends StatelessWidget {
@@ -37,11 +36,12 @@ class PlayControlsView extends StatelessWidget {
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
                           Duration value = snapshot.data;
-                          var max = 300;
+                          var max = Player.instance.totalDuration.inSeconds
+                              .toDouble();
                           var inDouble = value.inSeconds.toDouble();
                           return Slider(
                             min: 0,
-                            max: 300,
+                            max: max,
                             value: inDouble,
                             label: "Duration",
                             onChanged: (value) {},
@@ -75,13 +75,13 @@ class PlayControlsView extends StatelessWidget {
                       stream: player.playbackChanges,
                       builder: (context, data) {
                         if (data.hasData) {
-                          AudioPlayerState state = data.data;
-                          if (state == AudioPlayerState.PLAYING) {
+                          PlayerState state = data.data;
+                          if (state == PlayerState.PLAYING) {
                             return IconButtonStyled(
                                 iconData: Icons.pause_circle_filled_outlined,
                                 onPressed: player.pause);
                           }
-                          if (state == AudioPlayerState.PAUSED) {
+                          if (state == PlayerState.PAUSED) {
                             return IconButtonStyled(
                                 iconData: Icons.play_circle_filled_outlined,
                                 onPressed: player.resume);

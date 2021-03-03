@@ -1,6 +1,5 @@
 import 'package:audiobooks_app/models/book.dart';
 import 'package:audiobooks_app/models/book_file.dart';
-import 'package:audioplayer/audioplayer.dart';
 import 'package:flutter_playout/audio.dart';
 import 'package:flutter_playout/player_observer.dart';
 import 'package:rxdart/rxdart.dart';
@@ -11,9 +10,9 @@ class Player with PlayerObserver {
   PlayerState _playerState = PlayerState.STOPPED;
   Book book;
   int currentFileIndex;
-  BehaviorSubject _playbackChanges = BehaviorSubject<AudioPlayerState>();
+  BehaviorSubject _playbackChanges = BehaviorSubject<PlayerState>();
   BehaviorSubject _progressChanges = BehaviorSubject<Duration>();
-  ValueStream<AudioPlayerState> playbackChanges;
+  ValueStream<PlayerState> playbackChanges;
   ValueStream<Duration> progressChanges;
   Duration totalDuration = Duration.zero;
 
@@ -28,8 +27,15 @@ class Player with PlayerObserver {
   }
 
   onDuration(int total) {
-    var seconds = (total / 1000).toInt();
+    var seconds = total ~/ 1000;
+    if (seconds < 0) {
+      seconds = 0;
+    }
     totalDuration = Duration(seconds: seconds);
+  }
+
+  onComplete() {
+    playNext();
   }
 
   static final Player instance = Player._internal();
@@ -52,8 +58,10 @@ class Player with PlayerObserver {
   void play(Book book, BookFile file) async {
     this.book = book;
     this.currentFileIndex = this.book.files.indexOf(file);
-    await audioPlayer.play("$urlPrefix/${file.url}", title: "Title1");
+    await audioPlayer.play("$urlPrefix/${file.url}",
+        title: book.title, subtitle:file.title);
     _playerState = PlayerState.PLAYING;
+    pushCurrentPlayerState();
   }
 
   bool isCurrentlyPlayingThisFile(BookFile file) {
@@ -64,6 +72,7 @@ class Player with PlayerObserver {
     if (currentFile != null) {
       await audioPlayer.pause();
       _playerState = PlayerState.PAUSED;
+      pushCurrentPlayerState();
     }
   }
 
@@ -71,15 +80,20 @@ class Player with PlayerObserver {
     if (currentFile != null) {
       await audioPlayer.reset();
       _playerState = PlayerState.STOPPED;
+      pushCurrentPlayerState();
     }
   }
 
   void resume() async {
     if (currentFile != null) {
       await audioPlayer.play("$urlPrefix/${currentFile.url}");
-
       _playerState = PlayerState.PLAYING;
+      pushCurrentPlayerState();
     }
+  }
+
+  pushCurrentPlayerState() {
+    _playbackChanges.add(_playerState);
   }
 
   void skip30() {
@@ -119,6 +133,4 @@ class Player with PlayerObserver {
   }
 }
 
-enum PlayerState {
-  STOPPED, PLAYING, PAUSED
-}
+enum PlayerState { STOPPED, PLAYING, PAUSED }
