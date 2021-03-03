@@ -37,13 +37,11 @@ class PlayControlsView extends StatelessWidget {
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
                           Duration value = snapshot.data;
-                          var max = Player.instance.audioPlayer.duration.inSeconds
-                              .toDouble();
+                          var max = 300;
                           var inDouble = value.inSeconds.toDouble();
                           return Slider(
                             min: 0,
-                            max: Player.instance.audioPlayer.duration.inSeconds
-                                .toDouble(),
+                            max: 300,
                             value: inDouble,
                             label: "Duration",
                             onChanged: (value) {},

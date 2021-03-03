@@ -1,33 +1,35 @@
 import 'package:audiobooks_app/models/book.dart';
 import 'package:audiobooks_app/models/book_file.dart';
 import 'package:audioplayer/audioplayer.dart';
+import 'package:flutter_playout/audio.dart';
+import 'package:flutter_playout/player_observer.dart';
 import 'package:rxdart/rxdart.dart';
 
-class Player {
+class Player with PlayerObserver {
   final String urlPrefix = "https://sluha.ch";
-  final AudioPlayer audioPlayer = AudioPlayer();
+  Audio audioPlayer = Audio.instance();
+  PlayerState _playerState = PlayerState.STOPPED;
   Book book;
   int currentFileIndex;
   BehaviorSubject _playbackChanges = BehaviorSubject<AudioPlayerState>();
   BehaviorSubject _progressChanges = BehaviorSubject<Duration>();
   ValueStream<AudioPlayerState> playbackChanges;
   ValueStream<Duration> progressChanges;
+  Duration totalDuration = Duration.zero;
 
   Player._internal() {
     playbackChanges = _playbackChanges.stream;
-    audioPlayer.onPlayerStateChanged.listen(_playbackChanges.add);
-    audioPlayer.onAudioPositionChanged.listen(_progressChanges.add);
-    audioPlayer.onPlayerStateChanged.listen((event) {
-      switch (event) {
-        case AudioPlayerState.COMPLETED:
-          playNext();
-          break;
-        default:
-          break;
-      }
-    });
-
+    listenForAudioPlayerEvents();
     progressChanges = _progressChanges.stream;
+  }
+
+  onTime(int seconds) {
+    _progressChanges.add(Duration(seconds: seconds));
+  }
+
+  onDuration(int total) {
+    var seconds = (total / 1000).toInt();
+    totalDuration = Duration(seconds: seconds);
   }
 
   static final Player instance = Player._internal();
@@ -50,29 +52,33 @@ class Player {
   void play(Book book, BookFile file) async {
     this.book = book;
     this.currentFileIndex = this.book.files.indexOf(file);
-    await audioPlayer.stop();
-    await audioPlayer.play("$urlPrefix/${file.url}");
+    await audioPlayer.play("$urlPrefix/${file.url}", title: "Title1");
+    _playerState = PlayerState.PLAYING;
   }
 
   bool isCurrentlyPlayingThisFile(BookFile file) {
-    return file == currentFile && audioPlayer.state == AudioPlayerState.PLAYING;
+    return file == currentFile && _playerState == PlayerState.PLAYING;
   }
 
   void pause() async {
     if (currentFile != null) {
       await audioPlayer.pause();
+      _playerState = PlayerState.PAUSED;
     }
   }
 
   void stop() async {
     if (currentFile != null) {
-      await audioPlayer.stop();
+      await audioPlayer.reset();
+      _playerState = PlayerState.STOPPED;
     }
   }
 
   void resume() async {
     if (currentFile != null) {
       await audioPlayer.play("$urlPrefix/${currentFile.url}");
+
+      _playerState = PlayerState.PLAYING;
     }
   }
 
@@ -87,7 +93,7 @@ class Player {
   void jumpToOffset(Duration offset) async {
     Duration current = await _progressChanges.first;
     var newPosition = current + offset;
-    audioPlayer.seek(newPosition.inSeconds.toDouble());
+    audioPlayer.seekTo(newPosition.inSeconds.toDouble());
   }
 
   void playPrevious() {
@@ -111,4 +117,8 @@ class Player {
     _playbackChanges.close();
     _progressChanges.close();
   }
+}
+
+enum PlayerState {
+  STOPPED, PLAYING, PAUSED
 }

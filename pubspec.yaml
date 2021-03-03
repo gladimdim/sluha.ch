@@ -14,6 +14,11 @@ dependencies:
   cupertino_icons: ^1.0.2
   audioplayer: ^0.8.1
   rxdart: ^0.25.0
+  audio_service:
+    git:
+      url: https://github.com/ryanheise/audio_service.git
+      ref: one-isolate
+  flutter_playout: ^1.0.42
 
 dev_dependencies:
   flutter_test:

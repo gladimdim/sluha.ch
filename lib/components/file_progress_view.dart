@@ -10,8 +10,9 @@ class FileProgressView extends StatelessWidget {
           if (data.hasData) {
             Duration duration = data.data;
             return Text(
-                "${durationToString(duration)}/${durationToString(Player.instance.audioPlayer.duration)}",
-            textAlign: TextAlign.end,);
+              "${durationToString(duration)}/${durationToString(Player.instance.totalDuration)}",
+              textAlign: TextAlign.end,
+            );
           } else {
             return Container();
           }
