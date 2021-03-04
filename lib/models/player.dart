@@ -143,8 +143,8 @@ class Player {
     return AudioInfo(
       "$urlPrefix/${file.url}",
       title: file.title,
-      desc: file.title,
-      coverUrl: "$urlPrefix/minecraft/night_of_the_bats/cover.png",
+      desc: book.title,
+      coverUrl: "$urlPrefix/${book.coverUrl}",
     );
   }
 }
