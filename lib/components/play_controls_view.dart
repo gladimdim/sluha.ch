@@ -6,6 +6,7 @@ import 'package:audiobooks_app/components/icon_button_styled.dart';
 import 'package:audiobooks_app/models/player.dart';
 import 'package:audioplayer/audioplayer.dart';
 import 'package:flutter/material.dart';
+import 'package:tuple/tuple.dart';
 
 class PlayControlsView extends StatelessWidget {
   @override
@@ -36,15 +37,11 @@ class PlayControlsView extends StatelessWidget {
                       stream: player.progressChanges,
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
-                          Duration value = snapshot.data;
-                          var max = Player.instance.audioPlayer.duration.inSeconds
-                              .toDouble();
-                          var inDouble = value.inSeconds.toDouble();
+                          Tuple2<Duration, Duration> durations = snapshot.data;
                           return Slider(
                             min: 0,
-                            max: Player.instance.audioPlayer.duration.inSeconds
-                                .toDouble(),
-                            value: inDouble,
+                            max: durations.item2.inSeconds.toDouble(),
+                            value: durations.item1.inSeconds.toDouble(),
                             label: "Duration",
                             onChanged: (value) {},
                           );
@@ -77,20 +74,16 @@ class PlayControlsView extends StatelessWidget {
                       stream: player.playbackChanges,
                       builder: (context, data) {
                         if (data.hasData) {
-                          AudioPlayerState state = data.data;
-                          if (state == AudioPlayerState.PLAYING) {
+                          var isPlaying = data.data;
+                          if (isPlaying) {
                             return IconButtonStyled(
                                 iconData: Icons.pause_circle_filled_outlined,
                                 onPressed: player.pause);
-                          }
-                          if (state == AudioPlayerState.PAUSED) {
+                          } else {
                             return IconButtonStyled(
                                 iconData: Icons.play_circle_filled_outlined,
                                 onPressed: player.resume);
                           }
-                          return IconButtonStyled(
-                            iconData: Icons.play_circle_filled_outlined,
-                          );
                         } else {
                           return IconButtonStyled(
                             iconData: Icons.play_circle_filled_outlined,

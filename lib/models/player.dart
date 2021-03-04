@@ -1,33 +1,54 @@
+import 'package:audio_manager/audio_manager.dart';
 import 'package:audiobooks_app/models/book.dart';
 import 'package:audiobooks_app/models/book_file.dart';
 import 'package:audioplayer/audioplayer.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:tuple/tuple.dart';
 
 class Player {
   final String urlPrefix = "https://sluha.ch";
-  final AudioPlayer audioPlayer = AudioPlayer();
   Book book;
   int currentFileIndex;
-  BehaviorSubject _playbackChanges = BehaviorSubject<AudioPlayerState>();
-  BehaviorSubject _progressChanges = BehaviorSubject<Duration>();
-  ValueStream<AudioPlayerState> playbackChanges;
-  ValueStream<Duration> progressChanges;
+  BehaviorSubject _playbackChanges = BehaviorSubject<bool>();
+  BehaviorSubject _progressChanges =
+      BehaviorSubject<Tuple2<Duration, Duration>>();
+  ValueStream<bool> playbackChanges;
+  ValueStream<Tuple2<Duration, Duration>> progressChanges;
 
   Player._internal() {
     playbackChanges = _playbackChanges.stream;
-    audioPlayer.onPlayerStateChanged.listen(_playbackChanges.add);
-    audioPlayer.onAudioPositionChanged.listen(_progressChanges.add);
-    audioPlayer.onPlayerStateChanged.listen((event) {
-      switch (event) {
-        case AudioPlayerState.COMPLETED:
+    progressChanges = _progressChanges.stream;
+
+    setupAudio();
+  }
+
+  setupAudio() {
+    // AudioManager.instance.play(auto: false);
+    AudioManager.instance.onEvents((events, args) {
+      print(events);
+      switch (events) {
+        case AudioManagerEvents.timeupdate:
+          _progressChanges.add(Tuple2(
+              AudioManager.instance.position, AudioManager.instance.duration));
+          break;
+        case AudioManagerEvents.ended:
           playNext();
           break;
-        default:
+        case AudioManagerEvents.playstatus:
+          _playbackChanges.add(true);
+          break;
+        case AudioManagerEvents.stop:
+        case AudioManagerEvents.error:
+          _playbackChanges.add(false);
+          break;
+        case AudioManagerEvents.next:
+          playNext();
+          break;
+        case AudioManagerEvents.previous:
+          playPrevious();
           break;
       }
     });
-
-    progressChanges = _progressChanges.stream;
   }
 
   static final Player instance = Player._internal();
@@ -50,30 +71,35 @@ class Player {
   void play(Book book, BookFile file) async {
     this.book = book;
     this.currentFileIndex = this.book.files.indexOf(file);
-    await audioPlayer.stop();
-    await audioPlayer.play("$urlPrefix/${file.url}");
+    AudioManager.instance.audioList = [fileToAudioInfo(file)];
+    AudioManager.instance.play(index: 0, auto: true);
   }
 
   bool isCurrentlyPlayingThisFile(BookFile file) {
-    return file == currentFile && audioPlayer.state == AudioPlayerState.PLAYING;
+    return file == currentFile && AudioManager.instance.isPlaying;
   }
 
   void pause() async {
     if (currentFile != null) {
-      await audioPlayer.pause();
+      playOrPause();
     }
   }
 
   void stop() async {
     if (currentFile != null) {
-      await audioPlayer.stop();
+      await AudioManager.instance.stop();
     }
   }
 
   void resume() async {
     if (currentFile != null) {
-      await audioPlayer.play("$urlPrefix/${currentFile.url}");
+      playOrPause();
     }
+  }
+
+  void playOrPause() async {
+    var isPlaying = await AudioManager.instance.playOrPause();
+    _playbackChanges.add(isPlaying);
   }
 
   void skip30() {
@@ -85,9 +111,10 @@ class Player {
   }
 
   void jumpToOffset(Duration offset) async {
-    Duration current = await _progressChanges.first;
+    Tuple2<Duration, Duration> progresses = await _progressChanges.first;
+    Duration current = progresses.item1;
     var newPosition = current + offset;
-    audioPlayer.seek(newPosition.inSeconds.toDouble());
+    AudioManager.instance.seekTo(newPosition);
   }
 
   void playPrevious() {
@@ -110,5 +137,14 @@ class Player {
   void dispose() {
     _playbackChanges.close();
     _progressChanges.close();
+  }
+
+  AudioInfo fileToAudioInfo(BookFile file) {
+    return AudioInfo(
+      "$urlPrefix/${file.url}",
+      title: file.title,
+      desc: file.title,
+      coverUrl: "$urlPrefix/minecraft/night_of_the_bats/cover.png",
+    );
   }
 }
