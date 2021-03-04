@@ -12,7 +12,6 @@ dependencies:
     sdk: flutter
   google_fonts: ^1.1.2
   cupertino_icons: ^1.0.2
-  audioplayer: ^0.8.1
   rxdart: ^0.25.0
   audio_manager: ^0.7.3
   tuple: ^1.0.3
