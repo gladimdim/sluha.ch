@@ -10,7 +10,8 @@ class Player {
   Book book;
   int currentFileIndex;
   BehaviorSubject _playbackChanges = BehaviorSubject<bool>();
-  BehaviorSubject _progressChanges = BehaviorSubject<Tuple2<Duration, Duration>>();
+  BehaviorSubject _progressChanges =
+      BehaviorSubject<Tuple2<Duration, Duration>>();
   ValueStream<bool> playbackChanges;
   ValueStream<Tuple2<Duration, Duration>> progressChanges;
 
@@ -24,6 +25,7 @@ class Player {
   setupAudio() {
     // AudioManager.instance.play(auto: false);
     AudioManager.instance.onEvents((events, args) {
+      print(events);
       switch (events) {
         case AudioManagerEvents.timeupdate:
           _progressChanges.add(Tuple2(
@@ -38,6 +40,12 @@ class Player {
         case AudioManagerEvents.stop:
         case AudioManagerEvents.error:
           _playbackChanges.add(false);
+          break;
+        case AudioManagerEvents.next:
+          playNext();
+          break;
+        case AudioManagerEvents.previous:
+          playPrevious();
           break;
       }
     });
@@ -73,7 +81,7 @@ class Player {
 
   void pause() async {
     if (currentFile != null) {
-      await AudioManager.instance.playOrPause();
+      playOrPause();
     }
   }
 
@@ -85,8 +93,13 @@ class Player {
 
   void resume() async {
     if (currentFile != null) {
-      AudioManager.instance.playOrPause();
+      playOrPause();
     }
+  }
+
+  void playOrPause() async {
+    var isPlaying = await AudioManager.instance.playOrPause();
+    _playbackChanges.add(isPlaying);
   }
 
   void skip30() {
@@ -98,7 +111,8 @@ class Player {
   }
 
   void jumpToOffset(Duration offset) async {
-    Duration current = await _progressChanges.first;
+    Tuple2<Duration, Duration> progresses = await _progressChanges.first;
+    Duration current = progresses.item1;
     var newPosition = current + offset;
     AudioManager.instance.seekTo(newPosition);
   }

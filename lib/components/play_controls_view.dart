@@ -38,11 +38,10 @@ class PlayControlsView extends StatelessWidget {
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
                           Tuple2<Duration, Duration> durations = snapshot.data;
-                          var inDouble = durations.item2.inSeconds.toDouble();
                           return Slider(
                             min: 0,
                             max: durations.item2.inSeconds.toDouble(),
-                            value: inDouble,
+                            value: durations.item1.inSeconds.toDouble(),
                             label: "Duration",
                             onChanged: (value) {},
                           );
