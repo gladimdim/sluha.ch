@@ -1,5 +1,6 @@
 import 'package:audiobooks_app/models/player.dart';
 import 'package:flutter/material.dart';
+import 'package:tuple/tuple.dart';
 
 class FileProgressView extends StatelessWidget {
   @override
@@ -8,9 +9,9 @@ class FileProgressView extends StatelessWidget {
         stream: Player.instance.progressChanges,
         builder: (context, data) {
           if (data.hasData) {
-            Duration duration = data.data;
+            Tuple2<Duration, Duration> tuple = data.data;
             return Text(
-                "${durationToString(duration)}/${durationToString(Player.instance.audioPlayer.duration)}",
+                "${durationToString(tuple.item1)}/${durationToString(tuple.item2)}",
             textAlign: TextAlign.end,);
           } else {
             return Container();
