@@ -1,6 +1,4 @@
 PODS:
-  - audioplayer (0.0.1):
-    - Flutter
   - Flutter (1.0.0)
   - flutter_playout (0.0.1):
     - Flutter
@@ -8,14 +6,11 @@ PODS:
     - Flutter
 
 DEPENDENCIES:
-  - audioplayer (from `.symlinks/plugins/audioplayer/ios`)
   - Flutter (from `Flutter`)
   - flutter_playout (from `.symlinks/plugins/flutter_playout/ios`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
 
 EXTERNAL SOURCES:
-  audioplayer:
-    :path: ".symlinks/plugins/audioplayer/ios"
   Flutter:
     :path: Flutter
   flutter_playout:
@@ -24,7 +19,6 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/path_provider/ios"
 
 SPEC CHECKSUMS:
-  audioplayer: 0584f31a697e4b0bbad405ae7903d7a93585e784
   Flutter: 434fef37c0980e73bb6479ef766c45957d4b510c
   flutter_playout: a5aed32b3003b02eb4432815ecfe0c0e42a801ff
   path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
