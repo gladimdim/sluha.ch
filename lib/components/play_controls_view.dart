@@ -1,13 +1,17 @@
 import 'dart:math';
 
+import 'package:audio_service/audio_service.dart';
 import 'package:audiobooks_app/components/currently_playing.dart';
 import 'package:audiobooks_app/components/file_progress_view.dart';
 import 'package:audiobooks_app/components/icon_button_styled.dart';
 import 'package:audiobooks_app/models/player.dart';
-import 'package:audioplayer/audioplayer.dart';
 import 'package:flutter/material.dart';
 
 class PlayControlsView extends StatelessWidget {
+  final AudioHandler audioHandler;
+
+  PlayControlsView({this.audioHandler});
+
   @override
   Widget build(BuildContext context) {
     final Player player = Player.instance;
@@ -37,13 +41,13 @@ class PlayControlsView extends StatelessWidget {
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
                           Duration value = snapshot.data;
-                          var max = Player.instance.audioPlayer.duration.inSeconds
+                          var max = Player
+                              .instance.audioPlayer.duration.inSeconds
                               .toDouble();
                           var inDouble = value.inSeconds.toDouble();
                           return Slider(
                             min: 0,
-                            max: Player.instance.audioPlayer.duration.inSeconds
-                                .toDouble(),
+                            max: max,
                             value: inDouble,
                             label: "Duration",
                             onChanged: (value) {},
@@ -74,19 +78,24 @@ class PlayControlsView extends StatelessWidget {
                       iconData: Icons.settings_backup_restore,
                       onPressed: player.rewind30),
                   StreamBuilder(
-                      stream: player.playbackChanges,
+                      stream: audioHandler.playbackState,
                       builder: (context, data) {
                         if (data.hasData) {
-                          AudioPlayerState state = data.data;
-                          if (state == AudioPlayerState.PLAYING) {
+                          PlaybackState state = data.data;
+                          if (state.playing) {
                             return IconButtonStyled(
                                 iconData: Icons.pause_circle_filled_outlined,
-                                onPressed: player.pause);
+                                onPressed: () {
+                                  audioHandler.pause();
+                                  // Player.instance.pause();
+                                });
                           }
-                          if (state == AudioPlayerState.PAUSED) {
+                          if (!state.playing) {
                             return IconButtonStyled(
                                 iconData: Icons.play_circle_filled_outlined,
-                                onPressed: player.resume);
+                                onPressed: () {
+                                  audioHandler.play();
+                                });
                           }
                           return IconButtonStyled(
                             iconData: Icons.play_circle_filled_outlined,
@@ -102,10 +111,16 @@ class PlayControlsView extends StatelessWidget {
                       transform: Matrix4.rotationY(pi),
                       child: IconButtonStyled(
                           iconData: Icons.settings_backup_restore,
-                          onPressed: player.skip30)),
+                          onPressed: () {
+                            audioHandler.skipToPrevious();
+                            player.skip30();
+                          })),
                   IconButtonStyled(
                       iconData: Icons.skip_next_outlined,
-                      onPressed: player.playNext),
+                      onPressed: () {
+                        audioHandler.skipToNext();
+                        player.playNext();
+                      }),
                 ],
               ),
             ),

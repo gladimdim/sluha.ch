@@ -1,3 +1,4 @@
+import 'package:audio_service/audio_service.dart';
 import 'package:audiobooks_app/components/headline_text.dart';
 import 'package:audiobooks_app/components/play_controls_view.dart';
 import 'package:audiobooks_app/models/book.dart';
@@ -5,9 +6,10 @@ import 'package:audiobooks_app/models/player.dart';
 import 'package:flutter/material.dart';
 
 class CatalogBookView extends StatefulWidget {
+  final AudioHandler audioHandler;
   final Book book;
 
-  CatalogBookView({this.book});
+  CatalogBookView({@required this.book, @required this.audioHandler});
 
   @override
   _CatalogBookViewState createState() => _CatalogBookViewState();
@@ -93,7 +95,7 @@ class _CatalogBookViewState extends State<CatalogBookView> {
           ),
           Expanded(
             flex: 2,
-            child: Hero(tag: "PlayControls", child: PlayControlsView()),
+            child: Hero(tag: "PlayControls", child: PlayControlsView(audioHandler: widget.audioHandler,)),
           )
         ],
       ),

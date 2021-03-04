@@ -1,3 +1,4 @@
+import 'package:audio_service/audio_service.dart';
 import 'package:audiobooks_app/components/play_controls_view.dart';
 import 'package:audiobooks_app/models/book.dart';
 import 'package:audiobooks_app/views/catalog_book_view.dart';
@@ -6,8 +7,9 @@ import 'package:flutter/material.dart';
 
 class CatalogView extends StatelessWidget {
   final List<Book> books;
+  final AudioHandler audioHandler;
 
-  CatalogView({this.books});
+  CatalogView({this.books, this.audioHandler});
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +37,7 @@ class CatalogView extends StatelessWidget {
                           onPressed: () {
                             Navigator.push(context,
                                 MaterialPageRoute(builder: (context) {
-                              return CatalogBookView(book: book);
+                              return CatalogBookView(book: book, audioHandler: audioHandler,);
                             }));
                           },
                         ),
@@ -48,7 +50,7 @@ class CatalogView extends StatelessWidget {
         ),
         Expanded(
           flex: 2,
-          child: Hero(tag: "PlayControls", child: PlayControlsView()),
+          child: Hero(tag: "PlayControls", child: PlayControlsView(audioHandler: audioHandler)),
         ),
       ],
     );
