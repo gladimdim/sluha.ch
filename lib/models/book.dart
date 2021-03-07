@@ -29,7 +29,8 @@ class Book {
       this.author,
       this.year,
       this.filePath,
-      this.amountOfParts, this.coverUrl}) {
+      this.amountOfParts,
+      this.coverUrl}) {
     files = Iterable<int>.generate(amountOfParts).map((index) {
       if (index == 0) {
         return BookFile(title: "Передмова", url: "$filePath/pre.mp3");
@@ -111,7 +112,7 @@ List<Book> generateBooks() {
         LANGUAGES.UKR,
       ],
       filePath: "minecraft/dungeon_secrets",
-      amountOfParts: 13,
+      amountOfParts: 15,
     ),
   ];
 }
