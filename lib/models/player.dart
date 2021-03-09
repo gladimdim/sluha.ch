@@ -22,7 +22,6 @@ class Player {
   }
 
   setupAudio() {
-    // AudioManager.instance.play(auto: false);
     AudioManager.instance.onEvents((events, args) {
       print(events);
       switch (events) {
@@ -126,10 +125,22 @@ class Player {
 
   void jumpToTrack(int offset) async {
     if (book != null) {
-      var next = book.files[currentFileIndex + offset];
+      var next = findNextToPlay(currentFileIndex + offset);
       if (next != null) {
         play(book, next);
       }
+    }
+  }
+
+  BookFile findNextToPlay(startIndex) {
+    if (book.files.length <= startIndex) {
+      return null;
+    }
+    var start = book.files[startIndex];
+    if (start.queued) {
+      return start;
+    } else {
+      return findNextToPlay(startIndex + 1);
     }
   }
 

@@ -16,7 +16,7 @@ class PlayControlsView extends StatelessWidget {
         padding: EdgeInsets.only(top: 4.0),
         color: Theme.of(context).primaryColor,
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Padding(
               padding: const EdgeInsets.only(top: 2.0, left: 8.0, right: 8.0),
@@ -58,48 +58,45 @@ class PlayControlsView extends StatelessWidget {
                 ),
               ],
             ),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 4.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  IconButtonStyled(
-                      iconData: Icons.skip_previous_outlined,
-                      onPressed: player.playPrevious),
-                  IconButtonStyled(
-                      iconData: Icons.settings_backup_restore,
-                      onPressed: player.rewind30),
-                  StreamBuilder(
-                      stream: player.playbackChanges,
-                      builder: (context, data) {
-                        if (data.hasData) {
-                          var isPlaying = data.data;
-                          if (isPlaying) {
-                            return IconButtonStyled(
-                                iconData: Icons.pause_circle_filled_outlined,
-                                onPressed: player.pause);
-                          } else {
-                            return IconButtonStyled(
-                                iconData: Icons.play_circle_filled_outlined,
-                                onPressed: player.resume);
-                          }
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                IconButtonStyled(
+                    iconData: Icons.skip_previous_outlined,
+                    onPressed: player.playPrevious),
+                IconButtonStyled(
+                    iconData: Icons.settings_backup_restore,
+                    onPressed: player.rewind30),
+                StreamBuilder(
+                    stream: player.playbackChanges,
+                    builder: (context, data) {
+                      if (data.hasData) {
+                        var isPlaying = data.data;
+                        if (isPlaying) {
+                          return IconButtonStyled(
+                              iconData: Icons.pause_circle_filled_outlined,
+                              onPressed: player.pause);
                         } else {
                           return IconButtonStyled(
-                            iconData: Icons.play_circle_filled_outlined,
-                          );
+                              iconData: Icons.play_circle_filled_outlined,
+                              onPressed: player.resume);
                         }
-                      }),
-                  Transform(
-                      alignment: Alignment.center,
-                      transform: Matrix4.rotationY(pi),
-                      child: IconButtonStyled(
-                          iconData: Icons.settings_backup_restore,
-                          onPressed: player.skip30)),
-                  IconButtonStyled(
-                      iconData: Icons.skip_next_outlined,
-                      onPressed: player.playNext),
-                ],
-              ),
+                      } else {
+                        return IconButtonStyled(
+                          iconData: Icons.play_circle_filled_outlined,
+                        );
+                      }
+                    }),
+                Transform(
+                    alignment: Alignment.center,
+                    transform: Matrix4.rotationY(pi),
+                    child: IconButtonStyled(
+                        iconData: Icons.settings_backup_restore,
+                        onPressed: player.skip30)),
+                IconButtonStyled(
+                    iconData: Icons.skip_next_outlined,
+                    onPressed: player.playNext),
+              ],
             ),
           ],
         ),

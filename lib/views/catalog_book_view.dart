@@ -71,10 +71,18 @@ class _CatalogBookViewState extends State<CatalogBookView> {
                                     HeadlineText(
                                       file.title,
                                     ),
-                                    Icon(Player.instance
-                                            .isCurrentlyPlayingThisFile(file)
-                                        ? Icons.pause_circle_filled_outlined
-                                        : Icons.play_arrow_outlined),
+                                    Wrap(children: [
+                                      Checkbox(
+                                          value: file.queued, onChanged: (value) {
+                                            setState(() {
+                                              file.queued = value;
+                                            });
+                                      }),
+                                      Icon(Player.instance
+                                              .isCurrentlyPlayingThisFile(file)
+                                          ? Icons.pause_circle_filled_outlined
+                                          : Icons.play_arrow_outlined),
+                                    ]),
                                   ],
                                 ),
                               ),
