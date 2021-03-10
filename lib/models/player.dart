@@ -125,22 +125,23 @@ class Player {
 
   void jumpToTrack(int offset) async {
     if (book != null) {
-      var next = findNextToPlay(currentFileIndex + offset);
+      var next = findNextToPlay(currentFileIndex + offset, offset);
       if (next != null) {
         play(book, next);
       }
     }
   }
 
-  BookFile findNextToPlay(startIndex) {
-    if (book.files.length <= startIndex) {
+  BookFile findNextToPlay(startIndex, offset) {
+    print("processing: $startIndex, $offset");
+    if (book.files.length <= startIndex || startIndex < 0) {
       return null;
     }
     var start = book.files[startIndex];
     if (start.queued) {
       return start;
     } else {
-      return findNextToPlay(startIndex + 1);
+      return findNextToPlay(startIndex + offset, offset);
     }
   }
 
