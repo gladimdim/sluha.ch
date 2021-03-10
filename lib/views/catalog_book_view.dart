@@ -61,29 +61,41 @@ class _CatalogBookViewState extends State<CatalogBookView> {
                               fit: BoxFit.fitWidth,
                             ),
                           ),
-                          Positioned.fill(
-                            child: Container(
-                              color: Colors.white.withAlpha(180),
-                              child: Column(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: TitleText(widget.book.title),
-                                  ),
-                                  BookMetaFieldView(
-                                      "Автор", widget.book.author),
-                                  BookMetaFieldView(
-                                      "Рік", widget.book.year.toString()),
-                                  BookMetaFieldView(
-                                      "Тривалість",
-                                      widget.book.duration.inMinutes
-                                          .toString()),
-                                  BookMetaFieldView(
-                                      "Вік", "${widget.book.ageRating}+"),
-                                ],
+                         Padding(
+                           padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+                           child: Container(
+                                color: Colors.white.withAlpha(220),
+                                child: SingleChildScrollView(
+                                  child: Column(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: TitleText(widget.book.title),
+                                      ),
+
+                                      BookMetaFieldView(
+                                          "Серія", widget.book.seriesTitle),
+                                      BookMetaFieldView(
+                                          "Автор", widget.book.author),
+                                      BookMetaFieldView(
+                                          "Рік", widget.book.year.toString()),
+                                      BookMetaFieldView(
+                                          "Тривалість",
+                                          widget.book.duration.inMinutes
+                                              .toString()),
+                                      BookMetaFieldView(
+                                          "Вік", "${widget.book.ageRating}+"),
+                                      Column(
+                                        children: [
+                                          TitleText("Описання"),
+                                          Text(widget.book.description, style: TextStyle(fontSize: 18,)),
+                                        ],
+                                      ),
+                                    ],
                               ),
+                                ),
                             ),
-                          ),
+                         ),
                         ],
                       );
                     },
