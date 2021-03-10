@@ -1,5 +1,10 @@
+import 'dart:math';
+
+import 'package:audiobooks_app/components/book_meta_field_view.dart';
+import 'package:audiobooks_app/components/flipper.dart';
 import 'package:audiobooks_app/components/headline_text.dart';
 import 'package:audiobooks_app/components/play_controls_view.dart';
+import 'package:audiobooks_app/components/title_text.dart';
 import 'package:audiobooks_app/models/book.dart';
 import 'package:audiobooks_app/models/player.dart';
 import 'package:flutter/material.dart';
@@ -29,18 +34,59 @@ class _CatalogBookViewState extends State<CatalogBookView> {
               children: [
                 Expanded(
                   flex: 1,
-                  child: Center(
-                    child: Hero(
-                      tag: widget.book.id,
-                      child: Image.asset(
-                        widget.book.imageUrl,
-                        width: 256,
-                        fit: BoxFit.fitWidth,
+                  child: Flipper(
+                    frontBuilder: (context) => Center(
+                      child: Hero(
+                        tag: widget.book.id,
+                        child: Image.asset(
+                          widget.book.imageUrl,
+                          width: 256,
+                          fit: BoxFit.fitWidth,
+                        ),
+                        // child: CatalogCardBookView(
+                        //   book: widget.book,
+                        // ),
                       ),
-                      // child: CatalogCardBookView(
-                      //   book: widget.book,
-                      // ),
                     ),
+                    backBuilder: (context) {
+                      return Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          Transform(
+                            transform: Matrix4.rotationY(pi),
+                            alignment: Alignment.center,
+                            child: Image.asset(
+                              widget.book.imageUrl,
+                              width: 256,
+                              fit: BoxFit.fitWidth,
+                            ),
+                          ),
+                          Positioned.fill(
+                            child: Container(
+                              color: Colors.white.withAlpha(180),
+                              child: Column(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: TitleText(widget.book.title),
+                                  ),
+                                  BookMetaFieldView(
+                                      "Автор", widget.book.author),
+                                  BookMetaFieldView(
+                                      "Рік", widget.book.year.toString()),
+                                  BookMetaFieldView(
+                                      "Тривалість",
+                                      widget.book.duration.inMinutes
+                                          .toString()),
+                                  BookMetaFieldView(
+                                      "Вік", "${widget.book.ageRating}+"),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      );
+                    },
                   ),
                 ),
                 Expanded(
@@ -48,9 +94,21 @@ class _CatalogBookViewState extends State<CatalogBookView> {
                   child: SingleChildScrollView(
                     child: Column(
                       children: [
-                        Checkbox(
-                          value: widget.book.files.fold(true, (previousValue, file) => previousValue && file.queued),
-                          onChanged: processPlayAll,
+                        Padding(
+                          padding: const EdgeInsets.only(right: 2.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Checkbox(
+                                value: widget.book.files.fold(
+                                    true,
+                                    (previousValue, file) =>
+                                        previousValue && file.queued),
+                                onChanged: processPlayAll,
+                              ),
+                              Text("Грати все"),
+                            ],
+                          ),
                         ),
                         StreamBuilder(
                           stream: player.playbackChanges,
@@ -120,9 +178,9 @@ class _CatalogBookViewState extends State<CatalogBookView> {
   }
 
   void processPlayAll(bool selectAll) {
-    widget.book.files.forEach((file) {file.queued = selectAll;});
-    setState(() {
-
+    widget.book.files.forEach((file) {
+      file.queued = selectAll;
     });
+    setState(() {});
   }
 }
