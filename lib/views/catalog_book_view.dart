@@ -46,53 +46,64 @@ class _CatalogBookViewState extends State<CatalogBookView> {
                 Expanded(
                   flex: 1,
                   child: SingleChildScrollView(
-                    child: StreamBuilder(
-                      stream: player.playbackChanges,
-                      builder: (context, data) => Column(
-                          children: widget.book.files.map((file) {
-                        return Padding(
-                          padding: const EdgeInsets.all(2.0),
-                          child: InkWell(
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: player.currentFile == file
-                                    ? Theme.of(context).accentColor
-                                    : null,
-                                border: Border.all(
-                                    width: 4,
-                                    color: Theme.of(context).buttonColor),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(4.0),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    HeadlineText(
-                                      file.title,
+                    child: Column(
+                      children: [
+                        Checkbox(
+                          value: widget.book.files.fold(true, (previousValue, file) => previousValue && file.queued),
+                          onChanged: processPlayAll,
+                        ),
+                        StreamBuilder(
+                          stream: player.playbackChanges,
+                          builder: (context, data) => Column(
+                              children: widget.book.files.map((file) {
+                            return Padding(
+                              padding: const EdgeInsets.all(2.0),
+                              child: InkWell(
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: player.currentFile == file
+                                        ? Theme.of(context).accentColor
+                                        : null,
+                                    border: Border.all(
+                                        width: 4,
+                                        color: Theme.of(context).buttonColor),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(4.0),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        HeadlineText(
+                                          file.title,
+                                        ),
+                                        Wrap(children: [
+                                          Checkbox(
+                                              value: file.queued,
+                                              onChanged: (value) {
+                                                setState(() {
+                                                  file.queued = value;
+                                                });
+                                              }),
+                                          Icon(Player.instance
+                                                  .isCurrentlyPlayingThisFile(
+                                                      file)
+                                              ? Icons
+                                                  .pause_circle_filled_outlined
+                                              : Icons.play_arrow_outlined),
+                                        ]),
+                                      ],
                                     ),
-                                    Wrap(children: [
-                                      Checkbox(
-                                          value: file.queued, onChanged: (value) {
-                                            setState(() {
-                                              file.queued = value;
-                                            });
-                                      }),
-                                      Icon(Player.instance
-                                              .isCurrentlyPlayingThisFile(file)
-                                          ? Icons.pause_circle_filled_outlined
-                                          : Icons.play_arrow_outlined),
-                                    ]),
-                                  ],
+                                  ),
                                 ),
+                                onTap: () {
+                                  player.play(widget.book, file);
+                                },
                               ),
-                            ),
-                            onTap: () {
-                              player.play(widget.book, file);
-                            },
-                          ),
-                        );
-                      }).toList()),
+                            );
+                          }).toList()),
+                        ),
+                      ],
                     ),
                   ),
                 ),
@@ -106,5 +117,12 @@ class _CatalogBookViewState extends State<CatalogBookView> {
         ],
       ),
     );
+  }
+
+  void processPlayAll(bool selectAll) {
+    widget.book.files.forEach((file) {file.queued = selectAll;});
+    setState(() {
+
+    });
   }
 }
