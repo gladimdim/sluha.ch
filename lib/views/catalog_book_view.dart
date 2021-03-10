@@ -64,7 +64,7 @@ class _CatalogBookViewState extends State<CatalogBookView> {
                          Padding(
                            padding: const EdgeInsets.only(left: 8.0, right: 8.0),
                            child: Container(
-                                color: Colors.white.withAlpha(220),
+                                color: Theme.of(context).primaryColor.withAlpha(220),
                                 child: SingleChildScrollView(
                                   child: Column(
                                     children: [
