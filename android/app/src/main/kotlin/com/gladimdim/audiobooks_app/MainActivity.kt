@@ -1,4 +1,4 @@
-package com.example.audiobooks_app
+package com.gladimdim.audiobooks_app
 
 import io.flutter.embedding.android.FlutterActivity
 

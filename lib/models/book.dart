@@ -40,7 +40,8 @@ class Book {
     }).toList();
   }
 
-  static Book fromJson(Map<String, Object> json) {
+  factory Book.fromJson(Map<String, dynamic> json) {
+    // List<String> langs = json["languages"] as List<String>;
     return Book(
       id: json["id"],
       seriesTitle: json["series"],
@@ -50,7 +51,7 @@ class Book {
       year: json["year"],
       description: json["description"],
       ageRating: json["ageRating"],
-      languages: languagesFromStrings(json["languages"]),
+      languages: [LANGUAGES.UKR],
       filePath: json["filesPath"],
       amountOfParts: json["amountOfParts"],
     );

@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.audiobooks_app">
+    package="com.gladimdim.audiobooks_app">
    <application
         android:label="audiobooks_app"
         android:icon="@mipmap/ic_launcher">

@@ -17,8 +17,9 @@ class MainView extends StatelessWidget {
         builder: (context, snapshot) {
           if (snapshot
               .connectionState == ConnectionState.done && snapshot.hasData) {
+            final List<Book> books = snapshot.data;
             return CatalogView(
-              books: generateBooksFromJson(snapshot.data),
+              books: books,
             );
           } else {
             return CatalogView(
@@ -32,13 +33,13 @@ class MainView extends StatelessWidget {
 
   Future _fetchData() {
     return _fetchCatalog.runOnce(() async {
-      return await fetchBooks();
+      var result = await fetchBooks();
+      return result;
     });
   }
 
-  List<Book> generateBooksFromJson(Map<String, Object> json) {
-    var bookJson = json as List;
-    return bookJson.map((jsonItem) {
+  List<Book> generateBooksFromJson(List<Map<String, Object>> json) {
+    return json.map((jsonItem) {
       return Book.fromJson(jsonItem);
     }).toList();
   }
