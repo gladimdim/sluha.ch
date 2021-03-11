@@ -39,9 +39,25 @@ class Book {
       }
     }).toList();
   }
+
+  static Book fromJson(Map<String, Object> json) {
+    return Book(
+      id: json["id"],
+      seriesTitle: json["series"],
+      title: json["title"],
+      imageUrl: json["imageUrl"],
+      duration: Duration(minutes: json["duration"]),
+      year: json["year"],
+      description: json["description"],
+      ageRating: json["ageRating"],
+      languages: languagesFromStrings(json["languages"]),
+      filePath: json["filesPath"],
+      amountOfParts: json["amountOfParts"],
+    );
+  }
 }
 
-List<Book> generateBooks() {
+List<Book> generateLocalBooks() {
   return [
     Book(
       id: 1,
@@ -118,3 +134,13 @@ List<Book> generateBooks() {
 }
 
 enum LANGUAGES { UKR, RUS }
+
+List<LANGUAGES> languagesFromStrings(List<String> langs) {
+  return langs.map((sLang) {
+    if (sLang == "UKR") {
+      return LANGUAGES.UKR;
+    } else {
+      return LANGUAGES.RUS;
+    }
+  }).toList();
+}

@@ -1,11 +1,11 @@
 import 'package:audio_manager/audio_manager.dart';
 import 'package:audiobooks_app/models/book.dart';
 import 'package:audiobooks_app/models/book_file.dart';
+import 'package:audiobooks_app/models/server.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:tuple/tuple.dart';
 
 class Player {
-  final String urlPrefix = "https://sluha.ch";
   Book book;
   int currentFileIndex;
   BehaviorSubject _playbackChanges = BehaviorSubject<bool>();
@@ -152,10 +152,10 @@ class Player {
 
   AudioInfo fileToAudioInfo(BookFile file) {
     return AudioInfo(
-      "$urlPrefix/${file.url}",
+      "$URL_PREFIX/${file.url}",
       title: file.title,
       desc: book.title,
-      coverUrl: "$urlPrefix/${book.coverUrl}",
+      coverUrl: "$URL_PREFIX/${book.coverUrl}",
     );
   }
 }
