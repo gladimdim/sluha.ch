@@ -151,11 +151,12 @@ class Player {
   }
 
   AudioInfo fileToAudioInfo(BookFile file) {
+    var url = book.local ? "$URL_PREFIX/${file.url}" : "${URL_PREFIX}${file.url}";
     return AudioInfo(
-      "$URL_PREFIX/${file.url}",
+     url,
       title: file.title,
       desc: book.title,
-      coverUrl: "$URL_PREFIX/${book.coverUrl}",
+      coverUrl: book.fullCoverUrl,
     );
   }
 }

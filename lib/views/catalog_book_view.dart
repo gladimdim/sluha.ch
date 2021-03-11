@@ -38,11 +38,17 @@ class _CatalogBookViewState extends State<CatalogBookView> {
                     frontBuilder: (context) => Center(
                       child: Hero(
                         tag: widget.book.id,
-                        child: Image.asset(
-                          widget.book.imageUrl,
-                          width: 256,
-                          fit: BoxFit.fitWidth,
-                        ),
+                        child: widget.book.local
+                            ? Image.asset(
+                                widget.book.fullImageUrl,
+                                width: 256,
+                                fit: BoxFit.fitWidth,
+                              )
+                            : Image.network(
+                                widget.book.fullImageUrl,
+                                width: 256,
+                                fit: BoxFit.fitWidth,
+                              ),
                       ),
                     ),
                     backBuilder: (context) {
@@ -52,8 +58,14 @@ class _CatalogBookViewState extends State<CatalogBookView> {
                           Transform(
                             transform: Matrix4.rotationY(pi),
                             alignment: Alignment.center,
-                            child: Image.asset(
-                              widget.book.imageUrl,
+                            child: widget.book.local
+                                ? Image.asset(
+                              widget.book.fullImageUrl,
+                              width: 256,
+                              fit: BoxFit.fitWidth,
+                            )
+                                : Image.network(
+                              widget.book.fullImageUrl,
                               width: 256,
                               fit: BoxFit.fitWidth,
                             ),

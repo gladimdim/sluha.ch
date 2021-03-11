@@ -1,4 +1,5 @@
 import 'package:audiobooks_app/models/book_file.dart';
+import 'package:audiobooks_app/models/server.dart';
 
 class Book {
   final int id;
@@ -14,23 +15,34 @@ class Book {
   final String filePath;
   final int amountOfParts;
   final String coverUrl;
+  final bool local;
+
+  String get fullImageUrl {
+    return local ? "assets/$imageUrl" : "$URL_PREFIX$imageUrl";
+  }
+
+  String get fullCoverUrl {
+    return local ? "$URL_PREFIX/$imageUrl" : "$URL_PREFIX$imageUrl";
+  }
 
   List<BookFile> files;
 
-  Book(
-      {this.id,
-      this.seriesTitle,
-      this.title,
-      this.imageUrl,
-      this.duration,
-      this.description,
-      this.ageRating,
-      this.languages,
-      this.author,
-      this.year,
-      this.filePath,
-      this.amountOfParts,
-      this.coverUrl}) {
+  Book({
+    this.id,
+    this.seriesTitle,
+    this.title,
+    this.imageUrl,
+    this.duration,
+    this.description,
+    this.ageRating,
+    this.languages,
+    this.author,
+    this.year,
+    this.filePath,
+    this.amountOfParts,
+    this.coverUrl,
+    this.local = true,
+  }) {
     files = Iterable<int>.generate(amountOfParts).map((index) {
       if (index == 0) {
         return BookFile(title: "Передмова", url: "$filePath/pre.mp3");
@@ -54,6 +66,9 @@ class Book {
       languages: [LANGUAGES.UKR],
       filePath: json["filesPath"],
       amountOfParts: json["amountOfParts"],
+      local: false,
+      author: json["author"],
+      coverUrl: json["imageUrl"],
     );
   }
 }
@@ -64,7 +79,7 @@ List<Book> generateLocalBooks() {
       id: 1,
       seriesTitle: "Minecraft",
       title: "Ніч кажанів",
-      imageUrl: "assets/minecraft/night_of_the_bats/cover.png",
+      imageUrl: "minecraft/night_of_the_bats/cover.png",
       coverUrl: "minecraft/night_of_the_bats/cover.png",
       duration: Duration(minutes: 45),
       description:
@@ -80,7 +95,7 @@ List<Book> generateLocalBooks() {
       id: 2,
       seriesTitle: "Minecraft",
       title: "Глибоке занурення",
-      imageUrl: "assets/minecraft/deep_dive/cover.png",
+      imageUrl: "minecraft/deep_dive/cover.png",
       duration: Duration(minutes: 42),
       coverUrl: "/minecraft/deep_dive/cover.png",
       description:
@@ -98,7 +113,7 @@ List<Book> generateLocalBooks() {
       title: "Цифрова загроза",
       author: "Нік Еліопулос",
       year: 2020,
-      imageUrl: "assets/minecraft/cifrova_zagroza/cover.png",
+      imageUrl: "minecraft/cifrova_zagroza/cover.png",
       coverUrl: "minecraft/cifrova_zagroza/cover.png",
       duration: Duration(minutes: 53),
       description:
@@ -119,7 +134,7 @@ List<Book> generateLocalBooks() {
       title: "Таємниця підземелля",
       author: "Нік Еліопулос",
       year: 2020,
-      imageUrl: "assets/minecraft/dungeon_secrets/cover.png",
+      imageUrl: "minecraft/dungeon_secrets/cover.png",
       coverUrl: "minecraft/dungeon_secrets/cover.png",
       duration: Duration(minutes: 42),
       description:

@@ -15,11 +15,17 @@ class CatalogCardBookView extends StatelessWidget {
       children: [
         Hero(
           tag: book.id,
-          child: Image.asset(
-            book.imageUrl,
-            width: 256,
-            fit: BoxFit.fitWidth,
-          ),
+          child: book.local
+              ? Image.asset(
+                  book.fullImageUrl,
+                  width: 256,
+                  fit: BoxFit.fitWidth,
+                )
+              : Image.network(
+                  book.fullImageUrl,
+                  width: 256,
+                  fit: BoxFit.fitWidth,
+                ),
           // child: CatalogCardBookView(
           //   book: widget.book,
           // ),
