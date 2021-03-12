@@ -38,14 +38,25 @@ class _InteractiveSliderState extends State<InteractiveSlider> {
             max: durations.item2.inSeconds.toDouble(),
             value: value,
             label: "Duration",
+            onChangeStart: processChangeStart,
             onChanged: processChange,
-            onChangeEnd: processChange,
+            onChangeEnd: processChangeEnd,
           );
         } else {
           return Container();
         }
       },
     );
+  }
+
+  void processChangeStart(newValue) {
+    sub.pause();
+    processChange(newValue);
+  }
+
+  void processChangeEnd(newValue) {
+    sub.resume();
+    processChange(newValue);
   }
 
   void processChange(double newValue) {
