@@ -9,6 +9,9 @@ class IconButtonStyled extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IconButton(
+        highlightColor: Theme.of(context).accentColor,
+        hoverColor: Theme.of(context).accentColor,
+        splashColor: Theme.of(context).backgroundColor,
         icon: Icon(
           iconData,
           color: Theme.of(context).buttonColor,

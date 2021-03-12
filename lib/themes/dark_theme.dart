@@ -14,6 +14,7 @@ ThemeData getDarkTheme() {
     backgroundColor: deepColor,
     buttonColor: deepColor,
     scaffoldBackgroundColor: Colors.black,
+    splashColor: mediumColor,
     sliderTheme: SliderThemeData(
       valueIndicatorColor: Colors.white,
       // progress line to the right

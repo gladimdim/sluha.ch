@@ -12,9 +12,10 @@ class PlayControlsView extends StatelessWidget {
   Widget build(BuildContext context) {
     final Player player = Player.instance;
     return Material(
+      color: Theme.of(context).primaryColor,
       child: Container(
         padding: EdgeInsets.only(top: 4.0),
-        color: Theme.of(context).primaryColor,
+        // color: Theme.of(context).primaryColor,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
