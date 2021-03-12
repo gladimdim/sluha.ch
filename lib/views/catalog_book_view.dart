@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:audiobooks_app/components/book_cover.dart';
 import 'package:audiobooks_app/components/book_meta_field_view.dart';
 import 'package:audiobooks_app/components/flipper.dart';
 import 'package:audiobooks_app/components/headline_text.dart';
@@ -38,17 +39,9 @@ class _CatalogBookViewState extends State<CatalogBookView> {
                     frontBuilder: (context) => Center(
                       child: Hero(
                         tag: widget.book.id,
-                        child: widget.book.local
-                            ? Image.asset(
-                                widget.book.fullImageUrl,
-                                width: 256,
-                                fit: BoxFit.fitWidth,
-                              )
-                            : Image.network(
-                                widget.book.fullImageUrl,
-                                width: 256,
-                                fit: BoxFit.fitWidth,
-                              ),
+                        child: BookCover(
+                          book: widget.book,
+                        ),
                       ),
                     ),
                     backBuilder: (context) {
@@ -58,16 +51,8 @@ class _CatalogBookViewState extends State<CatalogBookView> {
                           Transform(
                             transform: Matrix4.rotationY(pi),
                             alignment: Alignment.center,
-                            child: widget.book.local
-                                ? Image.asset(
-                              widget.book.fullImageUrl,
-                              width: 256,
-                              fit: BoxFit.fitWidth,
-                            )
-                                : Image.network(
-                              widget.book.fullImageUrl,
-                              width: 256,
-                              fit: BoxFit.fitWidth,
+                            child: BookCover(
+                              book: widget.book,
                             ),
                           ),
                           Padding(
