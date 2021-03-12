@@ -26,6 +26,7 @@ class _FlipperState extends State<Flipper> with SingleTickerProviderStateMixin {
     _controller.addListener(() {
       print(_controller.value);
     });
+    super.initState();
   }
 
   void flip() {
@@ -56,7 +57,8 @@ class _FlipperState extends State<Flipper> with SingleTickerProviderStateMixin {
                 ? widget.frontBuilder(context)
                 : widget.backBuilder(context);
             final rotationValue = _controller.value * pi;
-            final rotationAngle = _controller.value > 0.5 ? pi - rotationValue : rotationValue;
+            final rotationAngle =
+                _controller.value > 0.5 ? pi - rotationValue : rotationValue;
             return Transform(
               transform: Matrix4.rotationY(rotationAngle),
               alignment: Alignment.center,

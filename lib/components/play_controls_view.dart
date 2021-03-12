@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:audiobooks_app/components/currently_playing.dart';
 import 'package:audiobooks_app/components/file_progress_view.dart';
 import 'package:audiobooks_app/components/icon_button_styled.dart';
+import 'package:audiobooks_app/components/interactive_slider.dart';
 import 'package:audiobooks_app/models/player.dart';
 import 'package:flutter/material.dart';
 import 'package:tuple/tuple.dart';
@@ -16,7 +17,7 @@ class PlayControlsView extends StatelessWidget {
         padding: EdgeInsets.only(top: 4.0),
         color: Theme.of(context).primaryColor,
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Padding(
               padding: const EdgeInsets.only(top: 2.0, left: 8.0, right: 8.0),
@@ -32,22 +33,9 @@ class PlayControlsView extends StatelessWidget {
               children: [
                 Expanded(
                   flex: 9,
-                  child: StreamBuilder(
-                      stream: player.progressChanges,
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          Tuple2<Duration, Duration> durations = snapshot.data;
-                          return Slider(
-                            min: 0,
-                            max: durations.item2.inSeconds.toDouble(),
-                            value: durations.item1.inSeconds.toDouble(),
-                            label: "Duration",
-                            onChanged: (value) {},
-                          );
-                        } else {
-                          return Container();
-                        }
-                      }),
+                  child: InteractiveSlider(
+                    player: player,
+                  ),
                 ),
                 Expanded(
                   flex: 3,

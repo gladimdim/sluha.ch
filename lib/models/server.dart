@@ -10,7 +10,7 @@ Future<List<Book>> fetchBooks() async {
     var data = await http.get("$URL_PREFIX/catalog.json");
     if (data != null) {
       List json = jsonDecode(data.body);
-      List<Book> results = (json as List).map((jsonItem) {
+      List<Book> results = json.map((jsonItem) {
         return Book.fromJson(jsonItem);
       }).toList();
       return results;

@@ -115,6 +115,10 @@ class Player {
     AudioManager.instance.seekTo(newPosition);
   }
 
+  void seekTo(Duration to) {
+    AudioManager.instance.seekTo(to);
+  }
+
   void playPrevious() {
     jumpToTrack(-1);
   }
@@ -151,9 +155,9 @@ class Player {
   }
 
   AudioInfo fileToAudioInfo(BookFile file) {
-    var url = book.local ? "$URL_PREFIX/${file.url}" : "${URL_PREFIX}${file.url}";
+    var url = book.local ? "$URL_PREFIX/${file.url}" : "$URL_PREFIX${file.url}";
     return AudioInfo(
-     url,
+      url,
       title: file.title,
       desc: book.title,
       coverUrl: book.remoteImageUrl,
