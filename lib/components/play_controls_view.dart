@@ -6,7 +6,6 @@ import 'package:audiobooks_app/components/icon_button_styled.dart';
 import 'package:audiobooks_app/components/interactive_slider.dart';
 import 'package:audiobooks_app/models/player.dart';
 import 'package:flutter/material.dart';
-import 'package:tuple/tuple.dart';
 
 class PlayControlsView extends StatelessWidget {
   @override

@@ -4,7 +4,12 @@ import 'package:audiobooks_app/views/catalog_view.dart';
 import 'package:flutter/material.dart';
 import 'package:async/async.dart';
 
-class MainView extends StatelessWidget {
+class MainView extends StatefulWidget {
+  @override
+  _MainViewState createState() => _MainViewState();
+}
+
+class _MainViewState extends State<MainView> {
   final AsyncMemoizer _fetchCatalog = AsyncMemoizer();
 
   @override
