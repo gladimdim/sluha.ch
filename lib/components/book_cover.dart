@@ -1,5 +1,6 @@
 import 'package:audiobooks_app/models/book.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 class BookCover extends StatelessWidget {
   final Book book;
@@ -10,12 +11,13 @@ class BookCover extends StatelessWidget {
   Widget build(BuildContext context) {
     return book.local
         ? Image.asset(
-            book.fullImageUrl,
+            book.localImageUrl,
             width: 256,
             fit: BoxFit.fitWidth,
           )
-        : Image.network(
-            book.fullImageUrl,
+        : FadeInImage.memoryNetwork(
+            placeholder: kTransparentImage,
+            image: book.remoteImageUrl,
             width: 256,
             fit: BoxFit.fitWidth,
           );

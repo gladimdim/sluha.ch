@@ -15,6 +15,7 @@ dependencies:
   rxdart: ^0.25.0
   audio_manager: ^0.7.3
   tuple: ^1.0.3
+  transparent_image: ^1.0.0
 
 dev_dependencies:
   flutter_test:

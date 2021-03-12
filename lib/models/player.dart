@@ -156,7 +156,7 @@ class Player {
      url,
       title: file.title,
       desc: book.title,
-      coverUrl: book.fullCoverUrl,
+      coverUrl: book.remoteImageUrl,
     );
   }
 }

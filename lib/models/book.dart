@@ -17,11 +17,11 @@ class Book {
   final String coverUrl;
   final bool local;
 
-  String get fullImageUrl {
+  String get localImageUrl {
     return local ? "assets/$imageUrl" : "$URL_PREFIX$imageUrl";
   }
 
-  String get fullCoverUrl {
+  String get remoteImageUrl {
     return local ? "$URL_PREFIX/$imageUrl" : "$URL_PREFIX$imageUrl";
   }
 

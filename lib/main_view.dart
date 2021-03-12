@@ -6,6 +6,7 @@ import 'package:async/async.dart';
 
 class MainView extends StatelessWidget {
   final AsyncMemoizer _fetchCatalog = AsyncMemoizer();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -13,21 +14,25 @@ class MainView extends StatelessWidget {
         title: Text("Слухач"),
       ),
       body: FutureBuilder(
-        future: _fetchData(),
-        builder: (context, snapshot) {
-          if (snapshot
-              .connectionState == ConnectionState.done && snapshot.hasData) {
-            final List<Book> books = snapshot.data;
-            return CatalogView(
-              books: books,
-            );
-          } else {
-            return CatalogView(
-              books: generateLocalBooks(),
-            );
-          }
-        }
-      ),
+          future: _fetchData(),
+          builder: (context, snapshot) {
+            switch (snapshot.connectionState) {
+              case ConnectionState.done:
+                if (snapshot.hasData) {
+                  final List<Book> books = snapshot.data;
+                  return CatalogView(
+                    books: books,
+                  );
+                } else {
+                  return CatalogView(
+                    books: generateLocalBooks(),
+                  );
+                }
+                break;
+              default:
+                return Center(child: CircularProgressIndicator());
+            }
+          }),
     );
   }
 

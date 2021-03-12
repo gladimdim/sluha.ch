@@ -8,12 +8,20 @@ class CurrentlyPlaying extends StatelessWidget {
   final String bookTitle;
 
   CurrentlyPlaying(this.file, this.bookTitle);
+
   @override
   Widget build(BuildContext context) {
     if (file == null) {
       return HeadlineText("Трек не вибрано");
     } else {
-      return HeadlineText("$bookTitle: ${file.title}");
+      return ConstrainedBox(
+        constraints: BoxConstraints(
+          maxWidth: MediaQuery.of(context).size.width,
+        ),
+        child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: HeadlineText("$bookTitle: ${file.title}")),
+      );
     }
   }
 }
