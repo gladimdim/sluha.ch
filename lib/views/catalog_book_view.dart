@@ -8,6 +8,7 @@ import 'package:audiobooks_app/components/play_controls_view.dart';
 import 'package:audiobooks_app/components/title_text.dart';
 import 'package:audiobooks_app/models/book.dart';
 import 'package:audiobooks_app/models/player.dart';
+import 'package:audiobooks_app/utils.dart';
 import 'package:flutter/material.dart';
 
 class CatalogBookView extends StatefulWidget {
@@ -109,6 +110,10 @@ class _CatalogBookViewState extends State<CatalogBookView> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
+                              TextButton(
+                                onPressed: downloadBook,
+                                child: Text("Скачати"),
+                              ),
                               Checkbox(
                                 value: widget.book.files.fold(
                                     true,
@@ -185,6 +190,10 @@ class _CatalogBookViewState extends State<CatalogBookView> {
         ],
       ),
     );
+  }
+
+  void downloadBook() async {
+    await widget.book.downloadBook();
   }
 
   void processPlayAll(bool selectAll) {

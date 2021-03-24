@@ -45,6 +45,8 @@ class Player {
         case AudioManagerEvents.previous:
           playPrevious();
           break;
+        default:
+          break;
       }
     });
   }
