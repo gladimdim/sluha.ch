@@ -26,6 +26,12 @@ class BookFile {
     return "$URL_PREFIX$url";
   }
 
+  Future<String> getPlaybackUrl() async {
+    var localUrl = await getFullFilePath();
+    var remoteUrl = remoteFullFilePath();
+    return canPlayOffline ? localUrl : remoteUrl;
+  }
+
   dispose() {
     _offlineChanges.close();
   }
@@ -50,7 +56,7 @@ class BookFile {
 
   Future<String> getFullFilePath() async {
     String docDir = await getDocumentRootPath();
-    return "$docDir$getRelativeFolderPath()/$getFileName()";
+    return "$docDir${getRelativeFolderPath()}/${getFileName()}";
   }
 
   Future<Directory> createFolderPath() async {
