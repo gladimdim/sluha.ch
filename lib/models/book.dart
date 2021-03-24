@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:audiobooks_app/models/book_file.dart';
 import 'package:audiobooks_app/models/server.dart';
-import 'package:audiobooks_app/utils.dart';
 
 class Book {
   final int id;
@@ -56,7 +55,7 @@ class Book {
   }
 
   Future<void> downloadBook() async {
-    var result = await Future.forEach(files, (file) => saveTrackToFile(file.url));
+    var result = await Future.forEach(files, (file) => file.saveForOffline());
     print(result);
     // await saveTrackToFile(files[1].url);
     print("saved");

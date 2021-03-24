@@ -7,8 +7,8 @@ import 'package:audiobooks_app/components/headline_text.dart';
 import 'package:audiobooks_app/components/play_controls_view.dart';
 import 'package:audiobooks_app/components/title_text.dart';
 import 'package:audiobooks_app/models/book.dart';
+import 'package:audiobooks_app/models/book_file.dart';
 import 'package:audiobooks_app/models/player.dart';
-import 'package:audiobooks_app/utils.dart';
 import 'package:flutter/material.dart';
 
 class CatalogBookView extends StatefulWidget {
@@ -151,6 +151,22 @@ class _CatalogBookViewState extends State<CatalogBookView> {
                                           file.title,
                                         ),
                                         Wrap(children: [
+                                          StreamBuilder(
+                                            stream: file.changes,
+                                            builder: (context, data) {
+                                                switch (data.data) {
+                                                  case OFFLINE_STATUS.LOADED:
+                                                    return Icon(Icons
+                                                        .download_done_outlined);
+                                                    break;
+                                                  case OFFLINE_STATUS.NOT_LOADED:
+                                                    return Container();
+                                                  case OFFLINE_STATUS.LOADING:
+                                                    return CircularProgressIndicator();
+                                                    default: return Container();
+                                                }
+                                            },
+                                          ),
                                           Checkbox(
                                               value: file.queued,
                                               onChanged: (value) {
