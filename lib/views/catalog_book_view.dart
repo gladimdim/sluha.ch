@@ -135,8 +135,8 @@ class _CatalogBookViewState extends State<CatalogBookView> {
                         Checkbox(
                           value: widget.book.files.fold(
                               true,
-                                  (previousValue, file) =>
-                              previousValue && file.queued),
+                              (previousValue, file) =>
+                                  previousValue && file.queued),
                           onChanged: processPlayAll,
                         ),
                         Text("Грати все"),
@@ -178,17 +178,18 @@ class _CatalogBookViewState extends State<CatalogBookView> {
                                           StreamBuilder(
                                             stream: file.changes,
                                             builder: (context, data) {
-                                                switch (data.data) {
-                                                  case OFFLINE_STATUS.LOADED:
-                                                    return Icon(Icons
-                                                        .download_done_outlined);
-                                                    break;
-                                                  case OFFLINE_STATUS.NOT_LOADED:
-                                                    return Container();
-                                                  case OFFLINE_STATUS.LOADING:
-                                                    return CircularProgressIndicator();
-                                                    default: return Container();
-                                                }
+                                              switch (data.data) {
+                                                case OFFLINE_STATUS.LOADED:
+                                                  return Icon(Icons
+                                                      .download_done_outlined);
+                                                  break;
+                                                case OFFLINE_STATUS.NOT_LOADED:
+                                                  return Container();
+                                                case OFFLINE_STATUS.LOADING:
+                                                  return CircularProgressIndicator();
+                                                default:
+                                                  return Container();
+                                              }
                                             },
                                           ),
                                           Checkbox(
