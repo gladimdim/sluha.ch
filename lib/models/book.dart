@@ -52,6 +52,7 @@ class Book {
         return BookFile(title: "Розділ $index", url: "$filePath/$index.mp3");
       }
     }).toList();
+
   }
 
   Future<void> downloadBook() async {
@@ -79,6 +80,21 @@ class Book {
       author: json["author"],
       coverUrl: json["imageUrl"],
     );
+  }
+
+  Future removeDownloads() async {
+    await Future.forEach(files, (file) async {
+      await file.removeDownload();
+    });
+  }
+
+  Future<int> totalFileSize() async {
+    var size = 0;
+    await Future.forEach<BookFile>(files, (file) async {
+      var s = await file.downloadedFileSize();
+      size = size + s;
+    });
+    return size;
   }
 }
 

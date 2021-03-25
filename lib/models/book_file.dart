@@ -93,6 +93,28 @@ class BookFile {
     var exists = await file.exists();
     return exists;
   }
+
+  Future removeDownload() async {
+    var path = await getFullFilePath();
+    var file = File(path);
+    try {
+      await file.delete();
+      _offlineChanges.add(OFFLINE_STATUS.NOT_LOADED);
+    } catch (e) {
+      print("failed to delete file: $path");
+    }
+  }
+
+  Future<int> downloadedFileSize() async {
+    var path = await getFullFilePath();
+    var file = File(path);
+    var exists = await file.exists();
+    if (exists) {
+      return await file.length();
+    } else {
+      return 0;
+    }
+  }
 }
 
 enum OFFLINE_STATUS { LOADED, NOT_LOADED, LOADING }

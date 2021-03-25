@@ -100,31 +100,42 @@ class _CatalogBookViewState extends State<CatalogBookView> {
                     },
                   ),
                 ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Row(
+                      children: [
+                        IconButton(
+                          onPressed: downloadBook,
+                          icon: Icon(Icons.get_app),
+                        ),
+                        IconButton(
+                          onPressed: removeDownloads,
+                          icon: Icon(Icons.delete_forever),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Checkbox(
+                          value: widget.book.files.fold(
+                              true,
+                                  (previousValue, file) =>
+                              previousValue && file.queued),
+                          onChanged: processPlayAll,
+                        ),
+                        Text("Грати все"),
+                      ],
+                    ),
+                  ],
+                ),
                 Expanded(
                   flex: 1,
                   child: SingleChildScrollView(
                     child: Column(
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.only(right: 2.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              TextButton(
-                                onPressed: downloadBook,
-                                child: Text("Скачати"),
-                              ),
-                              Checkbox(
-                                value: widget.book.files.fold(
-                                    true,
-                                    (previousValue, file) =>
-                                        previousValue && file.queued),
-                                onChanged: processPlayAll,
-                              ),
-                              Text("Грати все"),
-                            ],
-                          ),
-                        ),
                         StreamBuilder(
                           stream: player.playbackChanges,
                           builder: (context, data) => Column(
@@ -210,6 +221,10 @@ class _CatalogBookViewState extends State<CatalogBookView> {
 
   void downloadBook() async {
     await widget.book.downloadBook();
+  }
+
+  void removeDownloads() async {
+    await widget.book.removeDownloads();
   }
 
   void processPlayAll(bool selectAll) {
