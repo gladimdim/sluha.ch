@@ -114,6 +114,19 @@ class _CatalogBookViewState extends State<CatalogBookView> {
                           onPressed: removeDownloads,
                           icon: Icon(Icons.delete_forever),
                         ),
+                        FutureBuilder<int>(
+                          future: widget.book.totalFileSize(),
+                          initialData: 0,
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              var data = snapshot.data;
+                              var inMb = (data / 1000 / 1000).floor();
+                              return Text("${inMb.toString()} Mb");
+                            } else {
+                              return Container();
+                            }
+                          },
+                        ),
                       ],
                     ),
                     Row(
@@ -221,10 +234,12 @@ class _CatalogBookViewState extends State<CatalogBookView> {
 
   void downloadBook() async {
     await widget.book.downloadBook();
+    setState(() {});
   }
 
   void removeDownloads() async {
     await widget.book.removeDownloads();
+    setState(() {});
   }
 
   void processPlayAll(bool selectAll) {
