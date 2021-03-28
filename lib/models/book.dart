@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:audiobooks_app/models/book_file.dart';
 import 'package:audiobooks_app/models/server.dart';
+import 'package:rxdart/rxdart.dart';
 
 class Book {
   final int id;
@@ -16,6 +19,8 @@ class Book {
   final int amountOfParts;
   final String coverUrl;
   final bool local;
+  BehaviorSubject _fileSizeChanges = BehaviorSubject<int>();
+  ValueStream<int> fileSizeChanges;
 
   String get localImageUrl {
     return local ? "assets/$imageUrl" : "$URL_PREFIX$imageUrl";
@@ -50,6 +55,24 @@ class Book {
         return BookFile(title: "Розділ $index", url: "$filePath/$index.mp3");
       }
     }).toList();
+
+    fileSizeChanges = _fileSizeChanges.stream;
+    recalculateFileSize();
+  }
+
+  Future<void> downloadBook() async {
+    var statuses = _downloadFiles();
+    await for (var _ in statuses) {
+      await recalculateFileSize();
+    }
+  }
+
+  Stream<int> _downloadFiles() async* {
+    for (var file in files) {
+      await file.saveForOffline();
+      var size = await file.downloadedFileSize();
+      yield size;
+    }
   }
 
   factory Book.fromJson(Map<String, dynamic> json) {
@@ -70,6 +93,28 @@ class Book {
       author: json["author"],
       coverUrl: json["imageUrl"],
     );
+  }
+
+  Future removeDownloads() async {
+    await Future.forEach(files, (file) async {
+      await file.removeDownload();
+    });
+
+    recalculateFileSize();
+  }
+
+  Future recalculateFileSize() async {
+    var size = await totalFileSize();
+    _fileSizeChanges.add(size);
+  }
+
+  Future<int> totalFileSize() async {
+    var size = 0;
+    await Future.forEach<BookFile>(files, (file) async {
+      var s = await file.downloadedFileSize();
+      size = size + s;
+    });
+    return size;
   }
 }
 

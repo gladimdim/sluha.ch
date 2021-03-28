@@ -32,7 +32,7 @@ class Player {
         case AudioManagerEvents.ended:
           playNext();
           break;
-        case AudioManagerEvents.playstatus:
+        case AudioManagerEvents .playstatus:
           _playbackChanges.add(true);
           break;
         case AudioManagerEvents.stop:
@@ -44,6 +44,8 @@ class Player {
           break;
         case AudioManagerEvents.previous:
           playPrevious();
+          break;
+        default:
           break;
       }
     });
@@ -69,7 +71,8 @@ class Player {
   void play(Book book, BookFile file) async {
     this.book = book;
     this.currentFileIndex = this.book.files.indexOf(file);
-    AudioManager.instance.audioList = [fileToAudioInfo(file)];
+    var audioFileInfo = await fileToAudioInfo(file);
+    AudioManager.instance.audioList = [audioFileInfo];
     AudioManager.instance.play(index: 0, auto: true);
   }
 
@@ -154,10 +157,10 @@ class Player {
     _progressChanges.close();
   }
 
-  AudioInfo fileToAudioInfo(BookFile file) {
-    var url = book.local ? "$URL_PREFIX/${file.url}" : "$URL_PREFIX${file.url}";
+  Future<AudioInfo> fileToAudioInfo(BookFile file) async {
+    var url = await file.getPlaybackUrl();
     return AudioInfo(
-      url,
+      file.canPlayOffline ? "file://$url" : url,
       title: file.title,
       desc: book.title,
       coverUrl: book.remoteImageUrl,

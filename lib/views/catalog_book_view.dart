@@ -7,6 +7,7 @@ import 'package:audiobooks_app/components/headline_text.dart';
 import 'package:audiobooks_app/components/play_controls_view.dart';
 import 'package:audiobooks_app/components/title_text.dart';
 import 'package:audiobooks_app/models/book.dart';
+import 'package:audiobooks_app/models/book_file.dart';
 import 'package:audiobooks_app/models/player.dart';
 import 'package:flutter/material.dart';
 
@@ -99,27 +100,55 @@ class _CatalogBookViewState extends State<CatalogBookView> {
                     },
                   ),
                 ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Row(
+                      children: [
+                        IconButton(
+                          onPressed: downloadBook,
+                          icon: Icon(Icons.get_app),
+                        ),
+                        IconButton(
+                          onPressed: removeDownloads,
+                          icon: Icon(Icons.delete_forever),
+                        ),
+                        StreamBuilder<int>(
+                          stream: widget.book.fileSizeChanges,
+                          initialData: 0,
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              var data = snapshot.data;
+                              var inMb = (data / 1000 / 1000).floor();
+                              return Text("${inMb.toString()} Mb");
+                            } else {
+                              return Container();
+                            }
+                          },
+                        ),
+                      ],
+                    ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Checkbox(
+                          value: widget.book.files.fold(
+                              true,
+                              (previousValue, file) =>
+                                  previousValue && file.queued),
+                          onChanged: processPlayAll,
+                        ),
+                        Text("Грати все"),
+                      ],
+                    ),
+                  ],
+                ),
                 Expanded(
                   flex: 1,
                   child: SingleChildScrollView(
                     child: Column(
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.only(right: 2.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              Checkbox(
-                                value: widget.book.files.fold(
-                                    true,
-                                    (previousValue, file) =>
-                                        previousValue && file.queued),
-                                onChanged: processPlayAll,
-                              ),
-                              Text("Грати все"),
-                            ],
-                          ),
-                        ),
                         StreamBuilder(
                           stream: player.playbackChanges,
                           builder: (context, data) => Column(
@@ -146,6 +175,23 @@ class _CatalogBookViewState extends State<CatalogBookView> {
                                           file.title,
                                         ),
                                         Wrap(children: [
+                                          StreamBuilder(
+                                            stream: file.changes,
+                                            builder: (context, data) {
+                                              switch (data.data) {
+                                                case OFFLINE_STATUS.LOADED:
+                                                  return Icon(Icons
+                                                      .download_done_outlined);
+                                                  break;
+                                                case OFFLINE_STATUS.NOT_LOADED:
+                                                  return Container();
+                                                case OFFLINE_STATUS.LOADING:
+                                                  return CircularProgressIndicator();
+                                                default:
+                                                  return Container();
+                                              }
+                                            },
+                                          ),
                                           Checkbox(
                                               value: file.queued,
                                               onChanged: (value) {
@@ -185,6 +231,16 @@ class _CatalogBookViewState extends State<CatalogBookView> {
         ],
       ),
     );
+  }
+
+  void downloadBook() async {
+    await widget.book.downloadBook();
+    setState(() {});
+  }
+
+  void removeDownloads() async {
+    await widget.book.removeDownloads();
+    setState(() {});
   }
 
   void processPlayAll(bool selectAll) {
