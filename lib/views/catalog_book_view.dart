@@ -114,8 +114,8 @@ class _CatalogBookViewState extends State<CatalogBookView> {
                           onPressed: removeDownloads,
                           icon: Icon(Icons.delete_forever),
                         ),
-                        FutureBuilder<int>(
-                          future: widget.book.totalFileSize(),
+                        StreamBuilder<int>(
+                          stream: widget.book.fileSizeChanges,
                           initialData: 0,
                           builder: (context, snapshot) {
                             if (snapshot.hasData) {
