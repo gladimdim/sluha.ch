@@ -4,7 +4,7 @@ import 'package:audiobooks_app/models/book.dart';
 import 'package:audiobooks_app/views/catalog_book_view.dart';
 import 'package:audiobooks_app/views/catalog_card_book_view.dart';
 import 'package:flutter/material.dart';
-
+import 'package:audiobooks_app/extensions/list.dart';
 class CatalogView extends StatefulWidget {
   final List<Book> books;
 
@@ -44,17 +44,17 @@ class _CatalogViewState extends State<CatalogView> {
           ),
         ),
         Expanded(
-          flex: 10,
+          flex: 15,
           child: SingleChildScrollView(
             child: Column(
               children: widget.books
-              .where((book) {
-                if (selectedTags.isEmpty) {
-                  return true;
-                } else {
-                  return false;
-                }
-              })
+                  .where((book) {
+                    if (selectedTags.isEmpty) {
+                      return true;
+                    } else {
+                      return book.tags.intersection(selectedTags.toList(), (a, b) => a == b).isNotEmpty;
+                    }
+                  })
                   .map(
                     (book) => Padding(
                       padding: const EdgeInsets.all(8.0),
