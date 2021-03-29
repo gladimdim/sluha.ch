@@ -78,7 +78,7 @@ class Book {
   }
 
   factory Book.fromJson(Map<String, dynamic> json) {
-    final List<String> tagsJson = json["tags"];
+    final List tagsJson = json["tags"];
     return Book(
       id: json["id"],
       seriesTitle: json["series"],

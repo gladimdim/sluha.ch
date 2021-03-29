@@ -48,6 +48,13 @@ class _CatalogViewState extends State<CatalogView> {
           child: SingleChildScrollView(
             child: Column(
               children: widget.books
+              .where((book) {
+                if (selectedTags.isEmpty) {
+                  return true;
+                } else {
+                  return false;
+                }
+              })
                   .map(
                     (book) => Padding(
                       padding: const EdgeInsets.all(8.0),
