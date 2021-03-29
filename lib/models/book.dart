@@ -19,6 +19,7 @@ class Book {
   final int amountOfParts;
   final String coverUrl;
   final bool local;
+  final List<String> tags;
   BehaviorSubject _fileSizeChanges = BehaviorSubject<int>();
   ValueStream<int> fileSizeChanges;
 
@@ -47,6 +48,7 @@ class Book {
     this.amountOfParts,
     this.coverUrl,
     this.local = true,
+    this.tags,
   }) {
     files = Iterable<int>.generate(amountOfParts).map((index) {
       if (index == 0) {
@@ -76,7 +78,7 @@ class Book {
   }
 
   factory Book.fromJson(Map<String, dynamic> json) {
-    // List<String> langs = json["languages"] as List<String>;
+    final List<String> tagsJson = json["tags"];
     return Book(
       id: json["id"],
       seriesTitle: json["series"],
@@ -92,6 +94,7 @@ class Book {
       local: false,
       author: json["author"],
       coverUrl: json["imageUrl"],
+      tags: tagsJson.map<String>((tagJson) => tagJson).toList(),
     );
   }
 
@@ -135,6 +138,7 @@ List<Book> generateLocalBooks() {
       year: 2020,
       filePath: "minecraft/night_of_the_bats",
       amountOfParts: 15,
+      tags: ["майнкрафт"],
     ),
     Book(
       id: 2,
@@ -151,6 +155,7 @@ List<Book> generateLocalBooks() {
       year: 2020,
       filePath: "minecraft/deep_dive",
       amountOfParts: 16,
+      tags: ["майнкрафт"],
     ),
     Book(
       id: 3,
@@ -172,6 +177,7 @@ List<Book> generateLocalBooks() {
       ],
       filePath: "minecraft/cifrova_zagroza",
       amountOfParts: 16,
+      tags: ["майнкрайфт"],
     ),
     Book(
       id: 4,
@@ -190,6 +196,7 @@ List<Book> generateLocalBooks() {
       ],
       filePath: "minecraft/dungeon_secrets",
       amountOfParts: 15,
+      tags: ["майнкрафт"],
     ),
   ];
 }
