@@ -16,26 +16,32 @@ class TagsView extends StatefulWidget {
 
 class _TagsViewState extends State<TagsView> {
   Set<String> selectedTags = Set();
-  final List<String> tags = ["майнкрафт", "фортнайт"];
+  final List<String> rootTags = ["майнкрафт", "фортнайт"];
 
   @override
   Widget build(BuildContext context) {
     return Row(
-      children: tags.map((tag) {
-        return Padding(
-          padding: const EdgeInsets.only(left: 8.0, right: 4.0),
-          child: InputChip(
-            backgroundColor: Theme.of(context).primaryColor,
-            selectedColor: Theme.of(context).accentColor,
-            label: TitleText("$tag (${amountOfBooksForTag(tag)})"),
-            selected: selectedTags.contains(tag),
-            onSelected: (selected) {
-              selectTag(tag);
-            },
-          ),
-        );
-      }).toList(),
+      children: activeTags.map((tag) {
+              return Padding(
+                padding: const EdgeInsets.only(left: 8.0, right: 4.0),
+                child: InputChip(
+                  backgroundColor: Theme.of(context).primaryColor,
+                  selectedColor: Theme.of(context).accentColor,
+                  label: TitleText("$tag (${amountOfBooksForTag(tag)})"),
+                  selected: selectedTags.contains(tag),
+                  onSelected: (selected) {
+                    selectTag(tag);
+                  },
+                ),
+              );
+            }).toList(),
     );
+  }
+
+  List<String> get activeTags {
+    return selectedTags.isEmpty
+        ? rootTags
+        : selectedTags.toList();
   }
 
   amountOfBooksForTag(String tag) {
