@@ -1,6 +1,5 @@
 import 'package:audiobooks_app/components/play_controls_view.dart';
 import 'package:audiobooks_app/components/tags_view.dart';
-import 'package:audiobooks_app/components/title_text.dart';
 import 'package:audiobooks_app/models/book.dart';
 import 'package:audiobooks_app/views/catalog_book_view.dart';
 import 'package:audiobooks_app/views/catalog_card_book_view.dart';

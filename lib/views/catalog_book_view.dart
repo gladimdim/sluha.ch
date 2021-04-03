@@ -6,7 +6,6 @@ import 'package:audiobooks_app/components/book_meta_field_view.dart';
 import 'package:audiobooks_app/components/flipper.dart';
 import 'package:audiobooks_app/components/headline_text.dart';
 import 'package:audiobooks_app/components/play_controls_view.dart';
-import 'package:audiobooks_app/components/tags_view.dart';
 import 'package:audiobooks_app/components/title_text.dart';
 import 'package:audiobooks_app/models/book.dart';
 import 'package:audiobooks_app/models/book_file.dart';
@@ -14,7 +13,6 @@ import 'package:audiobooks_app/models/player.dart';
 import 'package:audiobooks_app/views/catalog_view.dart';
 import 'package:flutter/material.dart';
 
-import 'package:audiobooks_app/extensions/list.dart';
 class CatalogBookView extends StatefulWidget {
   final Book book;
   final List<Book> books;

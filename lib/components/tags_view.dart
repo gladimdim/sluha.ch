@@ -3,8 +3,6 @@ import 'package:audiobooks_app/components/title_text.dart';
 import 'package:audiobooks_app/models/book.dart';
 import 'package:flutter/material.dart';
 
-import 'package:audiobooks_app/extensions/list.dart';
-
 class TagsView extends StatefulWidget {
   final List<Book> books;
   final List<String> rootTags;
@@ -29,7 +27,7 @@ class _TagsViewState extends State<TagsView> {
             child: InputChip(
               backgroundColor: Theme.of(context).primaryColor,
               selectedColor: Theme.of(context).accentColor,
-              label: TitleText("$tag (${amountOfBooksForTag(tag)})"),
+              label: TitleText("$tag (${amountOfBooksForTag(tag, availableBooks)})"),
               selected: selectedTags.contains(tag),
               onSelected: (selected) {
                 selectTag(tag);
@@ -42,16 +40,7 @@ class _TagsViewState extends State<TagsView> {
   }
 
   List<String> get activeTags {
-    return selectedTags.isEmpty ? widget.rootTags : allTagsForBookSet(availableBooks).toList();
-  }
-
-  amountOfBooksForTag(String tag) {
-    return availableBooks.fold(0, (previousValue, book) {
-      if (book.tags.contains(tag)) {
-        return previousValue + 1;
-      }
-      return previousValue;
-    });
+    return selectedTags.isEmpty ? widget.rootTags : allTagsForBooks(availableBooks).toList();
   }
 
   selectTag(String tag) {
@@ -71,11 +60,4 @@ class _TagsViewState extends State<TagsView> {
     return booksWithTags(widget.books, selectedTags.toList());
   }
 
-  List<String> allTagsForBookSet(List<Book> books) {
-    List<String> allTags = [];
-    books.forEach((book) {
-      allTags.addAll(book.tags);
-    });
-    return allTags.toSet().toList();
-  }
 }
