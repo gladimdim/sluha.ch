@@ -1,20 +1,25 @@
 import 'dart:math';
 
+import 'package:audiobooks_app/book_utils.dart';
 import 'package:audiobooks_app/components/book_cover.dart';
 import 'package:audiobooks_app/components/book_meta_field_view.dart';
 import 'package:audiobooks_app/components/flipper.dart';
 import 'package:audiobooks_app/components/headline_text.dart';
 import 'package:audiobooks_app/components/play_controls_view.dart';
+import 'package:audiobooks_app/components/tags_view.dart';
 import 'package:audiobooks_app/components/title_text.dart';
 import 'package:audiobooks_app/models/book.dart';
 import 'package:audiobooks_app/models/book_file.dart';
 import 'package:audiobooks_app/models/player.dart';
+import 'package:audiobooks_app/views/catalog_view.dart';
 import 'package:flutter/material.dart';
 
+import 'package:audiobooks_app/extensions/list.dart';
 class CatalogBookView extends StatefulWidget {
   final Book book;
+  final List<Book> books;
 
-  CatalogBookView({this.book});
+  CatalogBookView({this.book, this.books});
 
   @override
   _CatalogBookViewState createState() => _CatalogBookViewState();
@@ -99,6 +104,36 @@ class _CatalogBookViewState extends State<CatalogBookView> {
                       );
                     },
                   ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: widget.book.tags
+                      .map(
+                        (tag) => InputChip(
+                          backgroundColor: Theme.of(context).primaryColor,
+                          selectedColor: Theme.of(context).accentColor,
+                          label: Text(tag),
+                          onSelected: (selected) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) {
+                                  return Scaffold(
+                                    appBar: AppBar(
+                                      title: Text("Слухач"),
+                                    ),
+                                    body: CatalogView(
+                                      rootTags: [tag],
+                                      books: booksWithTags(widget.books, [tag])
+                                    ),
+                                  );
+                                },
+                              ),
+                            );
+                          },
+                        ),
+                      )
+                      .toList(),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,

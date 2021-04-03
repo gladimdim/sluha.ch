@@ -1,22 +1,29 @@
 import 'package:audiobooks_app/components/play_controls_view.dart';
+import 'package:audiobooks_app/components/tags_view.dart';
 import 'package:audiobooks_app/components/title_text.dart';
 import 'package:audiobooks_app/models/book.dart';
 import 'package:audiobooks_app/views/catalog_book_view.dart';
 import 'package:audiobooks_app/views/catalog_card_book_view.dart';
 import 'package:flutter/material.dart';
-import 'package:audiobooks_app/extensions/list.dart';
+
 class CatalogView extends StatefulWidget {
   final List<Book> books;
+  final List<String> rootTags;
 
-  CatalogView({this.books});
+  CatalogView({this.books, this.rootTags = const ["майнкрафт", "фортнайт"]});
 
   @override
   _CatalogViewState createState() => _CatalogViewState();
 }
 
 class _CatalogViewState extends State<CatalogView> {
-  Set<String> selectedTags = Set();
-  final List<String> tags = ["майнкрафт", "фортнайт"];
+  List<Book> availableBooks;
+
+  @override
+  void initState() {
+    super.initState();
+    availableBooks = widget.books;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,21 +32,11 @@ class _CatalogViewState extends State<CatalogView> {
         Expanded(
           flex: 1,
           child: SingleChildScrollView(
-            child: Row(
-              children: tags.map((tag) {
-                return Padding(
-                  padding: const EdgeInsets.only(left: 8.0, right: 4.0),
-                  child: InputChip(
-                    backgroundColor: Theme.of(context).primaryColor,
-                    selectedColor: Theme.of(context).accentColor,
-                    label: TitleText("$tag (${amountOfBooksForTag(tag)})"),
-                    selected: selectedTags.contains(tag),
-                    onSelected: (selected) {
-                      selectTag(tag);
-                    },
-                  ),
-                );
-              }).toList(),
+            scrollDirection: Axis.horizontal,
+            child: TagsView(
+              books: widget.books,
+              onTagChange: onTagChange,
+              rootTags: widget.rootTags,
             ),
           ),
         ),
@@ -47,14 +44,7 @@ class _CatalogViewState extends State<CatalogView> {
           flex: 15,
           child: SingleChildScrollView(
             child: Column(
-              children: widget.books
-                  .where((book) {
-                    if (selectedTags.isEmpty) {
-                      return true;
-                    } else {
-                      return book.tags.intersection(selectedTags.toList(), (a, b) => a == b).isNotEmpty;
-                    }
-                  })
+              children: availableBooks
                   .map(
                     (book) => Padding(
                       padding: const EdgeInsets.all(8.0),
@@ -72,7 +62,10 @@ class _CatalogViewState extends State<CatalogView> {
                               context,
                               MaterialPageRoute(
                                 builder: (context) {
-                                  return CatalogBookView(book: book);
+                                  return CatalogBookView(
+                                    book: book,
+                                    books: widget.books,
+                                  );
                                 },
                               ),
                             );
@@ -93,21 +86,9 @@ class _CatalogViewState extends State<CatalogView> {
     );
   }
 
-  selectTag(String tag) {
-    if (selectedTags.contains(tag)) {
-      selectedTags.remove(tag);
-    } else {
-      selectedTags.add(tag);
-    }
-    setState(() {});
-  }
-
-  amountOfBooksForTag(String tag) {
-    return widget.books.fold(0, (previousValue, book) {
-      if (book.tags.contains(tag)) {
-        return previousValue + 1;
-      }
-      return previousValue;
+  onTagChange(List<Book> books) {
+    setState(() {
+      availableBooks = books;
     });
   }
 }
