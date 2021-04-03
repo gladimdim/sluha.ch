@@ -1,3 +1,4 @@
+import 'package:audiobooks_app/book_utils.dart';
 import 'package:audiobooks_app/components/title_text.dart';
 import 'package:audiobooks_app/models/book.dart';
 import 'package:flutter/material.dart';
@@ -5,10 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:audiobooks_app/extensions/list.dart';
 
 class TagsView extends StatefulWidget {
-  List<Book> books;
-  Function(List<Book>) onTagChange;
+  final List<Book> books;
+  final List<String> rootTags;
+  final Function(List<Book>) onTagChange;
 
-  TagsView({this.books, this.onTagChange});
+  TagsView({this.books, this.onTagChange, this.rootTags = const ["майнкрафт", "фортнайт"]});
 
   @override
   _TagsViewState createState() => _TagsViewState();
@@ -16,7 +18,6 @@ class TagsView extends StatefulWidget {
 
 class _TagsViewState extends State<TagsView> {
   Set<String> selectedTags = Set();
-  final List<String> rootTags = ["майнкрафт", "фортнайт"];
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +42,7 @@ class _TagsViewState extends State<TagsView> {
   }
 
   List<String> get activeTags {
-    return selectedTags.isEmpty ? rootTags : allTagsForBookSet(availableBooks).toList();
+    return selectedTags.isEmpty ? widget.rootTags : allTagsForBookSet(availableBooks).toList();
   }
 
   amountOfBooksForTag(String tag) {
@@ -64,16 +65,10 @@ class _TagsViewState extends State<TagsView> {
   }
 
   List<Book> get availableBooks {
-    return widget.books.where((book) {
-      if (selectedTags.isEmpty) {
-        return true;
-      } else {
-        return book.tags
-            .intersection(selectedTags.toList(), (a, b) => a == b)
-            .length ==
-            selectedTags.length;
-      }
-    }).toList();
+    if (selectedTags.isEmpty) {
+      return widget.books;
+    }
+    return booksWithTags(widget.books, selectedTags.toList());
   }
 
   List<String> allTagsForBookSet(List<Book> books) {

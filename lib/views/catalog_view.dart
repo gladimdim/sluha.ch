@@ -8,8 +8,9 @@ import 'package:flutter/material.dart';
 
 class CatalogView extends StatefulWidget {
   final List<Book> books;
+  final List<String> rootTags;
 
-  CatalogView({this.books});
+  CatalogView({this.books, this.rootTags = const ["майнкрафт", "фортнайт"]});
 
   @override
   _CatalogViewState createState() => _CatalogViewState();
@@ -32,7 +33,11 @@ class _CatalogViewState extends State<CatalogView> {
           flex: 1,
           child: SingleChildScrollView(
             scrollDirection: Axis.horizontal,
-            child: TagsView(books: widget.books, onTagChange: onTagChange,),
+            child: TagsView(
+              books: widget.books,
+              onTagChange: onTagChange,
+              rootTags: widget.rootTags,
+            ),
           ),
         ),
         Expanded(
@@ -57,7 +62,10 @@ class _CatalogViewState extends State<CatalogView> {
                               context,
                               MaterialPageRoute(
                                 builder: (context) {
-                                  return CatalogBookView(book: book);
+                                  return CatalogBookView(
+                                    book: book,
+                                    books: widget.books,
+                                  );
                                 },
                               ),
                             );
