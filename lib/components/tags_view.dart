@@ -21,31 +21,31 @@ class _TagsViewState extends State<TagsView> {
   @override
   Widget build(BuildContext context) {
     return Row(
-      children: activeTags.map((tag) {
-              return Padding(
-                padding: const EdgeInsets.only(left: 8.0, right: 4.0),
-                child: InputChip(
-                  backgroundColor: Theme.of(context).primaryColor,
-                  selectedColor: Theme.of(context).accentColor,
-                  label: TitleText("$tag (${amountOfBooksForTag(tag)})"),
-                  selected: selectedTags.contains(tag),
-                  onSelected: (selected) {
-                    selectTag(tag);
-                  },
-                ),
-              );
-            }).toList(),
+      children: activeTags.map(
+        (tag) {
+          return Padding(
+            padding: const EdgeInsets.only(left: 8.0, right: 4.0),
+            child: InputChip(
+              backgroundColor: Theme.of(context).primaryColor,
+              selectedColor: Theme.of(context).accentColor,
+              label: TitleText("$tag (${amountOfBooksForTag(tag)})"),
+              selected: selectedTags.contains(tag),
+              onSelected: (selected) {
+                selectTag(tag);
+              },
+            ),
+          );
+        },
+      ).toList(),
     );
   }
 
   List<String> get activeTags {
-    return selectedTags.isEmpty
-        ? rootTags
-        : selectedTags.toList();
+    return selectedTags.isEmpty ? rootTags : allTagsForBookSet(availableBooks).toList();
   }
 
   amountOfBooksForTag(String tag) {
-    return widget.books.fold(0, (previousValue, book) {
+    return availableBooks.fold(0, (previousValue, book) {
       if (book.tags.contains(tag)) {
         return previousValue + 1;
       }
@@ -59,18 +59,28 @@ class _TagsViewState extends State<TagsView> {
     } else {
       selectedTags.add(tag);
     }
-    final availableBooks = widget.books.where((book) {
+    widget.onTagChange(availableBooks);
+    setState(() {});
+  }
+
+  List<Book> get availableBooks {
+    return widget.books.where((book) {
       if (selectedTags.isEmpty) {
         return true;
       } else {
         return book.tags
-                .intersection(selectedTags.toList(), (a, b) => a == b)
-                .length ==
+            .intersection(selectedTags.toList(), (a, b) => a == b)
+            .length ==
             selectedTags.length;
       }
     }).toList();
+  }
 
-    widget.onTagChange(availableBooks);
-    setState(() {});
+  List<String> allTagsForBookSet(List<Book> books) {
+    List<String> allTags = [];
+    books.forEach((book) {
+      allTags.addAll(book.tags);
+    });
+    return allTags.toSet().toList();
   }
 }
