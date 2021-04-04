@@ -38,7 +38,7 @@ class _CatalogBookViewState extends State<CatalogBookView> {
             child: Column(
               children: [
                 Expanded(
-                  flex: 1,
+                  flex: 3,
                   child: Flipper(
                     frontBuilder: (context) => Center(
                       child: Hero(
@@ -178,7 +178,7 @@ class _CatalogBookViewState extends State<CatalogBookView> {
                   ],
                 ),
                 Expanded(
-                  flex: 1,
+                  flex: 2,
                   child: SingleChildScrollView(
                     child: Column(
                       children: [

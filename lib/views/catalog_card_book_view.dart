@@ -33,6 +33,27 @@ class CatalogCardBookView extends StatelessWidget {
             BookMetaFieldView("Вік", "${book.ageRating}+"),
           ],
         ),
+        Column(
+          children: [
+            Text("Теги"),
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: book.tags
+                    .map(
+                      (tag) => Padding(
+                        padding: const EdgeInsets.all(2.0),
+                        child: Chip(
+                          backgroundColor: Theme.of(context).accentColor,
+                          label: Text(tag),
+                        ),
+                      ),
+                    )
+                    .toList(),
+              ),
+            )
+          ],
+        ),
       ],
     );
   }
