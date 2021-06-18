@@ -55,9 +55,9 @@ ThemeData getDarkTheme() {
             if (states.contains(MaterialState.hovered) ||
                 states.contains(MaterialState.focused) ||
                 states.contains(MaterialState.pressed)) {
-              return mediumColor;
+              return mediumColor!;
             }
-            return lightColor; // Defer to the widget's default.
+            return lightColor!; // Defer to the widget's default.
           },
         ),
         foregroundColor: MaterialStateProperty.resolveWith((states) {

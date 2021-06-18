@@ -10,7 +10,7 @@ class MainView extends StatefulWidget {
 }
 
 class _MainViewState extends State<MainView> {
-  final AsyncMemoizer _fetchCatalog = AsyncMemoizer();
+  final AsyncMemoizer<List<Book>> _fetchCatalog = AsyncMemoizer();
 
   @override
   Widget build(BuildContext context) {
@@ -18,22 +18,22 @@ class _MainViewState extends State<MainView> {
       appBar: AppBar(
         title: Text("Слухач"),
       ),
-      body: FutureBuilder(
+      body: FutureBuilder<List<Book>>(
           future: _fetchData(),
           builder: (context, snapshot) {
             switch (snapshot.connectionState) {
               case ConnectionState.done:
-                if (snapshot.hasData) {
-                  final List<Book> books = snapshot.data;
-                  return CatalogView(
-                    books: books,
-                  );
-                } else {
+                final data = snapshot.data;
+                if (data == null || data.isEmpty) {
                   return CatalogView(
                     books: generateLocalBooks(),
                   );
+                } else {
+                  final List<Book> books = snapshot.data!;
+                  return CatalogView(
+                    books: books,
+                  );
                 }
-                break;
               default:
                 return Center(child: CircularProgressIndicator());
             }
@@ -41,7 +41,7 @@ class _MainViewState extends State<MainView> {
     );
   }
 
-  Future _fetchData() {
+  Future<List<Book>> _fetchData() {
     return _fetchCatalog.runOnce(() async {
       var result = await fetchBooks();
       return result;

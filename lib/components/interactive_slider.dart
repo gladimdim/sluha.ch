@@ -7,14 +7,14 @@ import 'package:tuple/tuple.dart';
 class InteractiveSlider extends StatefulWidget {
   final Player player;
 
-  InteractiveSlider({this.player});
+  InteractiveSlider({required this.player});
   @override
   _InteractiveSliderState createState() => _InteractiveSliderState();
 }
 
 class _InteractiveSliderState extends State<InteractiveSlider> {
   double value = 0;
-  StreamSubscription sub;
+  late StreamSubscription sub;
   @override
   void initState() {
     sub = widget.player.progressChanges.listen((event) {
@@ -28,11 +28,11 @@ class _InteractiveSliderState extends State<InteractiveSlider> {
   @override
   Widget build(BuildContext context) {
     var player = widget.player;
-    return StreamBuilder(
+    return StreamBuilder<Tuple2<Duration, Duration>>(
       stream: player.progressChanges,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          Tuple2<Duration, Duration> durations = snapshot.data;
+          Tuple2<Duration, Duration> durations = snapshot.data!;
           return Slider(
             min: 0,
             max: durations.item2.inSeconds.toDouble(),

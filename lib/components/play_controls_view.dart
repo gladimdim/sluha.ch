@@ -55,11 +55,11 @@ class PlayControlsView extends StatelessWidget {
                 IconButtonStyled(
                     iconData: Icons.settings_backup_restore,
                     onPressed: player.rewind30),
-                StreamBuilder(
+                StreamBuilder<bool>(
                     stream: player.playbackChanges,
                     builder: (context, data) {
                       if (data.hasData) {
-                        var isPlaying = data.data;
+                        var isPlaying = data.data!;
                         if (isPlaying) {
                           return IconButtonStyled(
                               iconData: Icons.pause_circle_filled_outlined,

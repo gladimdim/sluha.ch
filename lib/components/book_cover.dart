@@ -5,7 +5,7 @@ import 'package:transparent_image/transparent_image.dart';
 class BookCover extends StatelessWidget {
   final Book book;
 
-  BookCover({this.book});
+  BookCover({required this.book});
 
   @override
   Widget build(BuildContext context) {

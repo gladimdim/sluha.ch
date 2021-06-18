@@ -3,7 +3,7 @@ import 'package:audiobooks_app/models/book_file.dart';
 import 'package:flutter/material.dart';
 
 class CurrentlyPlaying extends StatelessWidget {
-  final BookFile file;
+  final BookFile? file;
   final String bookTitle;
 
   CurrentlyPlaying(this.file, this.bookTitle);
@@ -19,7 +19,7 @@ class CurrentlyPlaying extends StatelessWidget {
         ),
         child: SingleChildScrollView(
             scrollDirection: Axis.horizontal,
-            child: HeadlineText("$bookTitle: ${file.title}")),
+            child: HeadlineText("$bookTitle: ${file!.title}")),
       );
     }
   }

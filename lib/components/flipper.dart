@@ -7,7 +7,8 @@ class Flipper extends StatefulWidget {
   final WidgetBuilder frontBuilder;
   final WidgetBuilder backBuilder;
 
-  const Flipper({Key key, this.frontBuilder, this.backBuilder})
+  const Flipper(
+      {Key? key, required this.frontBuilder, required this.backBuilder})
       : super(key: key);
 
   @override
@@ -16,7 +17,7 @@ class Flipper extends StatefulWidget {
 
 class _FlipperState extends State<Flipper> with SingleTickerProviderStateMixin {
   bool _showFrontSide = true;
-  AnimationController _controller;
+  late AnimationController _controller;
 
   @override
   void initState() {
