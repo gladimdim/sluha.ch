@@ -28,7 +28,7 @@ class Book {
   }
 
   String get remoteImageUrl {
-    return local ? "$URL_PREFIX/$imageUrl" : "$URL_PREFIX$imageUrl";
+    return local ? "$URL_PREFIX/$imageUrl" : "https://$URL_PREFIX$imageUrl";
   }
 
   late List<BookFile> files;

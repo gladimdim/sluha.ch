@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:audiobooks_app/models/book.dart';
 import 'package:http/http.dart' as http;
 
-const URL_PREFIX = "https://sluha.ch";
+const URL_PREFIX = "sluha.ch";
 
 Future<List<Book>> fetchBooks() async {
   try {

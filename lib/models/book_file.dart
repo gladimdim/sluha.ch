@@ -23,7 +23,7 @@ class BookFile {
   }
 
   String remoteFullFilePath() {
-    return "$URL_PREFIX$url";
+    return "https://$URL_PREFIX$url";
   }
 
   Future<String> getPlaybackUrl() async {
@@ -71,7 +71,7 @@ class BookFile {
     var fileName = this.getFileName();
     var fullUrl = "$URL_PREFIX/$url";
     http.Client client = http.Client();
-    final req = await client.get(Uri.parse(fullUrl));
+    final req = await client.get(Uri.https(URL_PREFIX, url));
     final bytes = req.bodyBytes;
     String docDir = await getDocumentRootPath();
     Directory directory =

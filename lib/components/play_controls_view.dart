@@ -67,7 +67,7 @@ class PlayControlsView extends StatelessWidget {
                         } else {
                           return IconButtonStyled(
                               iconData: Icons.play_circle_filled_outlined,
-                              onPressed: player.resume);
+                              onPressed: () => player.resume());
                         }
                       } else {
                         return IconButtonStyled(
