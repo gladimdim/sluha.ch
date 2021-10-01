@@ -13,6 +13,7 @@ ThemeData getWhiteTheme() {
     accentColor: mediumColor,
     backgroundColor: lightColor,
     buttonColor: deepColor,
+    scaffoldBackgroundColor: bgColor,
     sliderTheme: SliderThemeData(
       valueIndicatorColor: Colors.white,
       // progress line to the right

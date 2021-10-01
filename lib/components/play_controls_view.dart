@@ -14,7 +14,7 @@ class PlayControlsView extends StatelessWidget {
     return Material(
       color: Theme.of(context).primaryColor,
       child: Container(
-        padding: EdgeInsets.only(top: 4.0),
+        padding: EdgeInsets.only(top: 2.0),
         // color: Theme.of(context).primaryColor,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

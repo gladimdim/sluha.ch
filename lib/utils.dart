@@ -1,5 +1,6 @@
 import 'package:path_provider/path_provider.dart';
 
 Future<String> getDocumentRootPath() async {
-  return (await getApplicationDocumentsDirectory()).path;
+  final dir = await getApplicationDocumentsDirectory();
+  return dir.path;
 }

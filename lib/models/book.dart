@@ -63,9 +63,11 @@ class Book {
   }
 
   Future<void> downloadBook() async {
-    var statuses = _downloadFiles();
-    await for (var _ in statuses) {
-      await recalculateFileSize();
+    final statuses = _downloadFiles();
+    var size = 0;
+    await for (var fileSize in statuses) {
+      size += fileSize;
+      _fileSizeChanges.add(size);
     }
   }
 
