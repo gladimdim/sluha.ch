@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 class CatalogCardBookView extends StatelessWidget {
   final Book book;
 
-  CatalogCardBookView({this.book});
+  CatalogCardBookView({required this.book});
 
   @override
   Widget build(BuildContext context) {

@@ -8,7 +8,10 @@ class TagsView extends StatefulWidget {
   final List<String> rootTags;
   final Function(List<Book>) onTagChange;
 
-  TagsView({this.books, this.onTagChange, this.rootTags = const ["майнкрафт", "фортнайт"]});
+  TagsView(
+      {required this.books,
+      required this.onTagChange,
+      this.rootTags = const ["майнкрафт", "фортнайт"]});
 
   @override
   _TagsViewState createState() => _TagsViewState();
@@ -27,7 +30,8 @@ class _TagsViewState extends State<TagsView> {
             child: InputChip(
               backgroundColor: Theme.of(context).primaryColor,
               selectedColor: Theme.of(context).accentColor,
-              label: TitleText("$tag (${amountOfBooksForTag(tag, availableBooks)})"),
+              label: TitleText(
+                  "$tag (${amountOfBooksForTag(tag, availableBooks)})"),
               selected: selectedTags.contains(tag),
               onSelected: (selected) {
                 selectTag(tag);
@@ -40,7 +44,9 @@ class _TagsViewState extends State<TagsView> {
   }
 
   List<String> get activeTags {
-    return selectedTags.isEmpty ? widget.rootTags : allTagsForBooks(availableBooks).toList();
+    return selectedTags.isEmpty
+        ? widget.rootTags
+        : allTagsForBooks(availableBooks).toList();
   }
 
   selectTag(String tag) {
@@ -59,5 +65,4 @@ class _TagsViewState extends State<TagsView> {
     }
     return booksWithTags(widget.books, selectedTags.toList());
   }
-
 }

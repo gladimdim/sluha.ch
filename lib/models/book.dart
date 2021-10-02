@@ -20,35 +20,35 @@ class Book {
   final String coverUrl;
   final bool local;
   final List<String> tags;
-  BehaviorSubject _fileSizeChanges = BehaviorSubject<int>();
-  ValueStream<int> fileSizeChanges;
+  final BehaviorSubject<int> _fileSizeChanges = BehaviorSubject<int>();
+  late ValueStream<int> fileSizeChanges;
 
   String get localImageUrl {
     return local ? "assets/$imageUrl" : "$URL_PREFIX$imageUrl";
   }
 
   String get remoteImageUrl {
-    return local ? "$URL_PREFIX/$imageUrl" : "$URL_PREFIX$imageUrl";
+    return local ? "$URL_PREFIX/$imageUrl" : "https://$URL_PREFIX$imageUrl";
   }
 
-  List<BookFile> files;
+  late List<BookFile> files;
 
   Book({
-    this.id,
-    this.seriesTitle,
-    this.title,
-    this.imageUrl,
-    this.duration,
-    this.description,
-    this.ageRating,
-    this.languages,
-    this.author,
-    this.year,
-    this.filePath,
-    this.amountOfParts,
-    this.coverUrl,
+    required this.id,
+    required this.seriesTitle,
+    required this.title,
+    required this.imageUrl,
+    required this.duration,
+    required this.description,
+    required this.ageRating,
+    required this.languages,
+    required this.author,
+    required this.year,
+    required this.filePath,
+    required this.amountOfParts,
+    required this.coverUrl,
     this.local = true,
-    this.tags,
+    required this.tags,
   }) {
     files = Iterable<int>.generate(amountOfParts).map((index) {
       if (index == 0) {
@@ -63,9 +63,11 @@ class Book {
   }
 
   Future<void> downloadBook() async {
-    var statuses = _downloadFiles();
-    await for (var _ in statuses) {
-      await recalculateFileSize();
+    final statuses = _downloadFiles();
+    var size = 0;
+    await for (var fileSize in statuses) {
+      size += fileSize;
+      _fileSizeChanges.add(size);
     }
   }
 
@@ -99,7 +101,7 @@ class Book {
   }
 
   Future removeDownloads() async {
-    await Future.forEach(files, (file) async {
+    await Future.forEach<BookFile>(files, (file) async {
       await file.removeDownload();
     });
 

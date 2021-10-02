@@ -3,9 +3,9 @@ import 'package:google_fonts/google_fonts.dart';
 
 var deepColor = Colors.deepPurple;
 
-var mediumColor = Colors.deepPurple[200];
-var lightColor = Colors.deepPurple[100];
-var bgColor = deepColor;
+final mediumColor = Colors.deepPurple[200]!;
+final lightColor = Colors.deepPurple[100]!;
+final bgColor = deepColor;
 
 ThemeData getWhiteTheme() {
   return ThemeData(
@@ -68,5 +68,8 @@ ThemeData getWhiteTheme() {
         }),
       ),
     ),
+    appBarTheme: AppBarTheme(
+      color: bgColor,
+    )
   );
 }

@@ -14,7 +14,7 @@ class PlayControlsView extends StatelessWidget {
     return Material(
       color: Theme.of(context).primaryColor,
       child: Container(
-        padding: EdgeInsets.only(top: 4.0),
+        padding: EdgeInsets.only(top: 2.0),
         // color: Theme.of(context).primaryColor,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -55,11 +55,11 @@ class PlayControlsView extends StatelessWidget {
                 IconButtonStyled(
                     iconData: Icons.settings_backup_restore,
                     onPressed: player.rewind30),
-                StreamBuilder(
+                StreamBuilder<bool>(
                     stream: player.playbackChanges,
                     builder: (context, data) {
                       if (data.hasData) {
-                        var isPlaying = data.data;
+                        var isPlaying = data.data!;
                         if (isPlaying) {
                           return IconButtonStyled(
                               iconData: Icons.pause_circle_filled_outlined,
@@ -67,7 +67,7 @@ class PlayControlsView extends StatelessWidget {
                         } else {
                           return IconButtonStyled(
                               iconData: Icons.play_circle_filled_outlined,
-                              onPressed: player.resume);
+                              onPressed: () => player.resume());
                         }
                       } else {
                         return IconButtonStyled(

@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 
 class IconButtonStyled extends StatelessWidget {
   final IconData iconData;
-  final Function onPressed;
+  final VoidCallback? onPressed;
 
-  IconButtonStyled({this.iconData, this.onPressed});
+  IconButtonStyled({required this.iconData, this.onPressed});
 
   @override
   Widget build(BuildContext context) {

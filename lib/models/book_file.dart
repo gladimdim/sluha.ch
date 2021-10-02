@@ -9,12 +9,12 @@ class BookFile {
   final String title;
   final String url;
   bool queued;
-  bool canPlayOffline;
+  bool canPlayOffline = false;
 
-  BehaviorSubject _offlineChanges = BehaviorSubject<OFFLINE_STATUS>();
-  ValueStream<OFFLINE_STATUS> changes;
+  final BehaviorSubject<OFFLINE_STATUS> _offlineChanges = BehaviorSubject();
+  late final ValueStream<OFFLINE_STATUS> changes;
 
-  BookFile({this.title, this.url, this.queued = true}) {
+  BookFile({required this.title, required this.url, this.queued = true}) {
     changes = _offlineChanges.stream;
     changes.listen((newState) {
       canPlayOffline = newState == OFFLINE_STATUS.LOADED;
@@ -23,7 +23,7 @@ class BookFile {
   }
 
   String remoteFullFilePath() {
-    return "$URL_PREFIX$url";
+    return "https://$URL_PREFIX$url";
   }
 
   Future<String> getPlaybackUrl() async {
@@ -41,7 +41,8 @@ class BookFile {
     var fullFilePath = "$rootPath${getRelativeFolderPath()}/${getFileName()}";
     File file = File(fullFilePath);
     var exists = await file.exists();
-    _offlineChanges.add(exists ? OFFLINE_STATUS.LOADED : OFFLINE_STATUS.NOT_LOADED);
+    _offlineChanges
+        .add(exists ? OFFLINE_STATUS.LOADED : OFFLINE_STATUS.NOT_LOADED);
   }
 
   String getFileName() {
@@ -68,9 +69,9 @@ class BookFile {
   Future saveForOffline() async {
     _offlineChanges.add(OFFLINE_STATUS.LOADING);
     var fileName = this.getFileName();
-    var fullUrl = "$URL_PREFIX$url";
+    var fullUrl = "$URL_PREFIX/$url";
     http.Client client = http.Client();
-    final req = await client.get(Uri.parse(fullUrl));
+    final req = await client.get(Uri.https(URL_PREFIX, url));
     final bytes = req.bodyBytes;
     String docDir = await getDocumentRootPath();
     Directory directory =

@@ -5,13 +5,13 @@ import 'package:rxdart/rxdart.dart';
 import 'package:tuple/tuple.dart';
 
 class Player {
-  Book book;
-  int currentFileIndex;
-  BehaviorSubject _playbackChanges = BehaviorSubject<bool>();
-  BehaviorSubject _progressChanges =
+  Book? book;
+  int? currentFileIndex;
+  BehaviorSubject<bool> _playbackChanges = BehaviorSubject<bool>();
+  BehaviorSubject<Tuple2<Duration, Duration>> _progressChanges =
       BehaviorSubject<Tuple2<Duration, Duration>>();
-  ValueStream<bool> playbackChanges;
-  ValueStream<Tuple2<Duration, Duration>> progressChanges;
+  late ValueStream<bool> playbackChanges;
+  late ValueStream<Tuple2<Duration, Duration>> progressChanges;
 
   Player._internal() {
     playbackChanges = _playbackChanges.stream;
@@ -31,7 +31,7 @@ class Player {
         case AudioManagerEvents.ended:
           playNext();
           break;
-        case AudioManagerEvents .playstatus:
+        case AudioManagerEvents.playstatus:
           _playbackChanges.add(true);
           break;
         case AudioManagerEvents.stop:
@@ -54,22 +54,23 @@ class Player {
 
   String get getBookTitle {
     if (book != null) {
-      return book.title;
+      return book!.title;
     } else {
       return "";
     }
   }
 
-  BookFile get currentFile {
-    if (book == null) {
+  BookFile? get currentFile {
+    final lBook = book;
+    if (lBook == null) {
       return null;
     }
-    return book.files[currentFileIndex];
+    return lBook.files[currentFileIndex!];
   }
 
   void play(Book book, BookFile file) async {
     this.book = book;
-    this.currentFileIndex = this.book.files.indexOf(file);
+    this.currentFileIndex = this.book!.files.indexOf(file);
     var audioFileInfo = await fileToAudioInfo(file);
     AudioManager.instance.audioList = [audioFileInfo];
     AudioManager.instance.play(index: 0, auto: true);
@@ -98,8 +99,15 @@ class Player {
   }
 
   void playOrPause() async {
-    var isPlaying = await AudioManager.instance.playOrPause();
-    _playbackChanges.add(isPlaying);
+    final isPlaying = AudioManager.instance.isPlaying;
+    if (isPlaying) {
+      await AudioManager.instance.toPause();
+    } else {
+      await AudioManager.instance.toPlay();
+    }
+    // var isPlaying = await AudioManager.instance.playOrPause();
+    // AudioManager.instance.toPause();
+    _playbackChanges.add(!isPlaying);
   }
 
   void skip30() {
@@ -131,19 +139,19 @@ class Player {
 
   void jumpToTrack(int offset) async {
     if (book != null) {
-      var next = findNextToPlay(currentFileIndex + offset, offset);
+      var next = findNextToPlay(currentFileIndex! + offset, offset);
       if (next != null) {
-        play(book, next);
+        play(book!, next);
       }
     }
   }
 
-  BookFile findNextToPlay(startIndex, offset) {
+  BookFile? findNextToPlay(startIndex, offset) {
     print("processing: $startIndex, $offset");
-    if (book.files.length <= startIndex || startIndex < 0) {
+    if (book!.files.length <= startIndex || startIndex < 0) {
       return null;
     }
-    var start = book.files[startIndex];
+    var start = book!.files[startIndex];
     if (start.queued) {
       return start;
     } else {
@@ -161,8 +169,8 @@ class Player {
     return AudioInfo(
       file.canPlayOffline ? "file://$url" : url,
       title: file.title,
-      desc: book.title,
-      coverUrl: book.remoteImageUrl,
+      desc: book!.title,
+      coverUrl: book!.remoteImageUrl,
     );
   }
 }

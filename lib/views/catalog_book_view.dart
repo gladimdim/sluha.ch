@@ -17,7 +17,7 @@ class CatalogBookView extends StatefulWidget {
   final Book book;
   final List<Book> books;
 
-  CatalogBookView({this.book, this.books});
+  CatalogBookView({required this.book, required this.books});
 
   @override
   _CatalogBookViewState createState() => _CatalogBookViewState();
@@ -121,9 +121,9 @@ class _CatalogBookViewState extends State<CatalogBookView> {
                                       title: Text("Слухач"),
                                     ),
                                     body: CatalogView(
-                                      rootTags: [tag],
-                                      books: booksWithTags(widget.books, [tag])
-                                    ),
+                                        rootTags: [tag],
+                                        books:
+                                            booksWithTags(widget.books, [tag])),
                                   );
                                 },
                               ),
@@ -152,7 +152,7 @@ class _CatalogBookViewState extends State<CatalogBookView> {
                           initialData: 0,
                           builder: (context, snapshot) {
                             if (snapshot.hasData) {
-                              var data = snapshot.data;
+                              var data = snapshot.data!;
                               var inMb = (data / 1000 / 1000).floor();
                               return Text("${inMb.toString()} Mb");
                             } else {
@@ -169,7 +169,7 @@ class _CatalogBookViewState extends State<CatalogBookView> {
                           value: widget.book.files.fold(
                               true,
                               (previousValue, file) =>
-                                  previousValue && file.queued),
+                                  previousValue! && file.queued),
                           onChanged: processPlayAll,
                         ),
                         Text("Грати все"),
@@ -215,7 +215,6 @@ class _CatalogBookViewState extends State<CatalogBookView> {
                                                 case OFFLINE_STATUS.LOADED:
                                                   return Icon(Icons
                                                       .download_done_outlined);
-                                                  break;
                                                 case OFFLINE_STATUS.NOT_LOADED:
                                                   return Container();
                                                 case OFFLINE_STATUS.LOADING:
@@ -229,7 +228,7 @@ class _CatalogBookViewState extends State<CatalogBookView> {
                                               value: file.queued,
                                               onChanged: (value) {
                                                 setState(() {
-                                                  file.queued = value;
+                                                  file.queued = value!;
                                                 });
                                               }),
                                           Icon(Player.instance
@@ -276,9 +275,9 @@ class _CatalogBookViewState extends State<CatalogBookView> {
     setState(() {});
   }
 
-  void processPlayAll(bool selectAll) {
+  void processPlayAll(bool? selectAll) {
     widget.book.files.forEach((file) {
-      file.queued = selectAll;
+      file.queued = selectAll!;
     });
     setState(() {});
   }

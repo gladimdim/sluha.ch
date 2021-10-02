@@ -10,38 +10,37 @@ class MainView extends StatefulWidget {
 }
 
 class _MainViewState extends State<MainView> {
-  final AsyncMemoizer _fetchCatalog = AsyncMemoizer();
+  final AsyncMemoizer<List<Book>> _fetchCatalog = AsyncMemoizer();
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Слухач"),
+    return SafeArea(
+      child: Scaffold(
+        body: FutureBuilder<List<Book>>(
+            future: _fetchData(),
+            builder: (context, snapshot) {
+              switch (snapshot.connectionState) {
+                case ConnectionState.done:
+                  final data = snapshot.data;
+                  if (data == null || data.isEmpty) {
+                    return CatalogView(
+                      books: generateLocalBooks(),
+                    );
+                  } else {
+                    final List<Book> books = snapshot.data!;
+                    return CatalogView(
+                      books: books,
+                    );
+                  }
+                default:
+                  return Center(child: CircularProgressIndicator());
+              }
+            }),
       ),
-      body: FutureBuilder(
-          future: _fetchData(),
-          builder: (context, snapshot) {
-            switch (snapshot.connectionState) {
-              case ConnectionState.done:
-                if (snapshot.hasData) {
-                  final List<Book> books = snapshot.data;
-                  return CatalogView(
-                    books: books,
-                  );
-                } else {
-                  return CatalogView(
-                    books: generateLocalBooks(),
-                  );
-                }
-                break;
-              default:
-                return Center(child: CircularProgressIndicator());
-            }
-          }),
     );
   }
 
-  Future _fetchData() {
+  Future<List<Book>> _fetchData() {
     return _fetchCatalog.runOnce(() async {
       var result = await fetchBooks();
       return result;
