@@ -13,6 +13,8 @@ ThemeData getDarkTheme() {
       accentColor: mediumColor,
       backgroundColor: deepColor,
       buttonColor: deepColor,
+
+      scaffoldBackgroundColor: Colors.black,
       splashColor: mediumColor,
       sliderTheme: SliderThemeData(
         valueIndicatorColor: Colors.white,
@@ -70,6 +72,6 @@ ThemeData getDarkTheme() {
         ),
       ),
       appBarTheme: AppBarTheme(
-        color: bgColor,
+        color: lightColor,
       ));
 }
