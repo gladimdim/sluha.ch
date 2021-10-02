@@ -60,7 +60,7 @@ class Player {
   void play(Book book, BookFile file) async {
     this.book = book;
     this.currentFileIndex = this.book!.files.indexOf(file);
-    final url = await file.getFullFilePath();
+    final url = await file.getUrl();
     await player.setAudioSource(AudioSource.uri(Uri.parse(url)));
     await player.play();
     // if (file.canPlayOffline) {
@@ -112,8 +112,13 @@ class Player {
   void jumpToOffset(Duration offset) async {
     Tuple2<Duration, Duration> progresses = await _progressChanges.first;
     Duration current = progresses.item1;
-    var newPosition = current + offset;
-    await player.seek(newPosition);
+    Duration newOffset = current + offset;
+    if (newOffset > progresses.item1) {
+      playNext();
+      return;
+    } else {
+      await player.seek(newOffset);
+    }
   }
 
   void seekTo(Duration to) {

@@ -55,6 +55,14 @@ class BookFile {
     return "${filePaths.join("/")}";
   }
 
+  Future<String> getUrl() async {
+    if (canPlayOffline) {
+      return await getFullFilePath();
+    } else {
+      return remoteFullFilePath();
+    }
+  }
+
   Future<String> getFullFilePath() async {
     String docDir = await getDocumentRootPath();
     return "$docDir${getRelativeFolderPath()}/${getFileName()}";
