@@ -14,30 +14,29 @@ class _MainViewState extends State<MainView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Слухач"),
+    return SafeArea(
+      child: Scaffold(
+        body: FutureBuilder<List<Book>>(
+            future: _fetchData(),
+            builder: (context, snapshot) {
+              switch (snapshot.connectionState) {
+                case ConnectionState.done:
+                  final data = snapshot.data;
+                  if (data == null || data.isEmpty) {
+                    return CatalogView(
+                      books: generateLocalBooks(),
+                    );
+                  } else {
+                    final List<Book> books = snapshot.data!;
+                    return CatalogView(
+                      books: books,
+                    );
+                  }
+                default:
+                  return Center(child: CircularProgressIndicator());
+              }
+            }),
       ),
-      body: FutureBuilder<List<Book>>(
-          future: _fetchData(),
-          builder: (context, snapshot) {
-            switch (snapshot.connectionState) {
-              case ConnectionState.done:
-                final data = snapshot.data;
-                if (data == null || data.isEmpty) {
-                  return CatalogView(
-                    books: generateLocalBooks(),
-                  );
-                } else {
-                  final List<Book> books = snapshot.data!;
-                  return CatalogView(
-                    books: books,
-                  );
-                }
-              default:
-                return Center(child: CircularProgressIndicator());
-            }
-          }),
     );
   }
 
