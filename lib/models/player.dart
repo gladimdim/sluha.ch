@@ -1,10 +1,13 @@
-import 'package:audio_manager/audio_manager.dart';
+import 'dart:io';
+
 import 'package:audiobooks_app/models/book.dart';
 import 'package:audiobooks_app/models/book_file.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:tuple/tuple.dart';
+import 'package:just_audio/just_audio.dart';
 
 class Player {
+  final player = AudioPlayer();
   Book? book;
   int? currentFileIndex;
   BehaviorSubject<bool> _playbackChanges = BehaviorSubject<bool>();
@@ -21,31 +24,17 @@ class Player {
   }
 
   setupAudio() {
-    AudioManager.instance.onEvents((events, args) {
-      print(events);
-      switch (events) {
-        case AudioManagerEvents.timeupdate:
-          _progressChanges.add(Tuple2(
-              AudioManager.instance.position, AudioManager.instance.duration));
-          break;
-        case AudioManagerEvents.ended:
-          playNext();
-          break;
-        case AudioManagerEvents.playstatus:
-          _playbackChanges.add(true);
-          break;
-        case AudioManagerEvents.stop:
-        case AudioManagerEvents.error:
-          _playbackChanges.add(false);
-          break;
-        case AudioManagerEvents.next:
-          playNext();
-          break;
-        case AudioManagerEvents.previous:
-          playPrevious();
-          break;
-        default:
-          break;
+    Rx.combineLatest2<Duration?, Duration, Tuple2<Duration, Duration>>(
+        player.durationStream, player.positionStream, (duration, position) {
+      return Tuple2(position ?? Duration.zero, duration ?? Duration.zero);
+    }).listen((duration) {
+      _progressChanges.add(Tuple2(duration.item1, duration.item2));
+    });
+
+    player.playerStateStream.listen((event) {
+      _playbackChanges.add(event.playing);
+      if (event.processingState == ProcessingState.completed) {
+        playNext();
       }
     });
   }
@@ -71,13 +60,18 @@ class Player {
   void play(Book book, BookFile file) async {
     this.book = book;
     this.currentFileIndex = this.book!.files.indexOf(file);
-    var audioFileInfo = await fileToAudioInfo(file);
-    AudioManager.instance.audioList = [audioFileInfo];
-    AudioManager.instance.play(index: 0, auto: true);
+    final url = await file.getFullFilePath();
+    await player.setAudioSource(AudioSource.uri(Uri.parse(url)));
+    await player.play();
+    // if (file.canPlayOffline) {
+    //   player.setFilePath(url);
+    // } else {
+    //   player.setUrl(url);
+    // }
   }
 
   bool isCurrentlyPlayingThisFile(BookFile file) {
-    return file == currentFile && AudioManager.instance.isPlaying;
+    return file == currentFile && player.playing;
   }
 
   void pause() async {
@@ -88,7 +82,7 @@ class Player {
 
   void stop() async {
     if (currentFile != null) {
-      await AudioManager.instance.stop();
+      await player.stop();
     }
   }
 
@@ -99,15 +93,12 @@ class Player {
   }
 
   void playOrPause() async {
-    final isPlaying = AudioManager.instance.isPlaying;
-    if (isPlaying) {
-      await AudioManager.instance.toPause();
+    if (player.playing) {
+      await player.pause();
     } else {
-      await AudioManager.instance.toPlay();
+      await player.play();
     }
-    // var isPlaying = await AudioManager.instance.playOrPause();
-    // AudioManager.instance.toPause();
-    _playbackChanges.add(!isPlaying);
+    _playbackChanges.add(player.playing);
   }
 
   void skip30() {
@@ -122,11 +113,11 @@ class Player {
     Tuple2<Duration, Duration> progresses = await _progressChanges.first;
     Duration current = progresses.item1;
     var newPosition = current + offset;
-    AudioManager.instance.seekTo(newPosition);
+    await player.seek(newPosition);
   }
 
   void seekTo(Duration to) {
-    AudioManager.instance.seekTo(to);
+    player.seek(to);
   }
 
   void playPrevious() {
@@ -162,15 +153,5 @@ class Player {
   void dispose() {
     _playbackChanges.close();
     _progressChanges.close();
-  }
-
-  Future<AudioInfo> fileToAudioInfo(BookFile file) async {
-    var url = await file.getPlaybackUrl();
-    return AudioInfo(
-      file.canPlayOffline ? "file://$url" : url,
-      title: file.title,
-      desc: book!.title,
-      coverUrl: book!.remoteImageUrl,
-    );
   }
 }
