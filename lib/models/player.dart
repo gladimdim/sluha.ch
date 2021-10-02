@@ -26,7 +26,7 @@ class Player {
   setupAudio() {
     Rx.combineLatest2<Duration?, Duration, Tuple2<Duration, Duration>>(
         player.durationStream, player.positionStream, (duration, position) {
-      return Tuple2(position ?? Duration.zero, duration ?? Duration.zero);
+      return Tuple2(position, duration ?? Duration.zero);
     }).listen((duration) {
       _progressChanges.add(Tuple2(duration.item1, duration.item2));
     });

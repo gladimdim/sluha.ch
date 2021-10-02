@@ -79,7 +79,7 @@ class _CatalogViewState extends State<CatalogView> {
           ),
         ),
         Expanded(
-          flex: 3,
+          flex: 4,
           child: Hero(
             tag: "PlayControls",
             child: PlayControlsView(),

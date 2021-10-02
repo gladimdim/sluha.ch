@@ -7,11 +7,13 @@ import 'package:audiobooks_app/components/interactive_slider.dart';
 import 'package:audiobooks_app/models/player.dart';
 import 'package:flutter/material.dart';
 
+final playerControlsKey = GlobalKey();
 class PlayControlsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Player player = Player.instance;
     return Material(
+      key: playerControlsKey,
       color: Theme.of(context).primaryColor,
       child: Container(
         padding: EdgeInsets.only(top: 2.0),
