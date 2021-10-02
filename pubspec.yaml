@@ -13,10 +13,10 @@ dependencies:
   google_fonts: ^2.1.0
   cupertino_icons: ^1.0.3
   rxdart: ^0.27.1
-  audio_manager: ^0.8.1
   tuple: ^2.0.0
   transparent_image: ^2.0.0
   path_provider: ^2.0.2
+  just_audio: ^0.9.12
 
 dev_dependencies:
   flutter_test:

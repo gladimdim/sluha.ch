@@ -118,7 +118,7 @@ class _CatalogBookViewState extends State<CatalogBookView> {
                                 builder: (context) {
                                   return Scaffold(
                                     appBar: AppBar(
-                                      title: Text("Слухач"),
+                                      title: Text(tag),
                                     ),
                                     body: CatalogView(
                                         rootTags: [tag],
@@ -258,7 +258,10 @@ class _CatalogBookViewState extends State<CatalogBookView> {
           ),
           Expanded(
             flex: 2,
-            child: Hero(tag: "PlayControls", child: PlayControlsView()),
+            child: Hero(
+              tag: "PlayControls",
+              child: PlayControlsView(),
+            ),
           )
         ],
       ),

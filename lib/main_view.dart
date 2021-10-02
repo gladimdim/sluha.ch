@@ -1,8 +1,9 @@
+import 'package:async/async.dart';
 import 'package:audiobooks_app/models/book.dart';
-import 'package:audiobooks_app/models/server.dart';
+import 'package:audiobooks_app/models/catalog.dart';
+import 'package:audiobooks_app/utils.dart';
 import 'package:audiobooks_app/views/catalog_view.dart';
 import 'package:flutter/material.dart';
-import 'package:async/async.dart';
 
 class MainView extends StatefulWidget {
   @override
@@ -10,14 +11,38 @@ class MainView extends StatefulWidget {
 }
 
 class _MainViewState extends State<MainView> {
-  final AsyncMemoizer<List<Book>> _fetchCatalog = AsyncMemoizer();
+  AsyncMemoizer<List<Book>> _fetchCatalog = AsyncMemoizer();
+  bool usesLocalCatalog = false;
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        appBar: AppBar(
+          title: Center(
+              child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text("Слухач"),
+              if (usesLocalCatalog)
+                Icon(
+                  Icons.offline_bolt,
+                  size: ICON_SIZE,
+                ),
+            ],
+          )),
+          actions: [
+            IconButton(
+              onPressed: _updateCatalog,
+              icon: Icon(
+                Icons.refresh,
+                size: ICON_SIZE,
+              ),
+            ),
+          ],
+        ),
         body: FutureBuilder<List<Book>>(
-            future: _fetchData(),
+            future: _fetchData(false),
             builder: (context, snapshot) {
               switch (snapshot.connectionState) {
                 case ConnectionState.done:
@@ -40,11 +65,40 @@ class _MainViewState extends State<MainView> {
     );
   }
 
-  Future<List<Book>> _fetchData() {
-    return _fetchCatalog.runOnce(() async {
-      var result = await fetchBooks();
-      return result;
+  void _updateCatalog() async {
+    setState(() {
+      _fetchCatalog = AsyncMemoizer();
+
     });
+    await _fetchData(true);
+  }
+
+  Future<List<Book>> _fetchData(bool refreshFromServer) {
+    return _fetchCatalog.runOnce(() async {
+      if (refreshFromServer) {
+        return await fetchRemoteData();
+      }
+      // check for local books first and use its catalog
+      final localCatalog = await Catalog.instance.readLocalCatalog();
+      if (localCatalog.isEmpty) {
+        return await fetchRemoteData();
+      }
+      usesLocalCatalog = true;
+      return localCatalog;
+    });
+  }
+
+  Future<List<Book>> fetchRemoteData() async {
+    setState(() {
+      usesLocalCatalog = false;
+    });
+    List<Book> books = await Catalog.instance.fetchRemoteCatalogAndSave();
+    if (books.isNotEmpty) {
+      setState(() {
+        usesLocalCatalog = true;
+      });
+    }
+    return books;
   }
 
   List<Book> generateBooksFromJson(List<Map<String, Object>> json) {
