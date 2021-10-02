@@ -99,8 +99,15 @@ class Player {
   }
 
   void playOrPause() async {
-    var isPlaying = await AudioManager.instance.playOrPause();
-    _playbackChanges.add(isPlaying);
+    final isPlaying = AudioManager.instance.isPlaying;
+    if (isPlaying) {
+      await AudioManager.instance.toPause();
+    } else {
+      await AudioManager.instance.toPlay();
+    }
+    // var isPlaying = await AudioManager.instance.playOrPause();
+    // AudioManager.instance.toPause();
+    _playbackChanges.add(!isPlaying);
   }
 
   void skip30() {
