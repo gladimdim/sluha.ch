@@ -258,7 +258,10 @@ class _CatalogBookViewState extends State<CatalogBookView> {
           ),
           Expanded(
             flex: 2,
-            child: Hero(tag: "PlayControls", child: PlayControlsView()),
+            child: Hero(
+              tag: "PlayControls",
+              child: PlayControlsView(),
+            ),
           )
         ],
       ),
