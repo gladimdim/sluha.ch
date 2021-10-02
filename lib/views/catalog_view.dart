@@ -10,14 +10,14 @@ class CatalogView extends StatefulWidget {
   final List<String> rootTags;
 
   CatalogView(
-      {required this.books, this.rootTags = const ["майнкрафт", "фортнайт"]});
+      {required this.books, this.rootTags = const ["майнкрафт", "пірати"]});
 
   @override
   _CatalogViewState createState() => _CatalogViewState();
 }
 
 class _CatalogViewState extends State<CatalogView> {
-  late final List<Book> availableBooks;
+  late List<Book> availableBooks;
 
   @override
   void initState() {
