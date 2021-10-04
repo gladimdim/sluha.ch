@@ -10,6 +10,7 @@ void main() async {
     androidNotificationChannelName: 'Sluha.ch playback',
     androidNotificationOngoing: true,
     androidShowNotificationBadge: true,
+    notificationColor: dark.lightColor,
   );
   runApp(MyApp());
 }

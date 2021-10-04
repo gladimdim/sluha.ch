@@ -79,7 +79,6 @@ class Player {
     this.book = book;
     this.currentFileIndex = this.book!.files.indexOf(file);
     final url = await file.getUrl();
-    print(book.remoteImageUrl);
     await player.setAudioSource(
       AudioSource.uri(
         Uri.parse(url),
