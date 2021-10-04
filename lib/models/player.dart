@@ -1,7 +1,9 @@
 import 'dart:io';
 
+import 'package:audio_session/audio_session.dart';
 import 'package:audiobooks_app/models/book.dart';
 import 'package:audiobooks_app/models/book_file.dart';
+import 'package:just_audio_background/just_audio_background.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:tuple/tuple.dart';
 import 'package:just_audio/just_audio.dart';
@@ -15,6 +17,7 @@ class Player {
       BehaviorSubject<Tuple2<Duration, Duration>>();
   late ValueStream<bool> playbackChanges;
   late ValueStream<Tuple2<Duration, Duration>> progressChanges;
+  bool shouldRestorePlaying = false;
 
   Player._internal() {
     playbackChanges = _playbackChanges.stream;
@@ -23,7 +26,7 @@ class Player {
     setupAudio();
   }
 
-  setupAudio() {
+  setupAudio() async {
     Rx.combineLatest2<Duration?, Duration, Tuple2<Duration, Duration>>(
         player.durationStream, player.positionStream, (duration, position) {
       return Tuple2(position, duration ?? Duration.zero);
@@ -35,6 +38,17 @@ class Player {
       _playbackChanges.add(event.playing);
       if (event.processingState == ProcessingState.completed) {
         playNext();
+      }
+    });
+
+    final session = await AudioSession.instance;
+    await session.configure(AudioSessionConfiguration.music());
+    session.interruptionEventStream.listen((event) {
+      if (event.begin && player.playing) {
+        shouldRestorePlaying = true;
+        pause();
+      } else if (shouldRestorePlaying) {
+        playOrPause();
       }
     });
   }
@@ -58,16 +72,28 @@ class Player {
   }
 
   void play(Book book, BookFile file) async {
+    final session = await AudioSession.instance;
+    if (!(await session.setActive(true))) {
+      return;
+    }
     this.book = book;
     this.currentFileIndex = this.book!.files.indexOf(file);
     final url = await file.getUrl();
-    await player.setAudioSource(AudioSource.uri(Uri.parse(url)));
+    await player.setAudioSource(
+      AudioSource.uri(
+        Uri.parse(url),
+        tag: MediaItem(
+          id: file.title,
+          title: file.title,
+          album: book.title,
+          artist: book.author,
+
+          artUri: Uri.parse(book.imageUrl),
+        ),
+      ),
+    );
+
     await player.play();
-    // if (file.canPlayOffline) {
-    //   player.setFilePath(url);
-    // } else {
-    //   player.setUrl(url);
-    // }
   }
 
   bool isCurrentlyPlayingThisFile(BookFile file) {
