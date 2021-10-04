@@ -79,6 +79,7 @@ class Player {
     this.book = book;
     this.currentFileIndex = this.book!.files.indexOf(file);
     final url = await file.getUrl();
+    print(book.remoteImageUrl);
     await player.setAudioSource(
       AudioSource.uri(
         Uri.parse(url),
@@ -87,8 +88,7 @@ class Player {
           title: file.title,
           album: book.title,
           artist: book.author,
-
-          artUri: Uri.parse(book.imageUrl),
+          artUri: Uri.parse(book.remoteImageUrl),
         ),
       ),
     );

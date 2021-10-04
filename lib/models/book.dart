@@ -23,11 +23,11 @@ class Book {
   late ValueStream<int> fileSizeChanges;
 
   String get localImageUrl {
-    return local ? "assets/$imageUrl" : "$URL_PREFIX$imageUrl";
+    return"assets/$imageUrl";
   }
 
   String get remoteImageUrl {
-    return local ? "$URL_PREFIX/$imageUrl" : "https://$URL_PREFIX$imageUrl";
+    return "https://$URL_PREFIX$imageUrl";
   }
 
   late List<BookFile> files;
