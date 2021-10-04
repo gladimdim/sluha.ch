@@ -17,6 +17,8 @@ dependencies:
   transparent_image: ^2.0.0
   path_provider: ^2.0.2
   just_audio: ^0.9.12
+  audio_session: ^0.1.6+1
+  just_audio_background: ^0.0.1-beta.1
 
 dev_dependencies:
   flutter_test:
