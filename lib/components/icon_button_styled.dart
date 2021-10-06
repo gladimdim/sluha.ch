@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 class IconButtonStyled extends StatelessWidget {
   final IconData iconData;
   final VoidCallback? onPressed;
+  final double size;
 
-  IconButtonStyled({required this.iconData, this.onPressed});
+  IconButtonStyled({required this.iconData, this.onPressed, this.size = 40});
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +17,7 @@ class IconButtonStyled extends StatelessWidget {
           iconData,
           color: Theme.of(context).buttonColor,
         ),
-        iconSize: 60,
+        iconSize: size,
         onPressed: onPressed);
   }
 }
