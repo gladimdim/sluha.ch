@@ -11,7 +11,6 @@ import 'package:just_audio/just_audio.dart';
 class Player {
   final player = AudioPlayer();
   Book? book;
-  int? currentFileIndex;
   BehaviorSubject<bool> _playbackChanges = BehaviorSubject<bool>();
   BehaviorSubject<Tuple2<Duration, Duration>> _progressChanges =
       BehaviorSubject<Tuple2<Duration, Duration>>();
@@ -68,7 +67,7 @@ class Player {
     if (lBook == null) {
       return null;
     }
-    return lBook.files[currentFileIndex!];
+    return lBook.files[player.currentIndex!];
   }
 
   void play(Book book, BookFile file) async {
@@ -77,10 +76,11 @@ class Player {
       return;
     }
     this.book = book;
-    this.currentFileIndex = this.book!.files.indexOf(file);
-    final url = await file.getUrl();
-    await player.setAudioSource(
-      AudioSource.uri(
+    var index = this.book!.files.indexOf(file);
+    List<AudioSource> playlist = [];
+    for (var file in book.files) {
+      var url = await file.getUrl();
+      var audioSource = AudioSource.uri(
         Uri.parse(url),
         tag: MediaItem(
           id: file.title,
@@ -89,14 +89,22 @@ class Player {
           artist: book.author,
           artUri: Uri.parse(book.remoteImageUrl),
         ),
-      ),
-    );
+      );
+      playlist.add(audioSource);
+    }
 
+    await player.setAudioSource(ConcatenatingAudioSource(children: playlist),
+        initialIndex: index);
     await player.play();
   }
 
   bool isCurrentlyPlayingThisFile(BookFile file) {
-    return file == currentFile && player.playing;
+    var b = book;
+    if (b == null) {
+      return false;
+    }
+    var index = b.files.indexOf(file);
+    return player.currentIndex == index && player.playing;
   }
 
   void pause() async {
@@ -138,9 +146,11 @@ class Player {
     Tuple2<Duration, Duration> progresses = await _progressChanges.first;
     Duration current = progresses.item1;
     Duration newOffset = current + offset;
-    if (newOffset > progresses.item1) {
+    if (newOffset > progresses.item2) {
       playNext();
       return;
+    } else if (newOffset < Duration.zero) {
+      await player.seek(Duration.zero);
     } else {
       await player.seek(newOffset);
     }
@@ -160,7 +170,7 @@ class Player {
 
   void jumpToTrack(int offset) async {
     if (book != null) {
-      var next = findNextToPlay(currentFileIndex! + offset, offset);
+      var next = findNextToPlay(player.currentIndex! + offset, offset);
       if (next != null) {
         play(book!, next);
       }
