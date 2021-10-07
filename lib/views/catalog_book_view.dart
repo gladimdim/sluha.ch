@@ -38,7 +38,7 @@ class _CatalogBookViewState extends State<CatalogBookView> {
       body: Column(
         children: [
           Expanded(
-            flex: 6,
+            flex: 9,
             child: ConstrainedBox(
               constraints:
                   BoxConstraints(maxHeight: MediaQuery.of(context).size.height),
@@ -47,78 +47,93 @@ class _CatalogBookViewState extends State<CatalogBookView> {
                     flex: portrait ? 8 : 1,
                     child: Column(
                       children: [
-                        Expanded(
-                          flex: 3,
-                          child: Flipper(
-                            frontBuilder: (context) => Center(
-                              child: Hero(
-                                tag: widget.book.id,
-                                child: BookCover(
-                                  book: widget.book,
-                                ),
-                              ),
-                            ),
-                            backBuilder: (context) {
-                              return Stack(
-                                alignment: Alignment.center,
-                                children: [
-                                  Transform(
-                                    transform: Matrix4.rotationY(pi),
-                                    alignment: Alignment.center,
-                                    child: BookCover(
-                                      book: widget.book,
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(
-                                        left: 8.0, right: 8.0),
-                                    child: Container(
-                                      color: Theme.of(context)
-                                          .primaryColor
-                                          .withAlpha(220),
-                                      child: SingleChildScrollView(
-                                        child: Column(
-                                          children: [
-                                            Padding(
-                                              padding: const EdgeInsets.all(8.0),
-                                              child: TitleText(widget.book.title),
-                                            ),
-                                            BookMetaFieldView(
-                                                "Серія", widget.book.seriesTitle),
-                                            BookMetaFieldView(
-                                                "Автор", widget.book.author),
-                                            BookMetaFieldView("Рік",
-                                                widget.book.year.toString()),
-                                            BookMetaFieldView(
-                                                "Тривалість",
-                                                widget.book.duration.inMinutes
-                                                    .toString()),
-                                            BookMetaFieldView("Вік",
-                                                "${widget.book.ageRating}+"),
-                                            Column(
-                                              children: [
-                                                TitleText("Описання"),
-                                                Text(widget.book.description,
-                                                    style: TextStyle(
-                                                      fontSize: 18,
-                                                    )),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
+                        portrait
+                            ? Expanded(
+                                flex: 3,
+                                child: Flipper(
+                                  frontBuilder: (context) => Center(
+                                    child: Hero(
+                                      tag: widget.book.id,
+                                      child: BookCover(
+                                        book: widget.book,
                                       ),
                                     ),
                                   ),
-                                ],
-                              );
-                            },
-                          ),
-                        ),
-                        if (portrait) Expanded(
-                            flex: 2,
-                            child: PlaylistSection(
-                              book: widget.book,
-                            )),
+                                  backBuilder: (context) {
+                                    return Stack(
+                                      alignment: Alignment.center,
+                                      children: [
+                                        Transform(
+                                          transform: Matrix4.rotationY(pi),
+                                          alignment: Alignment.center,
+                                          child: BookCover(
+                                            book: widget.book,
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                              left: 8.0, right: 8.0),
+                                          child: Container(
+                                            color: Theme.of(context)
+                                                .primaryColor
+                                                .withAlpha(220),
+                                            child: SingleChildScrollView(
+                                              child: Column(
+                                                children: [
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            8.0),
+                                                    child: TitleText(
+                                                        widget.book.title),
+                                                  ),
+                                                  BookMetaFieldView("Серія",
+                                                      widget.book.seriesTitle),
+                                                  BookMetaFieldView("Автор",
+                                                      widget.book.author),
+                                                  BookMetaFieldView(
+                                                      "Рік",
+                                                      widget.book.year
+                                                          .toString()),
+                                                  BookMetaFieldView(
+                                                      "Тривалість",
+                                                      widget.book.duration
+                                                          .inMinutes
+                                                          .toString()),
+                                                  BookMetaFieldView("Вік",
+                                                      "${widget.book.ageRating}+"),
+                                                  Column(
+                                                    children: [
+                                                      TitleText("Описання"),
+                                                      Text(
+                                                          widget
+                                                              .book.description,
+                                                          style: TextStyle(
+                                                            fontSize: 18,
+                                                          )),
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                ),
+                              )
+                            : Expanded(
+                                flex: 5,
+                                child: PlaylistSection(
+                                  book: widget.book,
+                                )),
+                        if (portrait)
+                          Expanded(
+                              flex: 2,
+                              child: PlaylistSection(
+                                book: widget.book,
+                              )),
                       ],
                     ),
                   ),
@@ -129,10 +144,80 @@ class _CatalogBookViewState extends State<CatalogBookView> {
                           child: Column(
                             children: [
                               Expanded(
-                                  flex: 5,
-                                  child: PlaylistSection(
-                                    book: widget.book,
-                                  )),
+                                flex: 3,
+                                child: Flipper(
+                                  frontBuilder: (context) => Center(
+                                    child: Hero(
+                                      tag: widget.book.id,
+                                      child: BookCover(
+                                        book: widget.book,
+                                      ),
+                                    ),
+                                  ),
+                                  backBuilder: (context) {
+                                    return Stack(
+                                      alignment: Alignment.center,
+                                      children: [
+                                        Transform(
+                                          transform: Matrix4.rotationY(pi),
+                                          alignment: Alignment.center,
+                                          child: BookCover(
+                                            book: widget.book,
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                              left: 8.0, right: 8.0),
+                                          child: Container(
+                                            color: Theme.of(context)
+                                                .primaryColor
+                                                .withAlpha(220),
+                                            child: SingleChildScrollView(
+                                              child: Column(
+                                                children: [
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            8.0),
+                                                    child: TitleText(
+                                                        widget.book.title),
+                                                  ),
+                                                  BookMetaFieldView("Серія",
+                                                      widget.book.seriesTitle),
+                                                  BookMetaFieldView("Автор",
+                                                      widget.book.author),
+                                                  BookMetaFieldView(
+                                                      "Рік",
+                                                      widget.book.year
+                                                          .toString()),
+                                                  BookMetaFieldView(
+                                                      "Тривалість",
+                                                      widget.book.duration
+                                                          .inMinutes
+                                                          .toString()),
+                                                  BookMetaFieldView("Вік",
+                                                      "${widget.book.ageRating}+"),
+                                                  Column(
+                                                    children: [
+                                                      TitleText("Описання"),
+                                                      Text(
+                                                          widget
+                                                              .book.description,
+                                                          style: TextStyle(
+                                                            fontSize: 18,
+                                                          )),
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                ),
+                              ),
                               Expanded(
                                 flex: 3,
                                 child: Hero(
