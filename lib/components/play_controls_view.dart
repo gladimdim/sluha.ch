@@ -34,7 +34,7 @@ class PlayControlsView extends StatelessWidget {
             ),
             Row(
               children: [
-                if (portrait)  Expanded(
+                Expanded(
                   flex: 2,
                   child: StreamBuilder(
                     stream: player.playbackChanges,
@@ -49,8 +49,8 @@ class PlayControlsView extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Padding(
-                        padding:
-                            const EdgeInsets.only(top: 2.0, left: 8.0, right: 8.0),
+                        padding: const EdgeInsets.only(
+                            top: 2.0, left: 8.0, right: 8.0),
                         child: StreamBuilder(
                           stream: player.playbackChanges,
                           builder: (context, data) => CurrentlyPlaying(
@@ -59,22 +59,9 @@ class PlayControlsView extends StatelessWidget {
                           ),
                         ),
                       ),
-                      Row(
-                        children: [
-                          Expanded(
-                            flex: 9,
-                            child: InteractiveSlider(
-                              player: player,
-                            ),
-                          ),
-                          Expanded(
-                            flex: 3,
-                            child: Padding(
-                              padding: const EdgeInsets.only(right: 8.0, left: 8.0),
-                              child: FileProgressView(),
-                            ),
-                          ),
-                        ],
+                      InteractiveSlider(
+                        player: player,
+                        key: GlobalKey(),
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -82,7 +69,6 @@ class PlayControlsView extends StatelessWidget {
                           IconButtonStyled(
                               iconData: Icons.skip_previous_outlined,
                               onPressed: player.playPrevious),
-
                           StreamBuilder<bool>(
                               stream: player.playbackChanges,
                               builder: (context, data) {
@@ -95,7 +81,8 @@ class PlayControlsView extends StatelessWidget {
                                         onPressed: player.pause);
                                   } else {
                                     return IconButtonStyled(
-                                        iconData: Icons.play_circle_filled_outlined,
+                                        iconData:
+                                            Icons.play_circle_filled_outlined,
                                         onPressed: () => player.resume());
                                   }
                                 } else {
@@ -104,7 +91,6 @@ class PlayControlsView extends StatelessWidget {
                                   );
                                 }
                               }),
-
                           IconButtonStyled(
                               iconData: Icons.skip_next_outlined,
                               onPressed: player.playNext),
