@@ -18,84 +18,81 @@ class _PlaylistSectionState extends State<PlaylistSection> {
   @override
   Widget build(BuildContext context) {
     final player = Player.instance;
-    return Expanded(
-      flex: 2,
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: BookStatsReport(book: widget.book),
-            ),
-            Column(
-              children: [
-                StreamBuilder(
-                  stream: player.playbackChanges,
-                  builder: (context, data) => Column(
-                      children: widget.book.files.map((file) {
-                    return Padding(
-                      padding: const EdgeInsets.all(2.0),
-                      child: InkWell(
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: player.currentFile == file
-                                ? Theme.of(context).accentColor
-                                : null,
-                            border: Border.all(
-                                width: 4, color: Theme.of(context).buttonColor),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(4.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                HeadlineText(
-                                  file.title,
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: BookStatsReport(book: widget.book),
+          ),
+          Column(
+            children: [
+              StreamBuilder(
+                stream: player.playbackChanges,
+                builder: (context, data) => Column(
+                    children: widget.book.files.map((file) {
+                  return Padding(
+                    padding: const EdgeInsets.all(2.0),
+                    child: InkWell(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: player.currentFile == file
+                              ? Theme.of(context).accentColor
+                              : null,
+                          border: Border.all(
+                              width: 4, color: Theme.of(context).buttonColor),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(4.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              HeadlineText(
+                                file.title,
+                              ),
+                              Wrap(children: [
+                                StreamBuilder(
+                                  stream: file.changes,
+                                  builder: (context, data) {
+                                    switch (data.data) {
+                                      case OFFLINE_STATUS.LOADED:
+                                        return Icon(
+                                            Icons.download_done_outlined);
+                                      case OFFLINE_STATUS.NOT_LOADED:
+                                        return Container();
+                                      case OFFLINE_STATUS.LOADING:
+                                        return CircularProgressIndicator();
+                                      default:
+                                        return Container();
+                                    }
+                                  },
                                 ),
-                                Wrap(children: [
-                                  StreamBuilder(
-                                    stream: file.changes,
-                                    builder: (context, data) {
-                                      switch (data.data) {
-                                        case OFFLINE_STATUS.LOADED:
-                                          return Icon(
-                                              Icons.download_done_outlined);
-                                        case OFFLINE_STATUS.NOT_LOADED:
-                                          return Container();
-                                        case OFFLINE_STATUS.LOADING:
-                                          return CircularProgressIndicator();
-                                        default:
-                                          return Container();
-                                      }
-                                    },
-                                  ),
-                                  Checkbox(
-                                      value: file.queued,
-                                      onChanged: (value) {
-                                        setState(() {
-                                          file.queued = value!;
-                                        });
-                                      }),
-                                  Icon(Player.instance
-                                          .isCurrentlyPlayingThisFile(file)
-                                      ? Icons.pause_circle_filled_outlined
-                                      : Icons.play_arrow_outlined),
-                                ]),
-                              ],
-                            ),
+                                Checkbox(
+                                    value: file.queued,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        file.queued = value!;
+                                      });
+                                    }),
+                                Icon(Player.instance
+                                        .isCurrentlyPlayingThisFile(file)
+                                    ? Icons.pause_circle_filled_outlined
+                                    : Icons.play_arrow_outlined),
+                              ]),
+                            ],
                           ),
                         ),
-                        onTap: () {
-                          player.play(widget.book, file);
-                        },
                       ),
-                    );
-                  }).toList()),
-                ),
-              ],
-            ),
-          ],
-        ),
+                      onTap: () {
+                        player.play(widget.book, file);
+                      },
+                    ),
+                  );
+                }).toList()),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }

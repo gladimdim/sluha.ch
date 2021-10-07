@@ -7,6 +7,7 @@ import 'package:audiobooks_app/components/flipper.dart';
 import 'package:audiobooks_app/components/headline_text.dart';
 import 'package:audiobooks_app/components/play_controls_view.dart';
 import 'package:audiobooks_app/components/playlist_section.dart';
+import 'package:audiobooks_app/components/responsive_content.dart';
 import 'package:audiobooks_app/components/title_text.dart';
 import 'package:audiobooks_app/models/book.dart';
 import 'package:audiobooks_app/models/book_file.dart';
@@ -31,15 +32,17 @@ class _CatalogBookViewState extends State<CatalogBookView> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.book.title),
+        toolbarHeight: 40,
       ),
       body: Column(
         children: [
           Expanded(
-            flex: 8,
-            child: Column(
-              children: [
-                Expanded(
-                  flex: 3,
+            flex: 6,
+            child: ConstrainedBox(
+              constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height),
+              child: ResponsiveContent(
+                one: Expanded(
+                  flex: 1,
                   child: Flipper(
                     frontBuilder: (context) => Center(
                       child: Hero(
@@ -104,39 +107,37 @@ class _CatalogBookViewState extends State<CatalogBookView> {
                     },
                   ),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: widget.book.tags
-                      .map(
-                        (tag) => InputChip(
-                          backgroundColor: Theme.of(context).primaryColor,
-                          selectedColor: Theme.of(context).accentColor,
-                          label: Text(tag),
-                          onSelected: (selected) {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) {
-                                  return Scaffold(
-                                    appBar: AppBar(
-                                      title: Text(tag),
-                                    ),
-                                    body: CatalogView(
-                                        rootTags: [tag],
-                                        books:
-                                            booksWithTags(widget.books, [tag])),
-                                  );
-                                },
-                              ),
-                            );
-                          },
-                        ),
-                      )
-                      .toList(),
-                ),
-
-                PlaylistSection(book: widget.book),
-              ],
+                two:  Expanded(flex: 1, child: PlaylistSection(book: widget.book)),
+                // two: Row(
+                //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                //   children: widget.book.tags
+                //       .map(
+                //         (tag) => InputChip(
+                //           backgroundColor: Theme.of(context).primaryColor,
+                //           selectedColor: Theme.of(context).accentColor,
+                //           label: Text(tag),
+                //           onSelected: (selected) {
+                //             Navigator.push(
+                //               context,
+                //               MaterialPageRoute(
+                //                 builder: (context) {
+                //                   return Scaffold(
+                //                     appBar: AppBar(
+                //                       title: Text(tag),
+                //                     ),
+                //                     body: CatalogView(
+                //                         rootTags: [tag],
+                //                         books: booksWithTags(widget.books, [tag])),
+                //                   );
+                //                 },
+                //               ),
+                //             );
+                //           },
+                //         ),
+                //       )
+                //       .toList(),
+                // ),
+              ),
             ),
           ),
           Expanded(
@@ -150,5 +151,4 @@ class _CatalogBookViewState extends State<CatalogBookView> {
       ),
     );
   }
-
 }
