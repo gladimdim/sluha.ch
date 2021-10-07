@@ -1,4 +1,5 @@
 import 'package:audiobooks_app/components/play_controls_view.dart';
+import 'package:audiobooks_app/components/playlist_section.dart';
 import 'package:audiobooks_app/components/responsive_content.dart';
 import 'package:audiobooks_app/components/tags_view.dart';
 import 'package:audiobooks_app/models/book.dart';
