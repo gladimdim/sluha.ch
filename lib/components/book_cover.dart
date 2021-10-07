@@ -12,13 +12,11 @@ class BookCover extends StatelessWidget {
     return book.local
         ? Image.asset(
             book.localImageUrl,
-            width: 256,
             fit: BoxFit.fitWidth,
           )
         : FadeInImage.memoryNetwork(
             placeholder: kTransparentImage,
             image: book.remoteImageUrl,
-            width: 256,
             fit: BoxFit.fitWidth,
           );
   }

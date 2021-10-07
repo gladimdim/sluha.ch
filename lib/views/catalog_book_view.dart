@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:audiobooks_app/book_utils.dart';
 import 'package:audiobooks_app/components/book_cover.dart';
+import 'package:audiobooks_app/components/book_flipper.dart';
 import 'package:audiobooks_app/components/book_meta_field_view.dart';
 import 'package:audiobooks_app/components/flipper.dart';
 import 'package:audiobooks_app/components/headline_text.dart';
@@ -144,78 +145,14 @@ class _CatalogBookViewState extends State<CatalogBookView> {
                           child: Column(
                             children: [
                               Expanded(
-                                flex: 3,
-                                child: Flipper(
-                                  frontBuilder: (context) => Center(
-                                    child: Hero(
-                                      tag: widget.book.id,
-                                      child: BookCover(
-                                        book: widget.book,
-                                      ),
-                                    ),
-                                  ),
-                                  backBuilder: (context) {
-                                    return Stack(
-                                      alignment: Alignment.center,
-                                      children: [
-                                        Transform(
-                                          transform: Matrix4.rotationY(pi),
-                                          alignment: Alignment.center,
-                                          child: BookCover(
-                                            book: widget.book,
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.only(
-                                              left: 8.0, right: 8.0),
-                                          child: Container(
-                                            color: Theme.of(context)
-                                                .primaryColor
-                                                .withAlpha(220),
-                                            child: SingleChildScrollView(
-                                              child: Column(
-                                                children: [
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            8.0),
-                                                    child: TitleText(
-                                                        widget.book.title),
-                                                  ),
-                                                  BookMetaFieldView("Серія",
-                                                      widget.book.seriesTitle),
-                                                  BookMetaFieldView("Автор",
-                                                      widget.book.author),
-                                                  BookMetaFieldView(
-                                                      "Рік",
-                                                      widget.book.year
-                                                          .toString()),
-                                                  BookMetaFieldView(
-                                                      "Тривалість",
-                                                      widget.book.duration
-                                                          .inMinutes
-                                                          .toString()),
-                                                  BookMetaFieldView("Вік",
-                                                      "${widget.book.ageRating}+"),
-                                                  Column(
-                                                    children: [
-                                                      TitleText("Описання"),
-                                                      Text(
-                                                          widget
-                                                              .book.description,
-                                                          style: TextStyle(
-                                                            fontSize: 18,
-                                                          )),
-                                                    ],
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
+                                flex: 5,
+                                child: StreamBuilder(
+                                  stream: Player.instance.playbackChanges,
+                                  builder: (context, snapshot) {
+                                    return BookFlipper(
+                                      book:widget.book,
                                     );
-                                  },
+                                  }
                                 ),
                               ),
                               Expanded(
