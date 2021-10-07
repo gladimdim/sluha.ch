@@ -33,8 +33,12 @@ class Player {
       _progressChanges.add(Tuple2(duration.item1, duration.item2));
     });
 
+    player.playbackEventStream.listen((event) {
+      if (event.processingState == ProcessingState.ready) {
+        _playbackChanges.add(true);
+      }
+    });
     player.playerStateStream.listen((event) {
-      _playbackChanges.add(event.playing);
       if (event.processingState == ProcessingState.completed) {
         playNext();
       }
@@ -77,6 +81,7 @@ class Player {
     }
     this.book = book;
     var index = this.book!.files.indexOf(file);
+    if (this.book == book) {}
     List<AudioSource> playlist = [];
     for (var file in book.files) {
       var url = await file.getUrl();
