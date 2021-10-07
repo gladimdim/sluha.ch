@@ -1,8 +1,10 @@
+import 'package:audiobooks_app/components/book_flipper.dart';
 import 'package:audiobooks_app/components/play_controls_view.dart';
 import 'package:audiobooks_app/components/playlist_section.dart';
 import 'package:audiobooks_app/components/responsive_content.dart';
 import 'package:audiobooks_app/components/tags_view.dart';
 import 'package:audiobooks_app/models/book.dart';
+import 'package:audiobooks_app/models/player.dart';
 import 'package:audiobooks_app/utils.dart';
 import 'package:audiobooks_app/views/catalog_book_view.dart';
 import 'package:audiobooks_app/views/catalog_card_book_view.dart';
@@ -49,7 +51,7 @@ class _CatalogViewState extends State<CatalogView> {
             constraints:
                 BoxConstraints(maxHeight: MediaQuery.of(context).size.height),
             child: ResponsiveContent(
-            one: Expanded(
+              one: Expanded(
                 flex: portrait ? 10 : 5,
                 child: SingleChildScrollView(
                   child: Column(
@@ -87,23 +89,44 @@ class _CatalogViewState extends State<CatalogView> {
                   ),
                 ),
               ),
-              two: portrait ? Container() : Expanded(
-                flex: 5,
-                child: Hero(
-                  tag: "PlayControls",
-                  child: PlayControlsView(),
-                ),
-              ),
+              two: portrait
+                  ? Container()
+                  : Expanded(
+                      flex: 5,
+                      child: Column(
+                        children: [
+                          Expanded(
+                            flex: 5,
+                            child: StreamBuilder(
+                              stream: Player.instance.playbackChanges,
+                              builder: (context, snapshot) {
+                                return BookFlipper(
+                                  book: Player.instance.book,
+                                );
+                              }
+                            ),
+                          ),
+                          Expanded(
+                            flex: 3,
+                            child: Hero(
+                              tag: "PlayControls",
+                              child: PlayControlsView(),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
             ),
           ),
         ),
-        if (portrait) Expanded(
-          flex: 2,
-          child: Hero(
-            tag: "PlayControls",
-            child: PlayControlsView(),
+        if (portrait)
+          Expanded(
+            flex: 2,
+            child: Hero(
+              tag: "PlayControls",
+              child: PlayControlsView(),
+            ),
           ),
-        ),
       ],
     );
   }
