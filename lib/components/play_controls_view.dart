@@ -1,8 +1,6 @@
-import 'dart:math';
 
 import 'package:audiobooks_app/components/book_cover.dart';
 import 'package:audiobooks_app/components/currently_playing.dart';
-import 'package:audiobooks_app/components/file_progress_view.dart';
 import 'package:audiobooks_app/components/icon_button_styled.dart';
 import 'package:audiobooks_app/components/interactive_slider.dart';
 import 'package:audiobooks_app/models/player.dart';
@@ -61,7 +59,6 @@ class PlayControlsView extends StatelessWidget {
                       ),
                       InteractiveSlider(
                         player: player,
-                        key: GlobalKey(),
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,

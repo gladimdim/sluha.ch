@@ -8,7 +8,7 @@ import 'package:tuple/tuple.dart';
 class InteractiveSlider extends StatefulWidget {
   final Player player;
 
-  const InteractiveSlider({Key? key, required this.player}):super(key: key);
+  const InteractiveSlider({Key? key, required this.player}) : super(key: key);
 
   @override
   _InteractiveSliderState createState() => _InteractiveSliderState();
@@ -19,9 +19,9 @@ class _InteractiveSliderState extends State<InteractiveSlider> {
   late StreamSubscription sub;
   Duration position = Duration.zero;
   Duration total = Duration.zero;
+
   @override
   void initState() {
-    print("init state key: ${widget.key}");
     super.initState();
     sub = widget.player.progressChanges.listen((event) {
       setState(() {
@@ -43,26 +43,16 @@ class _InteractiveSliderState extends State<InteractiveSlider> {
         StreamBuilder<Tuple2<Duration, Duration>>(
           stream: player.progressChanges,
           builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              Tuple2<Duration, Duration> durations = snapshot.data!;
-              return Slider(
-                min: 0,
-                max: durations.item2.inSeconds.toDouble(),
-                value: durations.item1.inSeconds.toDouble(),
-                label: "Duration",
-                onChangeStart: processChangeStart,
-                onChanged: processChange,
-                onChangeEnd: processChangeEnd,
-              );
-            } else {
-              return Slider(
-                min: 0,
-                max: 0,
-                value: value,
-                label: "Duration",
-                onChanged: null,
-              );
-            }
+            Tuple2<Duration, Duration> durations = snapshot.data ?? Tuple2(Duration.zero, Duration.zero);
+            return Slider(
+              min: 0,
+              max: durations.item2.inSeconds.toDouble(),
+              value: durations.item1.inSeconds.toDouble(),
+              label: "Duration",
+              onChangeStart: processChangeStart,
+              onChanged: processChange,
+              onChangeEnd: processChangeEnd,
+            );
           },
         ),
         Positioned.fill(
