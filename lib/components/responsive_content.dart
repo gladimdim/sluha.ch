@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-
+import 'package:audiobooks_app/utils.dart';
 class ResponsiveContent extends StatelessWidget {
   final Widget one;
   final Widget two;
@@ -10,9 +10,7 @@ class ResponsiveContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {
-      final isPortrait = MediaQuery.of(context).size.height >
-          MediaQuery.of(context).size.width;
-      if (isPortrait) {
+      if (isPortrait(MediaQuery.of(context).size)) {
         return Column(
           children: [one, two],
         );
