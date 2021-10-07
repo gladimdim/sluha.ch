@@ -2,6 +2,7 @@ import 'package:audiobooks_app/components/play_controls_view.dart';
 import 'package:audiobooks_app/components/responsive_content.dart';
 import 'package:audiobooks_app/components/tags_view.dart';
 import 'package:audiobooks_app/models/book.dart';
+import 'package:audiobooks_app/utils.dart';
 import 'package:audiobooks_app/views/catalog_book_view.dart';
 import 'package:audiobooks_app/views/catalog_card_book_view.dart';
 import 'package:flutter/material.dart';
@@ -28,26 +29,27 @@ class _CatalogViewState extends State<CatalogView> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final portrait = isPortrait(size);
     return Column(
       children: [
+        if (portrait)
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: TagsView(
+              books: widget.books,
+              onTagChange: onTagChange,
+              rootTags: widget.rootTags,
+            ),
+          ),
         Expanded(
-          flex: 6,
+          flex: 8,
           child: ConstrainedBox(
-            constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height),
+            constraints:
+                BoxConstraints(maxHeight: MediaQuery.of(context).size.height),
             child: ResponsiveContent(
-              one: Expanded(
-                flex: 1,
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: TagsView(
-                    books: widget.books,
-                    onTagChange: onTagChange,
-                    rootTags: widget.rootTags,
-                  ),
-                ),
-              ),
-              two: Expanded(
-                flex: 10,
+            one: Expanded(
+                flex: portrait ? 10 : 5,
                 child: SingleChildScrollView(
                   child: Column(
                     children: availableBooks
@@ -84,10 +86,17 @@ class _CatalogViewState extends State<CatalogView> {
                   ),
                 ),
               ),
+              two: portrait ? Container() : Expanded(
+                flex: 5,
+                child: Hero(
+                  tag: "PlayControls",
+                  child: PlayControlsView(),
+                ),
+              ),
             ),
           ),
         ),
-        Expanded(
+        if (portrait) Expanded(
           flex: 2,
           child: Hero(
             tag: "PlayControls",
