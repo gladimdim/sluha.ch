@@ -95,17 +95,7 @@ class _CatalogViewState extends State<CatalogView> {
                       flex: 5,
                       child: Column(
                         children: [
-                          Expanded(
-                            flex: 5,
-                            child: StreamBuilder(
-                              stream: Player.instance.playbackChanges,
-                              builder: (context, snapshot) {
-                                return BookFlipper(
-                                  book: Player.instance.book,
-                                );
-                              }
-                            ),
-                          ),
+
                           Expanded(
                             flex: 3,
                             child: Hero(

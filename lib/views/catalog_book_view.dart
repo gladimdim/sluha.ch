@@ -145,7 +145,7 @@ class _CatalogBookViewState extends State<CatalogBookView> {
                           child: Column(
                             children: [
                               Expanded(
-                                flex: 5,
+                                flex: 1,
                                 child: StreamBuilder(
                                   stream: Player.instance.playbackChanges,
                                   builder: (context, snapshot) {
@@ -156,7 +156,7 @@ class _CatalogBookViewState extends State<CatalogBookView> {
                                 ),
                               ),
                               Expanded(
-                                flex: 3,
+                                flex: 1,
                                 child: Hero(
                                   tag: "PlayControls",
                                   child: PlayControlsView(),
