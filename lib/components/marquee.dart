@@ -22,10 +22,14 @@ class _MarqueeState extends State<Marquee> {
   @override
   void initState() {
     super.initState();
-    _text = widget.text + " | ";
+   initText();
     if (widget.play) {
-     startTimer();
+      startTimer();
     }
+  }
+
+  void initText() {
+    _text = widget.text + " | ";
   }
 
   @override
@@ -35,7 +39,7 @@ class _MarqueeState extends State<Marquee> {
       startTimer();
     } else {
       stopTimer();
-      _text = widget.text;
+      initText();
     }
   }
 
