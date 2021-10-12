@@ -49,7 +49,7 @@ class _MarqueeState extends State<Marquee> {
 
   void startTimer() {
     _timer?.cancel();
-    _timer = Timer.periodic(Duration(milliseconds: 120), (timer) {
+    _timer = Timer.periodic(Duration(milliseconds: 250), (timer) {
       setState(() {
         var tail = _text.substring(1);
         var first = _text.substring(0, 1);
