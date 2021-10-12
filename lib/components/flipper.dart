@@ -20,13 +20,13 @@ class _FlipperState extends State<Flipper> with SingleTickerProviderStateMixin {
 
   @override
   void initState() {
+    super.initState();
     _controller = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 500));
     _controller.addStatusListener(_updateStatus);
     _controller.addListener(() {
       print(_controller.value);
     });
-    super.initState();
   }
 
   void flip() {

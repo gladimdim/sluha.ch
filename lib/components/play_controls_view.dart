@@ -1,4 +1,3 @@
-
 import 'package:audiobooks_app/components/book_cover.dart';
 import 'package:audiobooks_app/components/currently_playing.dart';
 import 'package:audiobooks_app/components/icon_button_styled.dart';
@@ -21,15 +20,16 @@ class PlayControlsView extends StatelessWidget {
         // color: Theme.of(context).primaryColor,
         child: Column(
           children: [
-            if (!portrait)  Expanded(
-              flex: 2,
-              child: StreamBuilder(
-                stream: player.playbackChanges,
-                builder: (context, snapshot) {
-                  return BookCover(book: Player.instance.book);
-                },
+            if (!portrait)
+              Expanded(
+                flex: 2,
+                child: StreamBuilder(
+                  stream: player.playbackChanges,
+                  builder: (context, snapshot) {
+                    return BookCover(book: Player.instance.book);
+                  },
+                ),
               ),
-            ),
             Row(
               children: [
                 Expanded(
@@ -37,7 +37,10 @@ class PlayControlsView extends StatelessWidget {
                   child: StreamBuilder(
                     stream: player.playbackChanges,
                     builder: (context, snapshot) {
-                      return BookCover(book: Player.instance.book);
+                      return ClipRRect(
+                        borderRadius: BorderRadius.all(Radius.circular(15)),
+                        child: BookCover(book: Player.instance.book),
+                      );
                     },
                   ),
                 ),
