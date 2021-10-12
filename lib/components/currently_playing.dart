@@ -1,4 +1,5 @@
 import 'package:audiobooks_app/components/headline_text.dart';
+import 'package:audiobooks_app/components/marquee.dart';
 import 'package:audiobooks_app/models/book_file.dart';
 import 'package:flutter/material.dart';
 
@@ -17,9 +18,16 @@ class CurrentlyPlaying extends StatelessWidget {
         constraints: BoxConstraints(
           maxWidth: MediaQuery.of(context).size.width,
         ),
-        child: SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: HeadlineText("$bookTitle: ${file!.title}")),
+        child: Stack(
+          children: [
+            Marquee(
+              text: "$bookTitle: ${file!.title}",
+              builder: (context, text) {
+                return HeadlineText(text);
+              },
+            ),
+          ],
+        ),
       );
     }
   }
