@@ -67,7 +67,8 @@ class BookFile {
 
   Future<String> getFullFilePath() async {
     String docDir = await getDocumentRootPath();
-    return "file://$docDir${getRelativeFolderPath()}/${getFileName()}";
+    var prefix = Platform.isIOS ? "file://" : "";
+    return "$prefix$docDir${getRelativeFolderPath()}/${getFileName()}";
   }
 
   Future<Directory> createFolderPath() async {

@@ -23,7 +23,7 @@ class Book {
   late ValueStream<int> fileSizeChanges;
 
   String get localImageUrl {
-    return"assets/$imageUrl";
+    return "assets/$imageUrl";
   }
 
   String get remoteImageUrl {
