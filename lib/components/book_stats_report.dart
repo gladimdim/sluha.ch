@@ -12,7 +12,7 @@ class BookStatsReport extends StatefulWidget {
 class _BookStatsReportState extends State<BookStatsReport> {
   @override
   Widget build(BuildContext context) {
-    return  Row(
+    return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -41,23 +41,9 @@ class _BookStatsReportState extends State<BookStatsReport> {
             ),
           ],
         ),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Checkbox(
-              value: widget.book.files.fold(
-                  true,
-                      (previousValue, file) =>
-                  previousValue! && file.queued),
-              onChanged: processPlayAll,
-            ),
-            Text("Грати все"),
-          ],
-        ),
       ],
     );
   }
-
 
   void downloadBook() async {
     await widget.book.downloadBook();
@@ -66,13 +52,6 @@ class _BookStatsReportState extends State<BookStatsReport> {
 
   void removeDownloads() async {
     await widget.book.removeDownloads();
-    setState(() {});
-  }
-
-  void processPlayAll(bool? selectAll) {
-    widget.book.files.forEach((file) {
-      file.queued = selectAll!;
-    });
     setState(() {});
   }
 }

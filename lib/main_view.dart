@@ -68,7 +68,6 @@ class _MainViewState extends State<MainView> {
   void _updateCatalog() async {
     setState(() {
       _fetchCatalog = AsyncMemoizer();
-
     });
     await _fetchData(true);
   }

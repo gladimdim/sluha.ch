@@ -17,14 +17,14 @@ class BookCover extends StatelessWidget {
     } else {
       return book!.local
           ? Image.asset(
-        book!.localImageUrl,
-        fit: BoxFit.fitWidth,
-      )
+              book!.localImageUrl,
+              fit: BoxFit.fitWidth,
+            )
           : FadeInImage.memoryNetwork(
-        placeholder: kTransparentImage,
-        image: book!.remoteImageUrl,
-        fit: BoxFit.fitWidth,
-      );
+              placeholder: kTransparentImage,
+              image: book!.remoteImageUrl,
+              fit: BoxFit.fitWidth,
+            );
     }
   }
 }

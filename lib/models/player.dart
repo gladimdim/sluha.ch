@@ -188,11 +188,7 @@ class Player {
       return null;
     }
     var start = book!.files[startIndex];
-    if (start.queued) {
-      return start;
-    } else {
-      return findNextToPlay(startIndex + offset, offset);
-    }
+    return start;
   }
 
   void dispose() {

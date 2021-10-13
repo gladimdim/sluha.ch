@@ -24,6 +24,7 @@ class MyApp extends StatelessWidget {
       title: 'Слухач',
       themeMode: ThemeMode.system,
       // themeMode: ThemeMode.dark,
+      debugShowCheckedModeBanner: false,
       theme: white.getWhiteTheme(),
       darkTheme: dark.getDarkTheme(),
       home: MainView(),

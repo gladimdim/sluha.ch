@@ -8,13 +8,15 @@ import 'package:http/http.dart' as http;
 class BookFile {
   final String title;
   final String url;
-  bool queued;
   bool canPlayOffline = false;
 
   final BehaviorSubject<OFFLINE_STATUS> _offlineChanges = BehaviorSubject();
   late final ValueStream<OFFLINE_STATUS> changes;
 
-  BookFile({required this.title, required this.url, this.queued = true}) {
+  BookFile({
+    required this.title,
+    required this.url,
+  }) {
     changes = _offlineChanges.stream;
     changes.listen((newState) {
       canPlayOffline = newState == OFFLINE_STATUS.LOADED;
@@ -65,7 +67,7 @@ class BookFile {
 
   Future<String> getFullFilePath() async {
     String docDir = await getDocumentRootPath();
-    return "$docDir${getRelativeFolderPath()}/${getFileName()}";
+    return "file://$docDir${getRelativeFolderPath()}/${getFileName()}";
   }
 
   Future<Directory> createFolderPath() async {

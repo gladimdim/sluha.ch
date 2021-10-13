@@ -67,13 +67,6 @@ class _PlaylistSectionState extends State<PlaylistSection> {
                                     }
                                   },
                                 ),
-                                Checkbox(
-                                    value: file.queued,
-                                    onChanged: (value) {
-                                      setState(() {
-                                        file.queued = value!;
-                                      });
-                                    }),
                                 Icon(Player.instance
                                         .isCurrentlyPlayingThisFile(file)
                                     ? Icons.pause_circle_filled_outlined
