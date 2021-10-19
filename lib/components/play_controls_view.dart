@@ -2,6 +2,7 @@ import 'package:audiobooks_app/components/book_cover.dart';
 import 'package:audiobooks_app/components/currently_playing.dart';
 import 'package:audiobooks_app/components/icon_button_styled.dart';
 import 'package:audiobooks_app/components/interactive_slider.dart';
+import 'package:audiobooks_app/models/book.dart';
 import 'package:audiobooks_app/models/player.dart';
 import 'package:audiobooks_app/utils.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +10,9 @@ import 'package:flutter/material.dart';
 final playerControlsKey = GlobalKey();
 
 class PlayControlsView extends StatelessWidget {
+  final Function(Book? book)? onNavigateToBookPress;
+
+  PlayControlsView({this.onNavigateToBookPress});
   @override
   Widget build(BuildContext context) {
     final Player player = Player.instance;
@@ -37,9 +41,16 @@ class PlayControlsView extends StatelessWidget {
                   child: StreamBuilder(
                     stream: player.playbackChanges,
                     builder: (context, snapshot) {
-                      return ClipRRect(
-                        borderRadius: BorderRadius.all(Radius.circular(15)),
-                        child: BookCover(book: Player.instance.book),
+                      return GestureDetector(
+                        onTap: () {
+                          if (onNavigateToBookPress != null) {
+                            onNavigateToBookPress!(Player.instance.book);
+                          }
+                        },
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.all(Radius.circular(15)),
+                          child: BookCover(book: Player.instance.book),
+                        ),
                       );
                     },
                   ),
@@ -106,4 +117,6 @@ class PlayControlsView extends StatelessWidget {
       ),
     );
   }
+
+  _navigateToBookView() {}
 }

@@ -69,17 +69,7 @@ class _CatalogViewState extends State<CatalogView> {
                                   book: book,
                                 ),
                                 onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) {
-                                        return CatalogBookView(
-                                          book: book,
-                                          books: widget.books,
-                                        );
-                                      },
-                                    ),
-                                  );
+                                  _navigateToBook(book);
                                 },
                               ),
                             ),
@@ -95,12 +85,13 @@ class _CatalogViewState extends State<CatalogView> {
                       flex: 5,
                       child: Column(
                         children: [
-
                           Expanded(
                             flex: 3,
                             child: Hero(
                               tag: "PlayControls",
-                              child: PlayControlsView(),
+                              child: PlayControlsView(
+                                onNavigateToBookPress: _onNavigateToBookPress,
+                              ),
                             ),
                           ),
                         ],
@@ -114,11 +105,34 @@ class _CatalogViewState extends State<CatalogView> {
             flex: 2,
             child: Hero(
               tag: "PlayControls",
-              child: PlayControlsView(),
+              child: PlayControlsView(
+                onNavigateToBookPress: _onNavigateToBookPress,
+              ),
             ),
           ),
       ],
     );
+  }
+
+  _navigateToBook(Book book) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) {
+          return CatalogBookView(
+            book: book,
+            books: widget.books,
+          );
+        },
+      ),
+    );
+  }
+
+  _onNavigateToBookPress(Book? book) {
+    if (book == null) {
+      return;
+    }
+    _navigateToBook(book);
   }
 
   onTagChange(List<Book> books) {
