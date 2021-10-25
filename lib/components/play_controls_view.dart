@@ -38,21 +38,24 @@ class PlayControlsView extends StatelessWidget {
               children: [
                 Expanded(
                   flex: 2,
-                  child: StreamBuilder(
-                    stream: player.playbackChanges,
-                    builder: (context, snapshot) {
-                      return GestureDetector(
-                        onTap: () {
-                          if (onNavigateToBookPress != null) {
-                            onNavigateToBookPress!(Player.instance.book);
-                          }
-                        },
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.all(Radius.circular(15)),
-                          child: BookCover(book: Player.instance.book),
-                        ),
-                      );
-                    },
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 8.0),
+                    child: StreamBuilder(
+                      stream: player.playbackChanges,
+                      builder: (context, snapshot) {
+                        return GestureDetector(
+                          onTap: () {
+                            if (onNavigateToBookPress != null) {
+                              onNavigateToBookPress!(Player.instance.book);
+                            }
+                          },
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.all(Radius.circular(15)),
+                            child: BookCover(book: Player.instance.book),
+                          ),
+                        );
+                      },
+                    ),
                   ),
                 ),
                 Expanded(
@@ -117,6 +120,4 @@ class PlayControlsView extends StatelessWidget {
       ),
     );
   }
-
-  _navigateToBookView() {}
 }

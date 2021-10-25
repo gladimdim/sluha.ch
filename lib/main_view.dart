@@ -19,21 +19,11 @@ class _MainViewState extends State<MainView> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: Center(
-              child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text("Слухач"),
-              if (usesLocalCatalog)
-                Icon(
-                  Icons.offline_bolt,
-                  size: ICON_SIZE,
-                ),
-            ],
-          )),
+          title: Text("Слухач"),
           actions: [
             IconButton(
               onPressed: _updateCatalog,
+              tooltip: "Оновити каталог",
               icon: Icon(
                 Icons.refresh,
                 size: ICON_SIZE,

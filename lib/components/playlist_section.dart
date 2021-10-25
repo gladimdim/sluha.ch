@@ -46,39 +46,45 @@ class _PlaylistSectionState extends State<PlaylistSection> {
                           padding: const EdgeInsets.all(4.0),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               HeadlineText(
                                 file.title,
                               ),
-                              Wrap(children: [
-                                StreamBuilder(
-                                  stream: file.changes,
-                                  builder: (context, data) {
-                                    switch (data.data) {
-                                      case OFFLINE_STATUS.LOADED:
-                                        return Icon(
-                                            Icons.download_done_outlined);
-                                      case OFFLINE_STATUS.NOT_LOADED:
-                                        return Container();
-                                      case OFFLINE_STATUS.LOADING:
-                                        return CircularProgressIndicator();
-                                      default:
-                                        return Container();
-                                    }
-                                  },
-                                ),
-                                Checkbox(
-                                    value: file.queued,
-                                    onChanged: (value) {
-                                      setState(() {
-                                        file.queued = value!;
-                                      });
-                                    }),
-                                Icon(Player.instance
-                                        .isCurrentlyPlayingThisFile(file)
-                                    ? Icons.pause_circle_filled_outlined
-                                    : Icons.play_arrow_outlined),
-                              ]),
+                              Wrap(
+                                crossAxisAlignment: WrapCrossAlignment.center,
+                                children: [
+                                  StreamBuilder(
+                                    stream: file.changes,
+                                    builder: (context, data) {
+                                      switch (data.data) {
+                                        case OFFLINE_STATUS.LOADED:
+                                          return Icon(
+                                            Icons.download_done_outlined,
+                                            size: 32,
+                                          );
+                                        case OFFLINE_STATUS.NOT_LOADED:
+                                          return Container();
+                                        case OFFLINE_STATUS.LOADING:
+                                          return CircularProgressIndicator(color: Theme.of(context).backgroundColor,);
+                                        default:
+                                          return Container();
+                                      }
+                                    },
+                                  ),
+                                  Checkbox(
+                                      value: file.queued,
+                                      onChanged: (value) {
+                                        setState(() {
+                                          file.queued = value!;
+                                        });
+                                      }),
+                                  Icon(Player.instance
+                                          .isCurrentlyPlayingThisFile(file)
+                                      ? Icons.pause_circle_filled_outlined
+                                      : Icons.play_arrow_outlined),
+                                ],
+                              ),
                             ],
                           ),
                         ),

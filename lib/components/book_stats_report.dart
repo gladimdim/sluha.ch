@@ -20,7 +20,7 @@ class _BookStatsReportState extends State<BookStatsReport> {
           children: [
             IconButton(
               onPressed: downloadBook,
-              icon: Icon(Icons.get_app),
+              icon: Icon(Icons.download_for_offline),
             ),
             IconButton(
               onPressed: removeDownloads,
@@ -33,7 +33,7 @@ class _BookStatsReportState extends State<BookStatsReport> {
                 if (snapshot.hasData) {
                   var data = snapshot.data!;
                   var inMb = (data / 1000 / 1000).floor();
-                  return Text("${inMb.toString()} Mb");
+                  return Text("${inMb.toString()} Мб");
                 } else {
                   return Container();
                 }

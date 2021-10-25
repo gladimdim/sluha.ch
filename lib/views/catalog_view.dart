@@ -1,10 +1,7 @@
-import 'package:audiobooks_app/components/book_flipper.dart';
 import 'package:audiobooks_app/components/play_controls_view.dart';
-import 'package:audiobooks_app/components/playlist_section.dart';
 import 'package:audiobooks_app/components/responsive_content.dart';
 import 'package:audiobooks_app/components/tags_view.dart';
 import 'package:audiobooks_app/models/book.dart';
-import 'package:audiobooks_app/models/player.dart';
 import 'package:audiobooks_app/utils.dart';
 import 'package:audiobooks_app/views/catalog_book_view.dart';
 import 'package:audiobooks_app/views/catalog_card_book_view.dart';
@@ -58,7 +55,7 @@ class _CatalogViewState extends State<CatalogView> {
                     children: availableBooks
                         .map(
                           (book) => Padding(
-                            padding: const EdgeInsets.all(8.0),
+                            padding: const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 8.0),
                             child: Container(
                               decoration: BoxDecoration(
                                 border: Border.all(width: 1),
