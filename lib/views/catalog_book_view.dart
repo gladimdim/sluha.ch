@@ -1,20 +1,16 @@
 import 'dart:math';
 
-import 'package:audiobooks_app/book_utils.dart';
 import 'package:audiobooks_app/components/book_cover.dart';
 import 'package:audiobooks_app/components/book_flipper.dart';
 import 'package:audiobooks_app/components/book_meta_field_view.dart';
 import 'package:audiobooks_app/components/flipper.dart';
-import 'package:audiobooks_app/components/headline_text.dart';
 import 'package:audiobooks_app/components/play_controls_view.dart';
 import 'package:audiobooks_app/components/playlist_section.dart';
 import 'package:audiobooks_app/components/responsive_content.dart';
 import 'package:audiobooks_app/components/title_text.dart';
 import 'package:audiobooks_app/models/book.dart';
-import 'package:audiobooks_app/models/book_file.dart';
 import 'package:audiobooks_app/models/player.dart';
 import 'package:audiobooks_app/utils.dart';
-import 'package:audiobooks_app/views/catalog_view.dart';
 import 'package:flutter/material.dart';
 
 class CatalogBookView extends StatefulWidget {
@@ -55,8 +51,18 @@ class _CatalogBookViewState extends State<CatalogBookView> {
                                   frontBuilder: (context) => Center(
                                     child: Hero(
                                       tag: widget.book.id,
-                                      child: BookCover(
-                                        book: widget.book,
+                                      child: Stack(
+                                        children: [
+                                          Align(
+                                            alignment: Alignment.center,
+                                            child: BookCover(
+                                              book: widget.book,
+                                            ),
+                                          ),
+                                          Align(
+                                            alignment: Alignment.bottomRight,
+                                              child: Icon(Icons.touch_app)),
+                                        ],
                                       ),
                                     ),
                                   ),
@@ -72,49 +78,56 @@ class _CatalogBookViewState extends State<CatalogBookView> {
                                           ),
                                         ),
                                         Padding(
-                                          padding: const EdgeInsets.only(
-                                              left: 8.0, right: 8.0),
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 8.0),
                                           child: Container(
                                             color: Theme.of(context)
                                                 .primaryColor
                                                 .withAlpha(220),
                                             child: SingleChildScrollView(
-                                              child: Column(
-                                                children: [
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            8.0),
-                                                    child: TitleText(
-                                                        widget.book.title),
-                                                  ),
-                                                  BookMetaFieldView("Серія",
-                                                      widget.book.seriesTitle),
-                                                  BookMetaFieldView("Автор",
-                                                      widget.book.author),
-                                                  BookMetaFieldView(
-                                                      "Рік",
-                                                      widget.book.year
-                                                          .toString()),
-                                                  BookMetaFieldView(
-                                                      "Тривалість",
-                                                      widget.book.duration
-                                                          .inMinutes
-                                                          .toString()),
-                                                  BookMetaFieldView("Вік",
-                                                      "${widget.book.ageRating}+"),
-                                                  Column(
-                                                    children: [
-                                                      TitleText("Описання"),
-                                                      Text(
-                                                          widget
-                                                              .book.description,
-                                                          style: TextStyle(
-                                                            fontSize: 18,
-                                                          )),
-                                                    ],
-                                                  ),
-                                                ],
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 4.0),
+                                                child: Column(
+                                                  children: [
+                                                    Padding(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              8.0),
+                                                      child: TitleText(
+                                                          widget.book.title),
+                                                    ),
+                                                    BookMetaFieldView(
+                                                        "Серія",
+                                                        widget
+                                                            .book.seriesTitle),
+                                                    BookMetaFieldView("Автор",
+                                                        widget.book.author),
+                                                    BookMetaFieldView(
+                                                        "Рік",
+                                                        widget.book.year
+                                                            .toString()),
+                                                    BookMetaFieldView(
+                                                        "Тривалість",
+                                                        widget.book.duration
+                                                            .inMinutes
+                                                            .toString()),
+                                                    BookMetaFieldView("Вік",
+                                                        "${widget.book.ageRating}+"),
+                                                    Column(
+                                                      children: [
+                                                        TitleText("Описання"),
+                                                        Text(
+                                                            widget.book
+                                                                .description,
+                                                            style: TextStyle(
+                                                              fontSize: 18,
+                                                            )),
+                                                      ],
+                                                    ),
+                                                  ],
+                                                ),
                                               ),
                                             ),
                                           ),
@@ -147,13 +160,12 @@ class _CatalogBookViewState extends State<CatalogBookView> {
                               Expanded(
                                 flex: 1,
                                 child: StreamBuilder(
-                                  stream: Player.instance.playbackChanges,
-                                  builder: (context, snapshot) {
-                                    return BookFlipper(
-                                      book:widget.book,
-                                    );
-                                  }
-                                ),
+                                    stream: Player.instance.playbackChanges,
+                                    builder: (context, snapshot) {
+                                      return BookFlipper(
+                                        book: widget.book,
+                                      );
+                                    }),
                               ),
                               Expanded(
                                 flex: 1,

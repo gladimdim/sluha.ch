@@ -1,5 +1,4 @@
 import 'package:audiobooks_app/components/headline_text.dart';
-import 'package:audiobooks_app/components/marquee.dart';
 import 'package:audiobooks_app/models/book_file.dart';
 import 'package:audiobooks_app/models/player.dart';
 import 'package:flutter/material.dart';

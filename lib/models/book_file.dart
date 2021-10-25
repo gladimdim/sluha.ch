@@ -77,7 +77,6 @@ class BookFile {
   Future saveForOffline() async {
     _offlineChanges.add(OFFLINE_STATUS.LOADING);
     var fileName = this.getFileName();
-    var fullUrl = "$URL_PREFIX/$url";
     http.Client client = http.Client();
     final req = await client.get(Uri.https(URL_PREFIX, url));
     final bytes = req.bodyBytes;

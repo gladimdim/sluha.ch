@@ -60,7 +60,7 @@ class _PlaylistSectionState extends State<PlaylistSection> {
                                       switch (data.data) {
                                         case OFFLINE_STATUS.LOADED:
                                           return Icon(
-                                            Icons.download_done_outlined,
+                                            Icons.offline_pin,
                                             size: 32,
                                           );
                                         case OFFLINE_STATUS.NOT_LOADED:

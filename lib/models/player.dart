@@ -1,12 +1,11 @@
-import 'dart:io';
 
 import 'package:audio_session/audio_session.dart';
 import 'package:audiobooks_app/models/book.dart';
 import 'package:audiobooks_app/models/book_file.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:tuple/tuple.dart';
-import 'package:just_audio/just_audio.dart';
 
 class Player {
   final player = AudioPlayer();

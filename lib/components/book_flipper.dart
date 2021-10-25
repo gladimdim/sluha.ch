@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 
 class BookFlipper extends StatelessWidget {
   final Book? book;
+
   const BookFlipper({Key? key, this.book}) : super(key: key);
 
   @override
@@ -22,15 +23,25 @@ class BookFlipper extends StatelessWidget {
       );
     } else {
       return Flipper(
-        frontBuilder: (context) =>
-            Center(
-              child: Hero(
-                tag: b.id,
-                child: BookCover(
-                  book: b,
+        frontBuilder: (context) => Center(
+          child: Stack(
+            children: [
+              Align(
+                alignment: Alignment.center,
+                child: Hero(
+                  tag: b.id,
+                  child: BookCover(
+                    book: b,
+                  ),
                 ),
               ),
-            ),
+              Align(
+                alignment: Alignment.bottomRight,
+                child: Icon(Icons.touch_app),
+              )
+            ],
+          ),
+        ),
         backBuilder: (context) {
           return Stack(
             alignment: Alignment.center,
@@ -42,44 +53,27 @@ class BookFlipper extends StatelessWidget {
                   book: b,
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(
-                    left: 8.0, right: 8.0),
-                child: Container(
-                  color: Theme
-                      .of(context)
-                      .primaryColor
-                      .withAlpha(220),
-                  child: SingleChildScrollView(
+              Container(
+                color: Theme.of(context).primaryColor.withAlpha(220),
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 8.0, right: 8.0),
                     child: Column(
                       children: [
                         Padding(
-                          padding:
-                          const EdgeInsets.all(
-                              8.0),
-                          child: TitleText(
-                              b.title),
+                          padding: const EdgeInsets.all(8.0),
+                          child: TitleText(b.title),
                         ),
-                        BookMetaFieldView("Серія",
-                            b.seriesTitle),
-                        BookMetaFieldView("Автор",
-                            b.author),
+                        BookMetaFieldView("Серія", b.seriesTitle),
+                        BookMetaFieldView("Автор", b.author),
+                        BookMetaFieldView("Рік", b.year.toString()),
                         BookMetaFieldView(
-                            "Рік",
-                            b.year
-                                .toString()),
-                        BookMetaFieldView(
-                            "Тривалість",
-                            b.duration
-                                .inMinutes
-                                .toString()),
-                        BookMetaFieldView("Вік",
-                            "${b.ageRating}+"),
+                            "Тривалість", b.duration.inMinutes.toString()),
+                        BookMetaFieldView("Вік", "${b.ageRating}+"),
                         Column(
                           children: [
                             TitleText("Описання"),
-                            Text(
-                                b.description,
+                            Text(b.description,
                                 style: TextStyle(
                                   fontSize: 18,
                                 )),
