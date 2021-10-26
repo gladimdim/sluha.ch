@@ -90,7 +90,7 @@ class Player {
           id: file.title,
           title: file.title,
           album: book.title,
-          artist: book.author,
+          artist: book.title,
           artUri: Uri.parse(book.remoteImageUrl),
         ),
       );
