@@ -180,12 +180,9 @@ class _CatalogBookViewState extends State<CatalogBookView> {
             ),
           ),
           if (portrait)
-            Expanded(
-              flex: 2,
-              child: Hero(
-                tag: "PlayControls",
-                child: PlayControlsView(),
-              ),
+            Hero(
+              tag: "PlayControls",
+              child: PlayControlsView(),
             )
         ],
       ),

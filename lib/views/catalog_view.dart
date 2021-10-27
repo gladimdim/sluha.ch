@@ -98,13 +98,10 @@ class _CatalogViewState extends State<CatalogView> {
           ),
         ),
         if (portrait)
-          Expanded(
-            flex: 2,
-            child: Hero(
-              tag: "PlayControls",
-              child: PlayControlsView(
-                onNavigateToBookPress: _onNavigateToBookPress,
-              ),
+          Hero(
+            tag: "PlayControls",
+            child: PlayControlsView(
+              onNavigateToBookPress: _onNavigateToBookPress,
             ),
           ),
       ],
