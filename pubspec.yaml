@@ -1,8 +1,8 @@
 name: audiobooks_app
-description: Audio books app
+description: Sluha.ch Audio Player
 publish_to: 'none'
 
-version: 1.0.0+2
+version: 1.0.0+3
 
 environment:
   sdk: ">=2.13.0 <3.0.0"
